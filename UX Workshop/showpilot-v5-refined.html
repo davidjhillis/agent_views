@@ -1572,24 +1572,20 @@
                     </div>
                     <div class="message-content">
                         <div class="message-bubble">
-                            I can help you navigate our website. What would you like to see?
+                            I can show you different sections of our website. Which would you like to explore?
                         </div>
                         <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
-                            <button class="suggestion-card" onclick="suggestNavigation('.agents-section', 'Agents')">
-                                <strong>Tell me about Agents</strong>
-                                <span>AI agent capabilities</span>
+                            <button class="suggestion-card" onclick="navigateToSection('.agents-section', 'Agents')">
+                                <strong>Show me Agents</strong>
+                                <span>AI automation capabilities</span>
                             </button>
-                            <button class="suggestion-card" onclick="suggestNavigation('.demos-section', 'Interactive Demos')">
-                                <strong>Tell me about Demos</strong>
-                                <span>Product tour features</span>
+                            <button class="suggestion-card" onclick="navigateToSection('.demos-section', 'Interactive Demos')">
+                                <strong>Show me Demos</strong>
+                                <span>Product tour platform</span>
                             </button>
-                            <button class="suggestion-card" onclick="suggestNavigation('.insights-section', 'Insights')">
-                                <strong>Tell me about Insights</strong>
-                                <span>Analytics platform</span>
-                            </button>
-                            <button class="suggestion-card" onclick="clearHighlights()">
-                                <strong>Clear Highlights</strong>
-                                <span>Remove all markers</span>
+                            <button class="suggestion-card" onclick="navigateToSection('.insights-section', 'Insights')">
+                                <strong>Show me Insights</strong>
+                                <span>Analytics dashboard</span>
                             </button>
                         </div>
                     </div>
@@ -1604,82 +1600,126 @@
             ".insights-section": "Get real-time analytics and uncover buyer intent from customer conversations. Monitor account-level engagement."
         };
 
-        // Suggestion → Confirmation → Action pattern for navigation
-        function suggestNavigation(selector, label) {
+        // Navigate to section with continuous conversation flow
+        async function navigateToSection(selector, label) {
             const messagesContainer = document.querySelector('.chat-messages');
-            const description = sectionDescriptions[selector] || 'Learn more about this feature.';
 
-            // Step 1: Suggestion - Provide information
-            const suggestionMessage = document.createElement('div');
-            suggestionMessage.className = 'message message-ai';
-            suggestionMessage.innerHTML = `
+            // Step 1: Acknowledge and navigate
+            const navMessage = document.createElement('div');
+            navMessage.className = 'message message-ai';
+            navMessage.innerHTML = `
                 <div class="message-avatar">
                     <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
-                        <strong>${label}</strong><br><br>
-                        ${description}<br><br>
-                        Would you like me to take you to this section?
+                        Let me show you our ${label} section...
+                    </div>
+                </div>
+            `;
+            messagesContainer.appendChild(navMessage);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Step 2: Animate and highlight
+            await highlightElement(selector, label);
+
+            // Step 3: Provide insights (keep highlight visible)
+            setTimeout(() => {
+                showSectionInsights(selector, label);
+            }, 1500);
+        }
+
+        function showSectionInsights(selector, label) {
+            const messagesContainer = document.querySelector('.chat-messages');
+            const insights = {
+                ".agents-section": {
+                    message: "Here's our <strong>Agents</strong> section. Our AI agents automate customer qualification through natural conversations. They learn your product knowledge, customize qualification paths, and integrate with your tech stack.",
+                    nextOptions: [
+                        { selector: ".demos-section", label: "Interactive Demos", description: "See how to create demos" },
+                        { selector: ".insights-section", label: "Insights", description: "Explore analytics features" }
+                    ]
+                },
+                ".demos-section": {
+                    message: "This is our <strong>Interactive Demos</strong> section. Create guided product tours directly from your live application without coding. Customize for different personas and deploy across channels.",
+                    nextOptions: [
+                        { selector: ".insights-section", label: "Insights", description: "View analytics platform" },
+                        { selector: ".agents-section", label: "Agents", description: "Back to AI agents" }
+                    ]
+                },
+                ".insights-section": {
+                    message: "Welcome to <strong>Insights</strong>. Get comprehensive analytics on customer interactions with real-time engagement metrics. Uncover buyer intent from conversations and monitor account-level performance.",
+                    nextOptions: [
+                        { selector: ".agents-section", label: "Agents", description: "Explore AI automation" },
+                        { selector: ".demos-section", label: "Interactive Demos", description: "See demo platform" }
+                    ]
+                }
+            };
+
+            const info = insights[selector];
+            const insightMessage = document.createElement('div');
+            insightMessage.className = 'message message-ai';
+            insightMessage.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        ${info.message}
+                    </div>
+                </div>
+            `;
+            messagesContainer.appendChild(insightMessage);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Step 4: Ask follow-up question
+            setTimeout(() => {
+                askFollowUp(info.nextOptions);
+            }, 800);
+        }
+
+        function askFollowUp(options) {
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            const followUpMessage = document.createElement('div');
+            followUpMessage.className = 'message message-ai';
+
+            const optionsHTML = options.map(opt => `
+                <button class="suggestion-card" onclick='navigateToSection("${opt.selector}", "${opt.label}")'>
+                    <strong>${opt.label}</strong>
+                    <span>${opt.description}</span>
+                </button>
+            `).join('');
+
+            followUpMessage.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        What would you like to explore next?
                     </div>
                     <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
-                        <button class="suggestion-card" onclick='confirmNavigation("${selector}", "${label}", true)'>
-                            <strong>Yes, show me</strong>
-                            <span>Navigate to ${label}</span>
-                        </button>
-                        <button class="suggestion-card" onclick='confirmNavigation("${selector}", "${label}", false)'>
-                            <strong>No thanks</strong>
-                            <span>Continue browsing</span>
+                        ${optionsHTML}
+                        <button class="suggestion-card" onclick="clearHighlights()">
+                            <strong>That's all for now</strong>
+                            <span>Clear highlights</span>
                         </button>
                     </div>
                 </div>
             `;
-
-            messagesContainer.appendChild(suggestionMessage);
+            messagesContainer.appendChild(followUpMessage);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
-        // Step 2: Confirmation - User responds
+        // OLD FUNCTIONS - Kept for backwards compatibility
+        function suggestNavigation(selector, label) {
+            // Redirect to new function
+            navigateToSection(selector, label);
+        }
+
         function confirmNavigation(selector, label, confirmed) {
-            const messagesContainer = document.querySelector('.chat-messages');
-
             if (confirmed) {
-                // Step 3a: Action - Navigate and highlight
-                const confirmMessage = document.createElement('div');
-                confirmMessage.className = 'message message-ai';
-                confirmMessage.innerHTML = `
-                    <div class="message-avatar">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
-                    </div>
-                    <div class="message-content">
-                        <div class="message-bubble">
-                            Taking you to ${label} now...
-                        </div>
-                    </div>
-                `;
-                messagesContainer.appendChild(confirmMessage);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-                // Execute navigation with highlight
-                setTimeout(() => {
-                    highlightElement(selector, label);
-                }, 500);
-            } else {
-                // Step 3b: Acknowledgment - Stay on current view
-                const declineMessage = document.createElement('div');
-                declineMessage.className = 'message message-ai';
-                declineMessage.innerHTML = `
-                    <div class="message-avatar">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
-                    </div>
-                    <div class="message-content">
-                        <div class="message-bubble">
-                            No problem! Let me know if you'd like to explore anything else.
-                        </div>
-                    </div>
-                `;
-                messagesContainer.appendChild(declineMessage);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                navigateToSection(selector, label);
             }
         }
 
@@ -1735,11 +1775,7 @@
             // Hide cursor
             cursor.classList.remove('active');
 
-            // Step 5: Show message about the section
-            showSectionMessage(selector);
-
-            // Auto-clear after 5 seconds
-            setTimeout(clearHighlights, 5000);
+            // Highlight stays visible until user takes next action
         }
 
         function showSectionMessage(selector) {
