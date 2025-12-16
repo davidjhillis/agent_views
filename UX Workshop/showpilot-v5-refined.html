@@ -1749,13 +1749,20 @@
             const targetX = rect.left + rect.width / 2;
             const targetY = rect.top + rect.height / 2;
 
-            // Step 3: Show and animate cursor to target
+            // Step 3: Show cursor at starting position (top-left of screen)
+            cursor.style.left = '100px';
+            cursor.style.top = '100px';
             cursor.classList.add('active');
+
+            // Small delay to ensure cursor is visible
+            await new Promise(resolve => setTimeout(resolve, 100));
+
+            // Step 4: Animate cursor to target
             cursor.style.left = targetX + 'px';
             cursor.style.top = targetY + 'px';
 
-            // Wait for cursor animation
-            await new Promise(resolve => setTimeout(resolve, 900));
+            // Wait for cursor animation (CSS transition is 0.8s)
+            await new Promise(resolve => setTimeout(resolve, 1000));
 
             // Step 4: Show highlight
             const highlight = document.createElement('div');
