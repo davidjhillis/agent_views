@@ -1599,9 +1599,9 @@
 
         // Section descriptions (stored to avoid quote escaping issues)
         const sectionDescriptions = {
-            '.agents-section': 'AI Agents help you automate customer qualification with natural conversations. They understand your business and integrate with your tech stack.',
-            '.demos-section': 'Create guided product tours without coding. Build interactive demos directly from your live application.',
-            '.insights-section': 'Get real-time analytics and uncover buyer intent from customer conversations. Monitor account-level engagement.'
+            ".agents-section": "AI Agents help you automate customer qualification with natural conversations. They understand your business and integrate with your tech stack.",
+            ".demos-section": "Create guided product tours without coding. Build interactive demos directly from your live application.",
+            ".insights-section": "Get real-time analytics and uncover buyer intent from customer conversations. Monitor account-level engagement."
         };
 
         // Suggestion → Confirmation → Action pattern for navigation
@@ -1744,12 +1744,12 @@
 
         function showSectionMessage(selector) {
             const messages = {
-                '.agents-section': 'Here's our <strong>Agents</strong> section. AI Agents automate customer qualification with natural conversations. They train on your product knowledge, customize qualification paths, and integrate with your tech stack to streamline follow-up.',
-                '.demos-section': 'This is our <strong>Interactive Demos</strong> section. You can create guided product tours directly from your live application without any coding. Customize demos for different personas and deploy them across multiple channels.',
-                '.insights-section': 'Welcome to <strong>Insights</strong>. Get comprehensive analytics on customer interactions, real-time engagement metrics, and uncover buyer intent from conversation patterns. Monitor account-level engagement and content performance.'
+                ".agents-section": "Here's our <strong>Agents</strong> section. AI Agents automate customer qualification with natural conversations. They train on your product knowledge, customize qualification paths, and integrate with your tech stack to streamline follow-up.",
+                ".demos-section": "This is our <strong>Interactive Demos</strong> section. You can create guided product tours directly from your live application without any coding. Customize demos for different personas and deploy them across multiple channels.",
+                ".insights-section": "Welcome to <strong>Insights</strong>. Get comprehensive analytics on customer interactions, real-time engagement metrics, and uncover buyer intent from conversation patterns. Monitor account-level engagement and content performance."
             };
 
-            const message = messages[selector] || 'Here's an important section about our product.';
+            const message = messages[selector] || "Here's an important section about our product.";
 
             const messagesContainer = document.querySelector('.chat-messages');
             const newMessage = document.createElement('div');
