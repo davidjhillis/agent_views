@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShowPilot - Seamless Transitions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            overflow: hidden;
+        }
+
+        /* ========================
+           APP CONTAINER
+           ======================== */
+        .app-container {
+            position: fixed;
+            inset: 0;
+            display: grid;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* STATE 1: Chat Only (default) */
+        .app-container[data-view="chat"] {
+            grid-template-columns: 0 1fr 0;
+        }
+
+        /* STATE 2: Content View (3-column) */
+        .app-container[data-view="content"] {
+            grid-template-columns: 280px 1fr 420px;
+        }
+
+        /* ========================
+           PLAYLIST PANEL (LEFT)
+           ======================== */
+        .playlist-panel {
+            background: white;
+            border-right: 1px solid #e5e7eb;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .app-container[data-view="chat"] .playlist-panel {
+            width: 0;
+            opacity: 0;
+        }
+
+        .app-container[data-view="content"] .playlist-panel {
+            opacity: 1;
+        }
+
+        .playlist-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .playlist-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .logo-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .playlist-title {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .playlist-subtitle {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .playlist-items {
+            overflow-y: auto;
+            max-height: calc(100vh - 120px);
+        }
+
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.15s;
+            border-left: 3px solid transparent;
+        }
+
+        .playlist-item:hover {
+            background: #f9fafb;
+        }
+
+        .playlist-item.active {
+            background: #f5f3ff;
+            border-left-color: #6366f1;
+        }
+
+        .item-thumbnail {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            background: #e5e7eb;
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .item-thumbnail-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            font-size: 20px;
+        }
+
+        .item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .item-meta {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .item-type-badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .item-type-badge svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        /* ========================
+           CONTENT VIEWER (CENTER)
+           ======================== */
+        .content-viewer {
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .app-container[data-view="chat"] .content-viewer {
+            display: none;
+        }
+
+        .viewer-header {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .viewer-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .viewer-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .viewer-control-btn {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .viewer-control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .viewer-control-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .viewer-body {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1a1a1a;
+        }
+
+        .video-player-placeholder {
+            text-align: center;
+        }
+
+        .play-circle {
+            width: 100px;
+            height: 100px;
+            background: #6366f1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        .play-circle:hover {
+            background: #4f46e5;
+            transform: scale(1.1);
+            box-shadow: 0 15px 50px rgba(99, 102, 241, 0.5);
+        }
+
+        .play-circle svg {
+            width: 40px;
+            height: 40px;
+            color: white;
+            margin-left: 6px;
+        }
+
+        .video-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .video-subtitle {
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        /* ========================
+           CHAT PANEL (RIGHT)
+           ======================== */
+        .chat-panel {
+            background: white;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #e5e7eb;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .app-container[data-view="chat"] .chat-panel {
+            border-left: none;
+        }
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .chat-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .chat-header p {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 20px;
+            background: #fafafa;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-ai {
+            display: flex;
+            gap: 12px;
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .message-bubble {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px 14px 14px 4px;
+            padding: 14px 16px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .message-bubble p {
+            font-size: 15px;
+            color: #374151;
+            line-height: 1.5;
+            margin: 0 0 10px 0;
+        }
+
+        .message-bubble p:last-child {
+            margin-bottom: 0;
+        }
+
+        .message-user {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .message-user .message-bubble {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border: none;
+            color: white;
+            border-radius: 14px 14px 4px 14px;
+            max-width: 80%;
+        }
+
+        .message-user .message-bubble p {
+            color: white;
+        }
+
+        /* Suggestion Cards */
+        .suggestion-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .app-container[data-view="content"] .suggestion-cards {
+            grid-template-columns: 1fr;
+        }
+
+        .suggestion-card {
+            background: white;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .suggestion-card:hover {
+            border-color: #6366f1;
+            background: #f5f3ff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+        }
+
+        .suggestion-card strong {
+            display: block;
+            font-size: 14px;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .suggestion-card span {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .chat-input-area {
+            padding: 20px;
+            border-top: 1px solid #e5e7eb;
+            background: white;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .send-button {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        .send-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .send-button svg {
+            width: 18px;
+            height: 18px;
+            color: white;
+        }
+
+        /* Control Bar */
+        .control-bar {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 12px 16px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-btn {
+            padding: 8px 16px;
+            background: #f3f4f6;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .control-btn:hover {
+            background: #e5e7eb;
+        }
+
+        .control-btn.active {
+            background: #ede9fe;
+            border-color: #6366f1;
+            color: #6366f1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Control Bar -->
+    <div class="control-bar">
+        <button class="control-btn active" onclick="setView('chat')">Chat Only</button>
+        <button class="control-btn" onclick="setView('content')">Content Viewer</button>
+    </div>
+
+    <!-- App Container -->
+    <div class="app-container" id="appContainer" data-view="chat">
+
+        <!-- LEFT: Playlist Panel -->
+        <div class="playlist-panel">
+            <div class="playlist-header">
+                <div class="playlist-logo">
+                    <div class="logo-icon">SP</div>
+                    <div class="logo-text">ShowPilot</div>
+                </div>
+                <div class="playlist-title">My playlist</div>
+                <div class="playlist-subtitle">4 topics | 18min 50 sec</div>
+            </div>
+
+            <div class="playlist-items">
+                <div class="playlist-item active">
+                    <div class="item-thumbnail">
+                        <div class="item-thumbnail-placeholder">▶</div>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-title">Data Center Overview</div>
+                        <div class="item-meta">
+                            <div class="item-type-badge">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                </svg>
+                                <span>YouTube</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="playlist-item">
+                    <div class="item-thumbnail">
+                        <div class="item-thumbnail-placeholder">📄</div>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-title">Understanding Enterprise Data</div>
+                        <div class="item-meta">
+                            <div class="item-type-badge">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                </svg>
+                                <span>Web page</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="playlist-item">
+                    <div class="item-thumbnail">
+                        <div class="item-thumbnail-placeholder">🎯</div>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-title">RecroWorld Market Platform Tour</div>
+                        <div class="item-meta">
+                            <div class="item-type-badge">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                <span>Tour</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="playlist-item">
+                    <div class="item-thumbnail">
+                        <div class="item-thumbnail-placeholder">📊</div>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-title">Customer Success Storytelling Financial</div>
+                        <div class="item-meta">
+                            <div class="item-type-badge">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                </svg>
+                                <span>PDF</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CENTER: Content Viewer -->
+        <div class="content-viewer">
+            <div class="viewer-header">
+                <div class="viewer-title">Inside a Google data center</div>
+                <div class="viewer-controls">
+                    <button class="viewer-control-btn" title="Watch later">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </button>
+                    <button class="viewer-control-btn" title="Share">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="18" cy="5" r="3"></circle>
+                            <circle cx="6" cy="12" r="3"></circle>
+                            <circle cx="18" cy="19" r="3"></circle>
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                        </svg>
+                    </button>
+                    <button class="viewer-control-btn" title="Info">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="viewer-body">
+                <div class="video-player-placeholder">
+                    <div class="play-circle">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                    </div>
+                    <div class="video-title">Inside a Google data center</div>
+                    <div class="video-subtitle">Click to play • 3:27 duration</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Chat Panel -->
+        <div class="chat-panel">
+            <div class="chat-header">
+                <h2>Chat with Alex</h2>
+                <p>I'm here to help guide you through content</p>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message message-ai">
+                    <div class="message-avatar">AI</div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            <p><strong>👋 Hello! I'm here to help you.</strong></p>
+                            <p>I can show you product demos, documentation, and interactive tours. What would you like to explore?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message message-ai">
+                    <div class="message-avatar">AI</div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            <p>We are gathering recommendations for you. You can ask me any questions.</p>
+                        </div>
+
+                        <div class="suggestion-cards">
+                            <button class="suggestion-card" onclick="showContent()">
+                                <strong>📺 Product Demo</strong>
+                                <span>2-minute overview</span>
+                            </button>
+                            <button class="suggestion-card" onclick="showContent()">
+                                <strong>📄 Documentation</strong>
+                                <span>Complete guides</span>
+                            </button>
+                            <button class="suggestion-card" onclick="showContent()">
+                                <strong>🎯 Interactive Tour</strong>
+                                <span>Guided walkthrough</span>
+                            </button>
+                            <button class="suggestion-card">
+                                <strong>📅 Book Meeting</strong>
+                                <span>Talk to our team</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <div class="input-wrapper">
+                    <input type="text" class="chat-input" placeholder="Ask me anything..." id="chatInput">
+                    <button class="send-button">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function setView(view) {
+            const container = document.getElementById('appContainer');
+            container.setAttribute('data-view', view);
+
+            // Update active button
+            document.querySelectorAll('.control-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function showContent() {
+            // Simulate user clicking to view content
+            const container = document.getElementById('appContainer');
+            const messages = document.getElementById('chatMessages');
+
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message message-user';
+            userMsg.innerHTML = `
+                <div class="message-bubble">
+                    <p>Show me the data center video</p>
+                </div>
+            `;
+            messages.appendChild(userMsg);
+
+            // Scroll to bottom
+            messages.scrollTop = messages.scrollHeight;
+
+            // Transition to content view after a moment
+            setTimeout(() => {
+                container.setAttribute('data-view', 'content');
+
+                // Update control buttons
+                document.querySelectorAll('.control-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.control-btn')[1].classList.add('active');
+
+                // Add AI response about content
+                setTimeout(() => {
+                    const aiMsg = document.createElement('div');
+                    aiMsg.className = 'message message-ai';
+                    aiMsg.innerHTML = `
+                        <div class="message-avatar">AI</div>
+                        <div class="message-content">
+                            <div class="message-bubble">
+                                <p>Great! I've loaded the Google data center video for you. Feel free to ask questions while watching!</p>
+                            </div>
+                        </div>
+                    `;
+                    messages.appendChild(aiMsg);
+                    messages.scrollTop = messages.scrollHeight;
+                }, 500);
+            }, 800);
+        }
+    </script>
+</body>
+</html>

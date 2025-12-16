@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShowPilot UX Prototype</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Demo Background (simulate website) -->
+    <div class="demo-background">
+        <div class="demo-content">
+            <h1>Your Website Content</h1>
+            <p>This simulates the main website where ShowPilot would be embedded.</p>
+            <p>Click the ShowPilot widget in the bottom right to see the UX in action!</p>
+        </div>
+    </div>
+
+    <!-- ShowPilot Widget Badge (Minimized State) -->
+    <button
+        id="widgetBadge"
+        class="widget-badge"
+        aria-label="Open ShowPilot assistant"
+        aria-expanded="false"
+    >
+        <div class="widget-badge-avatar">
+            <div class="avatar-placeholder">A</div>
+        </div>
+        <div class="widget-badge-status"></div>
+        <div class="widget-badge-notification">1</div>
+    </button>
+
+    <!-- ShowPilot Widget Modal (Expanded State) -->
+    <div id="widgetModal" class="widget-modal hidden">
+        <!-- Header -->
+        <div class="widget-header">
+            <div class="widget-header-avatar">
+                <div class="avatar-placeholder">A</div>
+            </div>
+            <div class="widget-header-info">
+                <h2 class="widget-header-title">Alex from Acme Corp</h2>
+                <p class="widget-header-subtitle">
+                    <span class="status-dot"></span>
+                    <span id="headerStatus">Online • Typically responds instantly</span>
+                </p>
+            </div>
+            <div class="widget-header-actions">
+                <button
+                    class="widget-header-action"
+                    id="minimizeBtn"
+                    aria-label="Minimize"
+                    title="Minimize"
+                >
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <button
+                    class="widget-header-action"
+                    id="expandBtn"
+                    aria-label="Expand"
+                    title="Expand"
+                >
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M13 7h4m0 0v4m0-4l-5 5M7 13H3m0 0V9m0 4l5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <button
+                    class="widget-header-action"
+                    id="closeBtn"
+                    aria-label="Close"
+                    title="Close"
+                >
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M6 6l8 8M14 6l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Body (Changes based on state) -->
+        <div class="widget-body" id="widgetBody">
+            <!-- Onboarding State (Default) -->
+            <div id="onboardingState" class="state-container">
+                <div class="message-ai">
+                    <div class="message-ai-avatar">
+                        <div class="avatar-placeholder small">A</div>
+                    </div>
+                    <div class="message-ai-content">
+                        <div class="message-ai-bubble">
+                            👋 Hi! I'm Alex, your Acme guide.<br><br>
+                            I don't just chat—I can show you videos, demos, and interactive tours.<br><br>
+                            Over 500 companies use ShowPilot to engage visitors with visual experiences.
+                        </div>
+                        <div class="message-ai-meta">
+                            <span class="message-ai-name">Alex</span>
+                            <span class="message-ai-time">Just now</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="suggestions-container">
+                    <p class="suggestions-label">What would you like to explore?</p>
+
+                    <button class="btn-suggestion" data-action="showDemo">
+                        <span class="btn-suggestion-icon">🎥</span>
+                        <span class="btn-suggestion-text">See a 2-minute product demo</span>
+                    </button>
+
+                    <button class="btn-suggestion" data-action="createJourney">
+                        <span class="btn-suggestion-icon">🎯</span>
+                        <span class="btn-suggestion-text">Create a personalized journey</span>
+                    </button>
+
+                    <button class="btn-suggestion" data-action="askAnything">
+                        <span class="btn-suggestion-icon">💬</span>
+                        <span class="btn-suggestion-text">Ask me anything</span>
+                    </button>
+
+                    <button class="btn-suggestion" data-action="bookMeeting">
+                        <span class="btn-suggestion-icon">📅</span>
+                        <span class="btn-suggestion-text">Book time with our team</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat State (Hidden initially) -->
+            <div id="chatState" class="state-container hidden">
+                <div class="messages-container" id="messagesContainer">
+                    <!-- Messages will be added here dynamically -->
+                </div>
+            </div>
+
+            <!-- Journey Selection State (Hidden initially) -->
+            <div id="journeyState" class="state-container hidden">
+                <div class="journey-qualification">
+                    <div class="message-ai">
+                        <div class="message-ai-avatar">
+                            <div class="avatar-placeholder small">A</div>
+                        </div>
+                        <div class="message-ai-content">
+                            <div class="message-ai-bubble">
+                                🎯 Let's create a personalized experience for you.<br><br>
+                                <strong>What best describes your role?</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="suggestions-container">
+                        <button class="btn-suggestion" data-role="sales">
+                            <span class="btn-suggestion-icon">👔</span>
+                            <span class="btn-suggestion-text">Sales/Business Development</span>
+                        </button>
+
+                        <button class="btn-suggestion" data-role="marketing">
+                            <span class="btn-suggestion-icon">📊</span>
+                            <span class="btn-suggestion-text">Marketing</span>
+                        </button>
+
+                        <button class="btn-suggestion" data-role="executive">
+                            <span class="btn-suggestion-icon">👨‍💼</span>
+                            <span class="btn-suggestion-text">Executive/Leadership</span>
+                        </button>
+
+                        <button class="btn-suggestion" data-role="technical">
+                            <span class="btn-suggestion-icon">💻</span>
+                            <span class="btn-suggestion-text">Technical/IT</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Viewing State (Hidden initially) -->
+            <div id="contentState" class="state-container hidden split-screen">
+                <div class="split-screen-content">
+                    <div class="content-viewer">
+                        <div class="content-viewer-header">
+                            <div class="content-viewer-title">
+                                <span class="content-icon">🎥</span>
+                                <span id="contentTitle">Product Demo</span>
+                                <span id="contentDuration">(2:30)</span>
+                            </div>
+                            <div class="content-viewer-actions">
+                                <button class="content-action-btn" aria-label="Bookmark">🔖</button>
+                                <button class="content-action-btn" aria-label="Share">📤</button>
+                            </div>
+                        </div>
+                        <div class="content-viewer-body">
+                            <div class="video-player-placeholder">
+                                <div class="video-play-button">▶️</div>
+                                <p>Product Demo Video</p>
+                                <p class="video-subtitle">Click to play</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="split-screen-chat">
+                    <div class="chat-messages" id="contentChatMessages">
+                        <div class="message-ai">
+                            <div class="message-ai-avatar">
+                                <div class="avatar-placeholder small">A</div>
+                            </div>
+                            <div class="message-ai-content">
+                                <div class="message-ai-bubble">
+                                    This 2-minute demo shows our core product capabilities in action!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="quick-questions">
+                        <p class="quick-questions-label">💬 Quick questions:</p>
+                        <button class="quick-question-btn">How does pricing work?</button>
+                        <button class="quick-question-btn">Can I get a custom demo?</button>
+                        <button class="quick-question-btn">What integrations do you support?</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meeting Booking State (Hidden initially) -->
+            <div id="meetingState" class="state-container hidden">
+                <div class="message-ai">
+                    <div class="message-ai-avatar">
+                        <div class="avatar-placeholder small">A</div>
+                    </div>
+                    <div class="message-ai-content">
+                        <div class="message-ai-bubble">
+                            Great! Let me connect you with the right person based on what you've explored.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="meeting-booking-container">
+                    <p class="form-label">What would you like to discuss?</p>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" checked>
+                            <span>Product overview & demo</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox">
+                            <span>Pricing & enterprise plans</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox">
+                            <span>Technical integration questions</span>
+                        </label>
+                    </div>
+
+                    <div class="recommended-rep">
+                        <p class="form-label">Recommended:</p>
+                        <div class="rep-card">
+                            <div class="rep-avatar">S</div>
+                            <div class="rep-info">
+                                <h4>Sarah Chen</h4>
+                                <p>Senior Solutions Engineer</p>
+                                <p class="rep-specialty">"Marketing product expert"</p>
+                            </div>
+                            <button class="btn-primary btn-small">Select</button>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary btn-full-width">Continue to Calendar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer (Input Area) -->
+        <div class="widget-footer" id="widgetFooter">
+            <div class="input-container">
+                <textarea
+                    class="input-field"
+                    id="messageInput"
+                    placeholder="Type your message..."
+                    rows="1"
+                    aria-label="Chat message input"
+                ></textarea>
+                <div class="input-actions">
+                    <button class="input-action-btn" id="attachBtn" aria-label="Attach file">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M16 10v4a4 4 0 01-4 4H8a4 4 0 01-4-4V6a3 3 0 013-3h6a3 3 0 013 3v8a2 2 0 01-2 2H9a2 2 0 01-2-2V8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <button class="input-action-btn input-send-btn" id="sendBtn" aria-label="Send message">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M18 10L2 3l4 7-4 7 16-7z" fill="currentColor"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating CTA (Shows in certain states) -->
+    <div id="floatingCTA" class="floating-cta hidden">
+        📅 Book a pricing consultation
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

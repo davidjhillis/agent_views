@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShowPilot v2 - Voice-Enabled Agent Positions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            overflow-x: hidden;
+        }
+
+        /* Page content for blur demonstration */
+        .page-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            z-index: 1;
+            transition: filter 0.4s;
+        }
+
+        body.content-viewer-active .page-content {
+            filter: blur(8px);
+        }
+
+        .page-content h1 {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .page-content p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        /* ========================
+           DEMO CONTROLS (TOP)
+           ======================== */
+        .demo-controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 16px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            z-index: 99998;
+            max-width: 320px;
+        }
+
+        .demo-controls h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #111827;
+        }
+
+        .demo-section {
+            margin-bottom: 16px;
+        }
+
+        .demo-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .demo-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .demo-btn {
+            display: block;
+            width: 100%;
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            background: white;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .demo-btn:hover {
+            border-color: #6366f1;
+            background: #f5f3ff;
+        }
+
+        .demo-btn.active {
+            background: #6366f1;
+            color: white;
+            border-color: #6366f1;
+        }
+
+        .device-btns {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+
+        .device-btn {
+            padding: 6px 8px;
+            font-size: 11px;
+            margin-bottom: 0;
+        }
+
+        /* ========================
+           WIDGET CONTAINER
+           ======================== */
+        #showpilot-widget {
+            position: fixed;
+            z-index: 99999;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Device simulation classes */
+        body.device-desktop #showpilot-widget {
+            /* Default desktop behavior */
+        }
+
+        body.device-tablet #showpilot-widget {
+            /* Tablet adjustments */
+        }
+
+        body.device-mobile #showpilot-widget {
+            /* Mobile adjustments */
+        }
+
+        /* POSITION 1: CHAT BUTTON */
+        #showpilot-widget[data-position="chat-button"] {
+            bottom: 24px;
+            right: 24px;
+            width: 64px;
+            height: 64px;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="chat-button"] {
+            bottom: 16px;
+            right: 16px;
+        }
+
+        /* POSITION 2: CENTER LOW RECTANGLE - FIXED LAYOUT */
+        #showpilot-widget[data-position="center-low-rectangle"] {
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 520px;
+            height: 160px;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] {
+            bottom: 0;
+            left: 0;
+            transform: none;
+            width: 100%;
+            height: 180px;
+            border-radius: 16px 16px 0 0 !important;
+        }
+
+        /* POSITION 3: CENTER ANCHOR BOTTOM MIDSIZE SQUARE */
+        #showpilot-widget[data-position="center-midsize-square"] {
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 560px;
+            height: 640px;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-midsize-square"] {
+            bottom: 0;
+            left: 0;
+            transform: none;
+            width: 100%;
+            height: 70vh;
+            border-radius: 16px 16px 0 0 !important;
+        }
+
+        /* POSITION 4: SKYSCRAPER */
+        #showpilot-widget[data-position="skyscraper"] {
+            top: 24px;
+            right: 24px;
+            width: 420px;
+            height: calc(100vh - 48px);
+        }
+
+        body.device-tablet #showpilot-widget[data-position="skyscraper"] {
+            width: 380px;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="skyscraper"] {
+            bottom: 0;
+            left: 0;
+            top: auto;
+            right: auto;
+            transform: none;
+            width: 100%;
+            height: 70vh;
+            border-radius: 16px 16px 0 0 !important;
+        }
+
+        /* POSITION 5: FULL HEIGHT CENTER LARGE */
+        #showpilot-widget[data-position="full-height-center"] {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 900px;
+            height: calc(100vh - 48px);
+            max-height: 900px;
+        }
+
+        body.device-tablet #showpilot-widget[data-position="full-height-center"] {
+            width: calc(100vw - 48px);
+            max-width: 700px;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="full-height-center"] {
+            inset: 0;
+            transform: none;
+            width: 100%;
+            height: 100%;
+            max-height: none;
+            border-radius: 0 !important;
+        }
+
+        /* POSITION 6: CONTENT VIEWER - 80% PAGE COVERAGE */
+        #showpilot-widget[data-position="content-viewer"] {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90vw;
+            height: 85vh;
+            max-width: 1600px;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="content-viewer"] {
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            transform: none;
+        }
+
+        /* Backdrop blur for content viewer */
+        .page-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 99998;
+            transition: all 0.4s;
+        }
+
+        #showpilot-widget[data-position="content-viewer"] ~ .page-backdrop {
+            display: block;
+        }
+
+        /* ========================
+           FLOATING BADGE (CHAT BUTTON)
+           ======================== */
+        .widget-badge {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        #showpilot-widget:not([data-position="chat-button"]) .widget-badge {
+            display: none;
+        }
+
+        .widget-badge:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 32px rgba(99, 102, 241, 0.5);
+        }
+
+        .badge-avatar {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .badge-status {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            width: 16px;
+            height: 16px;
+            background: #10b981;
+            border: 3px solid white;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* ========================
+           WIDGET WINDOW
+           ======================== */
+        .widget-window {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #showpilot-widget:not([data-position="chat-button"]) .widget-window {
+            display: flex;
+        }
+
+        #showpilot-widget[data-position="content-viewer"] .widget-window {
+            border-radius: 12px;
+        }
+
+        body.device-mobile #showpilot-widget .widget-window {
+            border-radius: 16px 16px 0 0 !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="content-viewer"] .widget-window,
+        body.device-mobile #showpilot-widget[data-position="full-height-center"] .widget-window {
+            border-radius: 0 !important;
+        }
+
+        /* ========================
+           HEADER WITH CONTROLS
+           ======================== */
+        .widget-header {
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .header-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .header-status {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 6px;
+        }
+
+        /* Control Button Base */
+        .control-btn {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .control-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke-width: 2.5px;
+        }
+
+        /* Control visibility based on position - UPDATED PER SPEC */
+        /* CENTER LOW RECTANGLE: Expand, Minimize, Close */
+        #showpilot-widget[data-position="center-low-rectangle"] .control-expand,
+        #showpilot-widget[data-position="center-low-rectangle"] .control-minimize,
+        #showpilot-widget[data-position="center-low-rectangle"] .control-close {
+            display: flex;
+        }
+
+        /* CENTER MIDSIZE SQUARE: Expand, Right, Close */
+        #showpilot-widget[data-position="center-midsize-square"] .control-expand,
+        #showpilot-widget[data-position="center-midsize-square"] .control-right,
+        #showpilot-widget[data-position="center-midsize-square"] .control-close {
+            display: flex;
+        }
+
+        /* SKYSCRAPER: Expand, Minimize, Close */
+        #showpilot-widget[data-position="skyscraper"] .control-expand,
+        #showpilot-widget[data-position="skyscraper"] .control-minimize,
+        #showpilot-widget[data-position="skyscraper"] .control-close {
+            display: flex;
+        }
+
+        /* FULL HEIGHT CENTER: Minimize, Right, Close */
+        #showpilot-widget[data-position="full-height-center"] .control-minimize,
+        #showpilot-widget[data-position="full-height-center"] .control-right,
+        #showpilot-widget[data-position="full-height-center"] .control-close {
+            display: flex;
+        }
+
+        /* CONTENT VIEWER: Fullscreen, Minimize, Dock Right - FIXED */
+        #showpilot-widget[data-position="content-viewer"] .control-fullscreen,
+        #showpilot-widget[data-position="content-viewer"] .control-minimize,
+        #showpilot-widget[data-position="content-viewer"] .control-right {
+            display: flex;
+        }
+
+        /* ========================
+           VOICE INTERACTION
+           ======================== */
+        .voice-indicator {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 24px;
+            height: 24px;
+            background: #ef4444;
+            border: 3px solid white;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            animation: voicePulse 1.5s ease-in-out infinite;
+        }
+
+        .voice-indicator.active {
+            display: flex;
+        }
+
+        .voice-indicator svg {
+            width: 12px;
+            height: 12px;
+            color: white;
+        }
+
+        @keyframes voicePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Voice button in input area */
+        .voice-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .voice-btn:hover {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: #6366f1;
+        }
+
+        .voice-btn.recording {
+            background: #ef4444;
+            border-color: #ef4444;
+            animation: voiceRecording 1.5s ease-in-out infinite;
+        }
+
+        .voice-btn.recording svg {
+            color: white;
+        }
+
+        @keyframes voiceRecording {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .voice-btn svg {
+            width: 18px;
+            height: 18px;
+            color: #6366f1;
+        }
+
+        /* Voice waveform animation */
+        .voice-waveform {
+            display: none;
+            gap: 3px;
+            align-items: center;
+            height: 24px;
+            margin: 8px 0;
+        }
+
+        .voice-waveform.active {
+            display: flex;
+        }
+
+        .wave-bar {
+            width: 3px;
+            background: #6366f1;
+            border-radius: 2px;
+            animation: waveform 1s ease-in-out infinite;
+        }
+
+        .wave-bar:nth-child(1) { animation-delay: 0s; height: 8px; }
+        .wave-bar:nth-child(2) { animation-delay: 0.1s; height: 12px; }
+        .wave-bar:nth-child(3) { animation-delay: 0.2s; height: 16px; }
+        .wave-bar:nth-child(4) { animation-delay: 0.3s; height: 12px; }
+        .wave-bar:nth-child(5) { animation-delay: 0.4s; height: 8px; }
+
+        @keyframes waveform {
+            0%, 100% { transform: scaleY(0.5); }
+            50% { transform: scaleY(1); }
+        }
+
+        /* ========================
+           CONTENT AREA
+           ======================== */
+        .widget-content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            background: white;
+        }
+
+        /* Content layout for Content Viewer */
+        #showpilot-widget[data-position="content-viewer"] .widget-content {
+            display: grid;
+            grid-template-columns: 280px 1fr 400px;
+        }
+
+        #showpilot-widget:not([data-position="content-viewer"]) .playlist-panel {
+            display: none;
+        }
+
+        #showpilot-widget:not([data-position="content-viewer"]) .content-viewer {
+            display: none;
+        }
+
+        /* ========================
+           PLAYLIST PANEL
+           ======================== */
+        .playlist-panel {
+            background: #f9fafb;
+            border-right: 1px solid #e5e7eb;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .playlist-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            background: white;
+        }
+
+        .playlist-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .playlist-subtitle {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .playlist-items {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .playlist-item {
+            padding: 14px 20px;
+            cursor: pointer;
+            transition: all 0.15s;
+            border-left: 3px solid transparent;
+        }
+
+        .playlist-item:hover {
+            background: white;
+        }
+
+        .playlist-item.active {
+            background: #ede9fe;
+            border-left-color: #6366f1;
+        }
+
+        .playlist-item-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .playlist-item-meta {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* ========================
+           CONTENT VIEWER
+           ======================== */
+        .content-viewer {
+            background: #000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .viewer-header {
+            padding: 16px 20px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .viewer-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .viewer-body {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        .play-btn {
+            width: 80px;
+            height: 80px;
+            background: #6366f1;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s;
+        }
+
+        .play-btn:hover {
+            background: #4f46e5;
+            transform: scale(1.1);
+        }
+
+        .play-btn svg {
+            width: 32px;
+            height: 32px;
+            color: white;
+            margin-left: 4px;
+        }
+
+        /* ========================
+           CHAT PANEL
+           ======================== */
+        .chat-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        #showpilot-widget[data-position="content-viewer"] .chat-panel {
+            border-left: 1px solid #e5e7eb;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #fafafa;
+        }
+
+        .message {
+            margin-bottom: 16px;
+        }
+
+        .message-ai {
+            display: flex;
+            gap: 10px;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .message-bubble {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px 12px 12px 4px;
+            padding: 12px 14px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #374151;
+        }
+
+        .suggestion-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        #showpilot-widget[data-position="content-viewer"] .suggestion-cards,
+        #showpilot-widget[data-position="skyscraper"] .suggestion-cards {
+            grid-template-columns: 1fr;
+        }
+
+        .suggestion-card {
+            background: white;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .suggestion-card:hover {
+            border-color: #6366f1;
+            background: #f5f3ff;
+        }
+
+        .suggestion-card strong {
+            display: block;
+            font-size: 13px;
+            color: #111827;
+            margin-bottom: 2px;
+        }
+
+        .suggestion-card span {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .chat-input-area {
+            padding: 16px 20px;
+            border-top: 1px solid #e5e7eb;
+            background: white;
+            flex-shrink: 0;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .chat-input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .send-btn {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .send-btn svg {
+            width: 16px;
+            height: 16px;
+            color: white;
+        }
+
+        /* Special layout for center-low-rectangle - FIXED */
+        #showpilot-widget[data-position="center-low-rectangle"] .chat-messages {
+            padding: 12px 16px;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .message-bubble {
+            font-size: 13px;
+            padding: 8px 12px;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .suggestion-cards {
+            display: none;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area {
+            padding: 10px 16px;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .voice-waveform {
+            margin: 4px 0;
+        }
+    </style>
+</head>
+<body class="device-desktop">
+    <!-- Page Content (for blur demo) -->
+    <div class="page-content">
+        <h1>Your Website</h1>
+        <p>ShowPilot enhances your experience with AI-powered guidance</p>
+    </div>
+
+    <!-- Demo Controls -->
+    <div class="demo-controls">
+        <h4>Test Agent Positions:</h4>
+        <div class="demo-section">
+            <button class="demo-btn" onclick="setPosition('chat-button')">1. Chat Button</button>
+            <button class="demo-btn" onclick="setPosition('center-low-rectangle')">2. Center Low Rectangle</button>
+            <button class="demo-btn" onclick="setPosition('center-midsize-square')">3. Center Midsize Square</button>
+            <button class="demo-btn" onclick="setPosition('skyscraper')">4. Skyscraper</button>
+            <button class="demo-btn" onclick="setPosition('full-height-center')">5. Full Height Center</button>
+            <button class="demo-btn" onclick="setPosition('content-viewer')">6. Content Viewer</button>
+        </div>
+
+        <div class="demo-section">
+            <div class="demo-section-title">Device View</div>
+            <div class="device-btns">
+                <button class="demo-btn device-btn active" onclick="setDevice('desktop')">Desktop</button>
+                <button class="demo-btn device-btn" onclick="setDevice('tablet')">Tablet</button>
+                <button class="demo-btn device-btn" onclick="setDevice('mobile')">Mobile</button>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <div class="demo-section-title">Voice Interaction</div>
+            <button class="demo-btn" onclick="toggleVoice()">Toggle Voice Recording</button>
+        </div>
+    </div>
+
+    <!-- Backdrop for Content Viewer -->
+    <div class="page-backdrop"></div>
+
+    <!-- ShowPilot Widget -->
+    <div id="showpilot-widget" data-position="chat-button">
+
+        <!-- Floating Badge (Position 1) -->
+        <button class="widget-badge" onclick="transitionFromChatButton()">
+            <div class="badge-avatar">AI</div>
+            <div class="badge-status"></div>
+            <div class="voice-indicator">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    <line x1="12" y1="19" x2="12" y2="23"></line>
+                    <line x1="8" y1="23" x2="16" y2="23"></line>
+                </svg>
+            </div>
+        </button>
+
+        <!-- Widget Window -->
+        <div class="widget-window">
+            <!-- Header with Controls -->
+            <div class="widget-header">
+                <div class="header-left">
+                    <div class="header-avatar">
+                        AI
+                        <div class="voice-indicator">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="header-info">
+                        <h3>Alex</h3>
+                        <div class="header-status">Online • Voice-enabled</div>
+                    </div>
+                </div>
+                <div class="header-controls">
+                    <!-- Minimize Icon -->
+                    <button class="control-btn control-minimize" onclick="minimize()" title="Minimize">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+
+                    <!-- Expand Icon -->
+                    <button class="control-btn control-expand" onclick="expand()" title="Expand">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <polyline points="9 21 3 21 3 15"></polyline>
+                            <line x1="21" y1="3" x2="14" y2="10"></line>
+                            <line x1="3" y1="21" x2="10" y2="14"></line>
+                        </svg>
+                    </button>
+
+                    <!-- Fullscreen Icon (Content Viewer) -->
+                    <button class="control-btn control-fullscreen" onclick="fullscreen()" title="Fullscreen">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Dock Right Icon -->
+                    <button class="control-btn control-right" onclick="dockRight()" title="Dock Right">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <line x1="18" y1="4" x2="18" y2="20"></line>
+                            <polyline points="6 12 14 12"></polyline>
+                            <polyline points="11 9 14 12 11 15"></polyline>
+                        </svg>
+                    </button>
+
+                    <!-- Close Icon -->
+                    <button class="control-btn control-close" onclick="closeWidget()" title="Close">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="widget-content">
+
+                <!-- Playlist Panel (Position 6 only) -->
+                <div class="playlist-panel">
+                    <div class="playlist-header">
+                        <div class="playlist-title">My Playlist</div>
+                        <div class="playlist-subtitle">4 topics • 18min 50sec</div>
+                    </div>
+                    <div class="playlist-items">
+                        <div class="playlist-item active">
+                            <div class="playlist-item-title">Data Center Overview</div>
+                            <div class="playlist-item-meta">▶ YouTube • 3:27</div>
+                        </div>
+                        <div class="playlist-item">
+                            <div class="playlist-item-title">Enterprise Data Guide</div>
+                            <div class="playlist-item-meta">📄 Web page • 5min read</div>
+                        </div>
+                        <div class="playlist-item">
+                            <div class="playlist-item-title">Platform Security</div>
+                            <div class="playlist-item-meta">📄 PDF • 8min read</div>
+                        </div>
+                        <div class="playlist-item">
+                            <div class="playlist-item-title">Platform Tour</div>
+                            <div class="playlist-item-meta">🎯 Interactive • 8min</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Viewer (Position 6 only) -->
+                <div class="content-viewer">
+                    <div class="viewer-header">
+                        <div class="viewer-title">Inside a Google data center</div>
+                    </div>
+                    <div class="viewer-body">
+                        <div class="video-placeholder">
+                            <button class="play-btn">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Panel -->
+                <div class="chat-panel">
+                    <div class="chat-messages">
+                        <div class="message message-ai">
+                            <div class="message-avatar">
+                                AI
+                                <div class="voice-indicator">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-bubble">
+                                    <strong>👋 Hello! I'm Alex.</strong><br><br>
+                                    I can show you product demos, documentation, and interactive tours. You can type or speak to me!
+                                </div>
+                                <div class="voice-waveform">
+                                    <div class="wave-bar"></div>
+                                    <div class="wave-bar"></div>
+                                    <div class="wave-bar"></div>
+                                    <div class="wave-bar"></div>
+                                    <div class="wave-bar"></div>
+                                </div>
+                                <div class="suggestion-cards">
+                                    <button class="suggestion-card" onclick="showContent()">
+                                        <strong>📺 Product Demo</strong>
+                                        <span>2-minute overview</span>
+                                    </button>
+                                    <button class="suggestion-card" onclick="showContent()">
+                                        <strong>📄 Documentation</strong>
+                                        <span>Complete guides</span>
+                                    </button>
+                                    <button class="suggestion-card" onclick="showContent()">
+                                        <strong>🎯 Interactive Tour</strong>
+                                        <span>Guided walkthrough</span>
+                                    </button>
+                                    <button class="suggestion-card">
+                                        <strong>📅 Book Meeting</strong>
+                                        <span>Talk to our team</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-area">
+                        <div class="input-row">
+                            <input type="text" class="chat-input" placeholder="Type or click microphone to speak...">
+                            <button class="voice-btn" onclick="toggleVoice()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                                    <line x1="12" y1="19" x2="12" y2="23"></line>
+                                    <line x1="8" y1="23" x2="16" y2="23"></line>
+                                </svg>
+                            </button>
+                            <button class="send-btn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const widget = document.getElementById('showpilot-widget');
+        let previousPosition = null;
+        let isVoiceActive = false;
+
+        // State management
+        function setPosition(position) {
+            previousPosition = widget.getAttribute('data-position');
+            widget.setAttribute('data-position', position);
+            updateDemoButtons(position);
+
+            // Update body class for content viewer
+            if (position === 'content-viewer') {
+                document.body.classList.add('content-viewer-active');
+            } else {
+                document.body.classList.remove('content-viewer-active');
+            }
+        }
+
+        function updateDemoButtons(activePosition) {
+            document.querySelectorAll('.demo-btn:not(.device-btn)').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            const positions = ['chat-button', 'center-low-rectangle', 'center-midsize-square', 'skyscraper', 'full-height-center', 'content-viewer'];
+            const index = positions.indexOf(activePosition);
+            if (index >= 0) {
+                document.querySelectorAll('.demo-btn:not(.device-btn)')[index].classList.add('active');
+            }
+        }
+
+        // Device switching
+        function setDevice(device) {
+            document.body.className = `device-${device}`;
+            document.querySelectorAll('.device-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Voice interaction
+        function toggleVoice() {
+            isVoiceActive = !isVoiceActive;
+
+            const voiceBtn = document.querySelector('.voice-btn');
+            const voiceIndicators = document.querySelectorAll('.voice-indicator');
+            const waveform = document.querySelector('.voice-waveform');
+
+            if (isVoiceActive) {
+                voiceBtn.classList.add('recording');
+                voiceIndicators.forEach(ind => ind.classList.add('active'));
+                if (waveform) waveform.classList.add('active');
+            } else {
+                voiceBtn.classList.remove('recording');
+                voiceIndicators.forEach(ind => ind.classList.remove('active'));
+                if (waveform) waveform.classList.remove('active');
+            }
+        }
+
+        // Transitions based on spec - UPDATED
+        function transitionFromChatButton() {
+            setPosition('center-low-rectangle');
+        }
+
+        function minimize() {
+            const currentPos = widget.getAttribute('data-position');
+
+            if (currentPos === 'center-low-rectangle') {
+                setPosition('chat-button');
+            } else if (currentPos === 'skyscraper') {
+                // FIXED: Skyscraper minimizes to center-low-rectangle
+                setPosition('center-low-rectangle');
+            } else if (currentPos === 'full-height-center') {
+                setPosition('center-midsize-square');
+            } else if (currentPos === 'content-viewer') {
+                setPosition('skyscraper');
+            }
+        }
+
+        function expand() {
+            const currentPos = widget.getAttribute('data-position');
+
+            if (currentPos === 'center-low-rectangle') {
+                setPosition('center-midsize-square');
+            } else if (currentPos === 'center-midsize-square') {
+                setPosition('full-height-center');
+            } else if (currentPos === 'skyscraper') {
+                setPosition('full-height-center');
+            }
+        }
+
+        function fullscreen() {
+            // For content viewer - maximize the experience
+            const currentPos = widget.getAttribute('data-position');
+            if (currentPos === 'content-viewer') {
+                // Already fullscreen, could toggle to even larger
+                console.log('Content viewer fullscreen toggle');
+            }
+        }
+
+        function dockRight() {
+            const currentPos = widget.getAttribute('data-position');
+
+            if (currentPos === 'center-midsize-square' ||
+                currentPos === 'full-height-center' ||
+                currentPos === 'content-viewer') {
+                setPosition('skyscraper');
+            }
+        }
+
+        function closeWidget() {
+            const currentPos = widget.getAttribute('data-position');
+
+            // FIXED: Follow spec for close behavior
+            if (currentPos === 'center-low-rectangle') {
+                setPosition('chat-button');
+            } else if (currentPos === 'center-midsize-square') {
+                setPosition('chat-button');
+            } else if (currentPos === 'skyscraper') {
+                setPosition('chat-button');
+            } else if (currentPos === 'full-height-center') {
+                setPosition('center-low-rectangle');
+            } else if (currentPos === 'content-viewer') {
+                setPosition(previousPosition || 'center-midsize-square');
+            }
+        }
+
+        function showContent() {
+            setPosition('content-viewer');
+        }
+
+        // Initialize
+        updateDemoButtons('chat-button');
+    </script>
+</body>
+</html>
