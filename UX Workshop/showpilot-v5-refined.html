@@ -1623,11 +1623,11 @@
                         Would you like me to take you to this section?
                     </div>
                     <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
-                        <button class="suggestion-card" onclick="confirmNavigation('${selector}', '${label}', true)">
+                        <button class="suggestion-card" onclick='confirmNavigation("${selector}", "${label}", true)'>
                             <strong>Yes, show me</strong>
                             <span>Navigate to ${label}</span>
                         </button>
-                        <button class="suggestion-card" onclick="confirmNavigation('${selector}', '${label}', false)">
+                        <button class="suggestion-card" onclick='confirmNavigation("${selector}", "${label}", false)'>
                             <strong>No thanks</strong>
                             <span>Continue browsing</span>
                         </button>
