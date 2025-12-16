@@ -1575,15 +1575,15 @@
                             I can help you navigate our website. What would you like to see?
                         </div>
                         <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
-                            <button class="suggestion-card" onclick="suggestNavigation('.agents-section', 'Agents', 'AI Agents help you automate customer qualification with natural conversations. They understand your business and integrate with your tech stack.')">
+                            <button class="suggestion-card" onclick="suggestNavigation('.agents-section', 'Agents')">
                                 <strong>Tell me about Agents</strong>
                                 <span>AI agent capabilities</span>
                             </button>
-                            <button class="suggestion-card" onclick="suggestNavigation('.demos-section', 'Interactive Demos', 'Create guided product tours without coding. Build interactive demos directly from your live application.')">
+                            <button class="suggestion-card" onclick="suggestNavigation('.demos-section', 'Interactive Demos')">
                                 <strong>Tell me about Demos</strong>
                                 <span>Product tour features</span>
                             </button>
-                            <button class="suggestion-card" onclick="suggestNavigation('.insights-section', 'Insights', 'Get real-time analytics and uncover buyer intent from customer conversations. Monitor account-level engagement.')">
+                            <button class="suggestion-card" onclick="suggestNavigation('.insights-section', 'Insights')">
                                 <strong>Tell me about Insights</strong>
                                 <span>Analytics platform</span>
                             </button>
@@ -1597,9 +1597,17 @@
             `;
         }
 
+        // Section descriptions (stored to avoid quote escaping issues)
+        const sectionDescriptions = {
+            '.agents-section': 'AI Agents help you automate customer qualification with natural conversations. They understand your business and integrate with your tech stack.',
+            '.demos-section': 'Create guided product tours without coding. Build interactive demos directly from your live application.',
+            '.insights-section': 'Get real-time analytics and uncover buyer intent from customer conversations. Monitor account-level engagement.'
+        };
+
         // Suggestion → Confirmation → Action pattern for navigation
-        function suggestNavigation(selector, label, description) {
+        function suggestNavigation(selector, label) {
             const messagesContainer = document.querySelector('.chat-messages');
+            const description = sectionDescriptions[selector] || 'Learn more about this feature.';
 
             // Step 1: Suggestion - Provide information
             const suggestionMessage = document.createElement('div');
