@@ -643,6 +643,25 @@
             gap: 12px;
         }
 
+        .message-user {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 16px;
+        }
+
+        .message-user .message-bubble {
+            background: #0B3398;
+            color: white;
+            border-radius: 18px 18px 4px 18px;
+            padding: 12px 16px;
+            font-size: 14px;
+            line-height: 1.5;
+            max-width: 80%;
+            min-width: fit-content;
+            display: inline-block;
+            font-weight: 400;
+        }
+
         /* Round avatar in messages - smaller */
         .message-avatar {
             width: 28px;
@@ -696,6 +715,41 @@
             border-color: #6366f1;
             background: rgba(99, 102, 241, 0.03);
             transform: translateY(-2px);
+        }
+
+        /* Disabled state after answer submitted */
+        .suggestion-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .suggestion-card.selected-answer {
+            border-color: #0B3398;
+            background: rgba(11, 51, 152, 0.05);
+        }
+
+        /* Multi-select selected state - no checkboxes, just card highlight */
+        .multi-select-option.selected {
+            border-color: #0B3398;
+            background: rgba(11, 51, 152, 0.08);
+            box-shadow: 0 0 0 3px rgba(11, 51, 152, 0.1);
+        }
+
+        .multi-select-option.selected strong {
+            color: #0B3398;
+        }
+
+        /* Slide in animation for Continue button */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .suggestion-card strong {
@@ -1191,10 +1245,9 @@
         <div class="demo-section">
             <button class="demo-btn" onclick="setPosition('chat-button')">1. Chat Button</button>
             <button class="demo-btn" onclick="setPosition('center-low-rectangle')">2. Site Agent</button>
-            <button class="demo-btn" onclick="setPosition('center-midsize-square')">3. Focus Box</button>
+            <button class="demo-btn" onclick="demoFocusBox()">3. Focus Box</button>
             <button class="demo-btn" onclick="setPosition('skyscraper')">4. Skyscraper</button>
             <button class="demo-btn" onclick="setPosition('full-height-center')">5. Command Center</button>
-            <button class="demo-btn" onclick="setPosition('content-viewer')">6. Experience Viewer</button>
         </div>
 
         <div class="demo-section">
@@ -1215,11 +1268,7 @@
             <div class="demo-section-title">Demos</div>
             <button class="demo-btn" onclick="demoBookMeeting()">Book Meeting Flow</button>
             <button class="demo-btn" onclick="demoPageNavigation()">Page Navigation</button>
-        </div>
-
-        <div class="demo-section">
-            <div class="demo-section-title">Documentation</div>
-            <a href="https://github.com/davidjhillis/agent_views/blob/main/DEVELOPER-GUIDE.md" target="_blank" class="demo-btn" style="text-decoration: none; display: block;">📋 Developer PRD</a>
+            <button class="demo-btn" onclick="demoExperienceViewer()">Experience Viewer</button>
         </div>
     </div>
 
@@ -1335,24 +1384,22 @@
                             </div>
                             <div class="message-content">
                                 <div class="message-bubble">
-                                    Hello! I'm here to help you. How can I assist you today?
+                                    Hi! I'm Alex. I can help you explore ShowPilot, answer questions, or connect you with our team.
+                                    <br><br>
+                                    What can I help you with?
                                 </div>
-                                <div class="suggestion-cards">
-                                    <button class="suggestion-card" onclick="showContent()">
-                                        <strong>Product Demo</strong>
-                                        <span>2-minute overview</span>
+                                <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
+                                    <button class="suggestion-card" onclick="disableSuggestionCards(this); startDemoFlow()">
+                                        <strong>See a personalized demo</strong>
                                     </button>
-                                    <button class="suggestion-card" onclick="showContent()">
-                                        <strong>Documentation</strong>
-                                        <span>Complete guides</span>
+                                    <button class="suggestion-card" onclick="disableSuggestionCards(this); startLearnFlow()">
+                                        <strong>Learn how ShowPilot works</strong>
                                     </button>
-                                    <button class="suggestion-card" onclick="showContent()">
-                                        <strong>Interactive Tour</strong>
-                                        <span>Guided walkthrough</span>
+                                    <button class="suggestion-card" onclick="disableSuggestionCards(this); startCustomerFlow()">
+                                        <strong>See how customers use it</strong>
                                     </button>
-                                    <button class="suggestion-card">
-                                        <strong>Book Meeting</strong>
-                                        <span>Talk to our team</span>
+                                    <button class="suggestion-card" onclick="disableSuggestionCards(this); actionBookMeeting()">
+                                        <strong>Talk to sales</strong>
                                     </button>
                                 </div>
                             </div>
@@ -1547,6 +1594,8 @@
         // Demo: Book Meeting Flow
         function demoBookMeeting() {
             setPosition('center-midsize-square');
+
+            // Clear previous messages
             const messagesContainer = document.querySelector('.chat-messages');
             messagesContainer.innerHTML = `
                 <div class="message message-ai">
@@ -1566,9 +1615,11 @@
         // Demo: Page Navigation with Highlights
         function demoPageNavigation() {
             setPosition('skyscraper');
+
             // Show sample sections
             document.querySelector('.sample-sections').style.display = 'block';
 
+            // Clear previous messages
             const messagesContainer = document.querySelector('.chat-messages');
             messagesContainer.innerHTML = `
                 <div class="message message-ai">
@@ -1577,25 +1628,75 @@
                     </div>
                     <div class="message-content">
                         <div class="message-bubble">
-                            I can show you different sections of our website. Which would you like to explore?
+                            Hi! I'm here to help you explore ShowPilot. How can I help you today?
                         </div>
                         <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
-                            <button class="suggestion-card" onclick="navigateToSection('.agents-section', 'Agents')">
-                                <strong>Show me Agents</strong>
-                                <span>AI automation capabilities</span>
+                            <button class="suggestion-card" onclick="disableSuggestionCards(this); offerPersonalization()">
+                                <strong>I can personalize your visit</strong>
                             </button>
-                            <button class="suggestion-card" onclick="navigateToSection('.demos-section', 'Interactive Demos')">
-                                <strong>Show me Demos</strong>
-                                <span>Product tour platform</span>
+                            <button class="suggestion-card" onclick="disableSuggestionCards(this); navigateToSection('.agents-section', 'Agents')">
+                                <strong>Show me how ShowPilot works</strong>
                             </button>
-                            <button class="suggestion-card" onclick="navigateToSection('.insights-section', 'Insights')">
-                                <strong>Show me Insights</strong>
-                                <span>Analytics dashboard</span>
+                            <button class="suggestion-card" onclick="disableSuggestionCards(this); navigateToSection('.demos-section', 'Interactive Demos')">
+                                <strong>Show me pricing</strong>
+                            </button>
+                            <button class="suggestion-card" onclick="disableSuggestionCards(this); demoBookMeeting()">
+                                <strong>Talk to sales</strong>
                             </button>
                         </div>
                     </div>
                 </div>
             `;
+        }
+
+        // Demo: Focus Box - Shows journey options in centered chat view
+        function demoFocusBox() {
+            // Set position to Focus Box
+            setPosition('center-midsize-square');
+
+            // Clear previous messages
+            const messagesContainer = document.querySelector('.chat-messages');
+            messagesContainer.innerHTML = `
+                <div class="message message-ai">
+                    <div class="message-avatar">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            Hi! I'm Alex. I can help you explore ShowPilot, answer questions, or connect you with our team.
+                            <br><br>
+                            What can I help you with?
+                        </div>
+                        <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
+                            <button class="suggestion-card" onclick="disableSuggestionCards(this); startDemoFlow()">
+                                <strong>See a personalized demo</strong>
+                            </button>
+                            <button class="suggestion-card" onclick="disableSuggestionCards(this); startLearnFlow()">
+                                <strong>Learn how ShowPilot works</strong>
+                            </button>
+                            <button class="suggestion-card" onclick="disableSuggestionCards(this); startCustomerFlow()">
+                                <strong>See how customers use it</strong>
+                            </button>
+                            <button class="suggestion-card" onclick="disableSuggestionCards(this); demoBookMeeting()">
+                                <strong>Talk to sales</strong>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Demo: Experience Viewer - Goes through full flow: questions → recommendations → viewer
+        function demoExperienceViewer() {
+            // Clear previous messages
+            const messagesContainer = document.querySelector('.chat-messages');
+            messagesContainer.innerHTML = '';
+
+            // Open in Skyscraper position
+            setPosition('skyscraper');
+
+            // Start with the personalized demo flow which asks questions then shows content
+            startDemoFlow();
         }
 
         // Section descriptions (stored to avoid quote escaping issues)
@@ -1689,9 +1790,8 @@
             followUpMessage.className = 'message message-ai';
 
             const optionsHTML = options.map(opt => `
-                <button class="suggestion-card" onclick='navigateToSection("${opt.selector}", "${opt.label}")'>
+                <button class="suggestion-card" onclick='disableSuggestionCards(this); navigateToSection("${opt.selector}", "${opt.label}")'>
                     <strong>${opt.label}</strong>
-                    <span>${opt.description}</span>
                 </button>
             `).join('');
 
@@ -1705,9 +1805,8 @@
                     </div>
                     <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
                         ${optionsHTML}
-                        <button class="suggestion-card" onclick="clearHighlights()">
+                        <button class="suggestion-card" onclick="disableSuggestionCards(this); clearHighlights()">
                             <strong>That's all for now</strong>
-                            <span>Clear highlights</span>
                         </button>
                     </div>
                 </div>
@@ -1821,6 +1920,1865 @@
         function clearHighlights() {
             document.querySelectorAll('.page-highlight').forEach(el => el.remove());
             document.querySelector('.animated-cursor').classList.remove('active');
+        }
+
+        // ========================================
+        // VALUE-FIRST ENGAGEMENT SYSTEM
+        // ========================================
+
+        // Engagement tracking
+        let engagementState = {
+            viewedContent: [],
+            clickedCategories: [],
+            userTags: [],
+            timeOnPage: 0,
+            engagementLevel: 'low' // low, medium, high
+        };
+
+        // Content library
+        const contentLibrary = [
+            {
+                id: "exec-overview",
+                title: "2-Minute Product Overview",
+                description: "Quick overview of key benefits and ROI",
+                type: "Video",
+                duration: "2:15",
+                tags: ["executive", "overview", "roi"],
+                priority: 10
+            },
+            {
+                id: "sales-demo",
+                title: "Full Product Walkthrough",
+                description: "Complete demonstration of all features",
+                type: "Video",
+                duration: "12:30",
+                tags: ["sales", "features", "demo"],
+                priority: 10
+            },
+            {
+                id: "marketing-analytics",
+                title: "Marketing Analytics Deep Dive",
+                description: "Track engagement, conversions, and ROI",
+                type: "Demo",
+                tags: ["marketing", "analytics", "reporting", "conversion"],
+                priority: 9
+            },
+            {
+                id: "conversion-optimization",
+                title: "Conversion Optimization Best Practices",
+                description: "Learn proven strategies to boost conversions",
+                type: "Video",
+                duration: "8:45",
+                tags: ["marketing", "sales", "conversion", "optimization"],
+                priority: 9
+            },
+            {
+                id: "engagement-guide",
+                title: "Visitor Engagement Playbook",
+                description: "Increase engagement with proven tactics",
+                type: "PDF",
+                tags: ["marketing", "engagement", "strategy"],
+                priority: 9
+            },
+            {
+                id: "lead-qualification",
+                title: "Lead Qualification Framework",
+                description: "Qualify leads faster with AI automation",
+                type: "Demo",
+                tags: ["sales", "qualification", "automation"],
+                priority: 9
+            },
+            {
+                id: "personalization-demo",
+                title: "AI-Powered Personalization Demo",
+                description: "See personalization in action",
+                type: "Video",
+                duration: "6:20",
+                tags: ["marketing", "personalization", "ai"],
+                priority: 9
+            },
+            {
+                id: "api-docs",
+                title: "API Documentation & Integration Guide",
+                description: "Complete technical documentation",
+                type: "Article",
+                tags: ["technical", "api", "integration", "product"],
+                priority: 10
+            },
+            {
+                id: "quick-start",
+                title: "5-Minute Quick Start",
+                description: "Get up and running in minutes",
+                type: "Video",
+                duration: "5:00",
+                tags: ["quick-start", "fast-implementation"],
+                priority: 10
+            },
+            {
+                id: "support-sla",
+                title: "Premium Support & SLAs",
+                description: "Enterprise support options",
+                type: "PDF",
+                tags: ["support", "enterprise", "executive"],
+                priority: 7
+            }
+        ];
+
+        // Offer personalization - explicit value proposition
+        function offerPersonalization() {
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            const message = document.createElement('div');
+            message.className = 'message message-ai';
+
+            message.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        I can create a personalized list of content for you to view and guide you through our site based on your specific needs.
+                        <br><br>
+                        <strong>Would you like to personalize your visit?</strong>
+                    </div>
+                    <div class="suggestion-cards" style="grid-template-columns: 1fr 1fr; margin-top: 12px;">
+                        <button class="suggestion-card" onclick="startConversationalJourney()">
+                            <strong>Yes, personalize it</strong>
+                        </button>
+                        <button class="suggestion-card" onclick="skipPersonalization()">
+                            <strong>No, I'll browse</strong>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(message);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Skip personalization - show general options
+        function skipPersonalization() {
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            const message = document.createElement('div');
+            message.className = 'message message-ai';
+
+            message.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        No problem! Feel free to explore our site, or let me know if you have any questions.
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(message);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Helper: Show user's message in chat
+        function showUserMessage(text) {
+            const messagesContainer = document.querySelector('.chat-messages');
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message message-user';
+            userMessage.innerHTML = `
+                <div class="message-content">
+                    <div class="message-bubble">
+                        ${text}
+                    </div>
+                </div>
+            `;
+            messagesContainer.appendChild(userMessage);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Helper: Convert suggestion cards to compact submitted state
+        function disableSuggestionCards(clickedButton) {
+            // Find the parent suggestion-cards container
+            const cardsContainer = clickedButton.closest('.suggestion-cards');
+            if (!cardsContainer) return;
+
+            // Get the selected text
+            const selectedText = clickedButton.querySelector('strong')?.textContent || clickedButton.textContent.trim();
+
+            // Create compact submitted message
+            const submittedMessage = document.createElement('div');
+            submittedMessage.style.cssText = 'margin-top: 12px; padding: 10px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px; color: #64748b; font-weight: 500;';
+            submittedMessage.innerHTML = `→ ${selectedText}`;
+
+            // Replace the cards container with the compact message
+            cardsContainer.parentNode.replaceChild(submittedMessage, cardsContainer);
+        }
+
+        // ===========================================
+        // FLOWS - Each flow asks questions and waits for user responses
+        // ===========================================
+
+        // FLOW 1: Personalized Demo - asks questions FIRST, then shows content
+        function startDemoFlow() {
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            setTimeout(() => {
+                const message = document.createElement('div');
+                message.className = 'message message-ai';
+
+                message.innerHTML = `
+                    <div class="message-avatar">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            Great! I'll personalize a demo for you. What topics are most important?
+                            <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #64748b; margin-top: 8px;">
+                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                    <circle cx="8" cy="8" r="6" stroke="#64748b" stroke-width="1.5"/>
+                                </svg>
+                                <span>Click any option to continue</span>
+                            </div>
+                        </div>
+                        <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px; gap: 8px;">
+                            <button class="suggestion-card single-select-option" onclick="disableSuggestionCards(this); demoFlowQ2('conversion')" style="display: flex; align-items: center; gap: 10px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                    <circle cx="8" cy="8" r="7" stroke="#D1D5DB" stroke-width="1.5"/>
+                                </svg>
+                                <strong>Lead Conversion</strong>
+                            </button>
+                            <button class="suggestion-card single-select-option" onclick="disableSuggestionCards(this); demoFlowQ2('engagement')" style="display: flex; align-items: center; gap: 10px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                    <circle cx="8" cy="8" r="7" stroke="#D1D5DB" stroke-width="1.5"/>
+                                </svg>
+                                <strong>Visitor Engagement</strong>
+                            </button>
+                            <button class="suggestion-card single-select-option" onclick="disableSuggestionCards(this); demoFlowQ2('qualification')" style="display: flex; align-items: center; gap: 10px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                    <circle cx="8" cy="8" r="7" stroke="#D1D5DB" stroke-width="1.5"/>
+                                </svg>
+                                <strong>Lead Qualification</strong>
+                            </button>
+                            <button class="suggestion-card single-select-option" onclick="disableSuggestionCards(this); demoFlowQ2('personalization')" style="display: flex; align-items: center; gap: 10px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                    <circle cx="8" cy="8" r="7" stroke="#D1D5DB" stroke-width="1.5"/>
+                                </svg>
+                                <strong>Personalization</strong>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                messagesContainer.appendChild(message);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 500);
+        }
+
+        function demoFlowQ2(topic) {
+            engagementState.userTags.push(topic);
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            setTimeout(() => {
+                const message = document.createElement('div');
+                message.className = 'message message-ai';
+
+                message.innerHTML = `
+                    <div class="message-avatar">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            Perfect! What's your role?
+                            <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #64748b; margin-top: 8px;">
+                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                    <circle cx="8" cy="8" r="6" stroke="#64748b" stroke-width="1.5"/>
+                                </svg>
+                                <span>Click any option to continue</span>
+                            </div>
+                        </div>
+                        <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px; gap: 8px;">
+                            <button class="suggestion-card single-select-option" onclick="disableSuggestionCards(this); demoFlowComplete('marketing')" style="display: flex; align-items: center; gap: 10px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                    <circle cx="8" cy="8" r="7" stroke="#D1D5DB" stroke-width="1.5"/>
+                                </svg>
+                                <strong>Marketing</strong>
+                            </button>
+                            <button class="suggestion-card single-select-option" onclick="disableSuggestionCards(this); demoFlowComplete('sales')" style="display: flex; align-items: center; gap: 10px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                    <circle cx="8" cy="8" r="7" stroke="#D1D5DB" stroke-width="1.5"/>
+                                </svg>
+                                <strong>Sales</strong>
+                            </button>
+                            <button class="suggestion-card single-select-option" onclick="disableSuggestionCards(this); demoFlowComplete('product')" style="display: flex; align-items: center; gap: 10px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                    <circle cx="8" cy="8" r="7" stroke="#D1D5DB" stroke-width="1.5"/>
+                                </svg>
+                                <strong>Product</strong>
+                            </button>
+                            <button class="suggestion-card single-select-option" onclick="disableSuggestionCards(this); demoFlowComplete('executive')" style="display: flex; align-items: center; gap: 10px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                    <circle cx="8" cy="8" r="7" stroke="#D1D5DB" stroke-width="1.5"/>
+                                </svg>
+                                <strong>Executive</strong>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                messagesContainer.appendChild(message);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 500);
+        }
+
+        function demoFlowComplete(role) {
+            engagementState.userTags.push(role);
+            engagementState.engagementLevel = 'high';
+
+            // ACTION: Show personalized content playlist
+            actionShowContentPlaylist();
+        }
+
+        // FLOW 2: Learn How ShowPilot Works - DEMONSTRATES ALL 6 QUESTION TYPES
+        function startLearnFlow() {
+            // Clear previous messages
+            const messagesContainer = document.querySelector('.chat-messages');
+            messagesContainer.innerHTML = '';
+
+            // TYPE 1: MESSAGE - No interaction required, just information
+            setTimeout(() => {
+                const message = document.createElement('div');
+                message.className = 'message message-ai';
+
+                message.innerHTML = `
+                    <div class="message-avatar">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            <strong>Question Type Demo: MESSAGE</strong><br><br>
+                            This is a message-only step with no interaction required. It's great for providing context or explaining what happens next.
+                        </div>
+                    </div>
+                `;
+
+                messagesContainer.appendChild(message);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                // Automatically continue to next question type
+                setTimeout(() => {
+                    learnFlowYesNo();
+                }, 1500);
+            }, 500);
+        }
+
+        // TYPE 2: YES/NO - Binary choice
+        function learnFlowYesNo() {
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            const message = document.createElement('div');
+            message.className = 'message message-ai';
+
+            message.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        <strong>Question Type Demo: YES/NO</strong><br><br>
+                        Would you like to see a guided tour of all question types?
+                    </div>
+                    <div class="suggestion-cards" style="grid-template-columns: 1fr 1fr; margin-top: 12px; gap: 8px;">
+                        <button class="suggestion-card" onclick="disableSuggestionCards(this); learnFlowSingleSelect('yes')" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                <circle cx="8" cy="8" r="6" fill="#10b981" stroke="#10b981" stroke-width="1.5"/>
+                                <path d="M5 8l2 2 4-4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <strong>Yes</strong>
+                        </button>
+                        <button class="suggestion-card" onclick="disableSuggestionCards(this); learnFlowSingleSelect('no')" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                <circle cx="8" cy="8" r="6" fill="#ef4444" stroke="#ef4444" stroke-width="1.5"/>
+                                <path d="M5 5l6 6M11 5l-6 6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            <strong>No</strong>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(message);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // TYPE 3: SINGLE SELECT - Choose one option
+        function learnFlowSingleSelect(yesNo) {
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            setTimeout(() => {
+                const message = document.createElement('div');
+                message.className = 'message message-ai';
+
+                message.innerHTML = `
+                    <div class="message-avatar">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            <strong>Question Type Demo: SINGLE SELECT</strong><br><br>
+                            Which ShowPilot feature interests you most?
+                            <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #64748b; margin-top: 8px;">
+                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                    <circle cx="8" cy="8" r="6" stroke="#64748b" stroke-width="1.5"/>
+                                </svg>
+                                <span>Click any option to continue</span>
+                            </div>
+                        </div>
+                        <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px; gap: 8px;">
+                            <button class="suggestion-card single-select-option" onclick="disableSuggestionCards(this); learnFlowMultiSelect('ai-agents')" style="display: flex; align-items: center; gap: 10px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                    <circle cx="8" cy="8" r="7" stroke="#D1D5DB" stroke-width="1.5"/>
+                                </svg>
+                                <strong>AI Agents</strong>
+                            </button>
+                            <button class="suggestion-card single-select-option" onclick="disableSuggestionCards(this); learnFlowMultiSelect('content-delivery')" style="display: flex; align-items: center; gap: 10px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                    <circle cx="8" cy="8" r="7" stroke="#D1D5DB" stroke-width="1.5"/>
+                                </svg>
+                                <strong>Content Delivery</strong>
+                            </button>
+                            <button class="suggestion-card single-select-option" onclick="disableSuggestionCards(this); learnFlowMultiSelect('analytics')" style="display: flex; align-items: center; gap: 10px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                    <circle cx="8" cy="8" r="7" stroke="#D1D5DB" stroke-width="1.5"/>
+                                </svg>
+                                <strong>Analytics</strong>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                messagesContainer.appendChild(message);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 500);
+        }
+
+        // TYPE 4: MULTI SELECT - Choose multiple options
+        function learnFlowMultiSelect(feature) {
+            const messagesContainer = document.querySelector('.chat-messages');
+            const questionId = 'learn-multi-' + Date.now();
+
+            setTimeout(() => {
+                const message = document.createElement('div');
+                message.className = 'message message-ai';
+
+                message.innerHTML = `
+                    <div class="message-avatar">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            <strong>Question Type Demo: MULTI SELECT</strong><br><br>
+                            Which use cases interest you? (Select all that apply)
+                            <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #64748b; margin-top: 8px;">
+                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                    <rect x="3" y="3" width="10" height="10" stroke="#64748b" stroke-width="1.5" rx="2"/>
+                                </svg>
+                                <span>Select one or more, then continue</span>
+                            </div>
+                        </div>
+                        <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px; gap: 8px;">
+                            <button class="suggestion-card multi-select-option" onclick="toggleMultiSelectOption('${questionId}', 'lead-gen', 'Lead Generation', this)">
+                                <strong>Lead Generation</strong>
+                            </button>
+                            <button class="suggestion-card multi-select-option" onclick="toggleMultiSelectOption('${questionId}', 'onboarding', 'Customer Onboarding', this)">
+                                <strong>Customer Onboarding</strong>
+                            </button>
+                            <button class="suggestion-card multi-select-option" onclick="toggleMultiSelectOption('${questionId}', 'support', 'Product Support', this)">
+                                <strong>Product Support</strong>
+                            </button>
+                        </div>
+                        <button id="submit-${questionId}"
+                                onclick="submitMultiSelect('${questionId}', learnFlowOpenEnded)"
+                                style="display: none; background: #18181b; color: white; border: none; margin-top: 12px; width: 100%; justify-content: center; align-items: center; animation: slideIn 0.2s ease-out; padding: 12px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; letter-spacing: 0.01em; cursor: pointer; transition: all 0.15s ease;"
+                                onmouseover="this.style.background='#27272a';"
+                                onmouseout="this.style.background='#18181b';">
+                            Continue (<span id="count-${questionId}" style="padding: 0 2px;">0</span> selected)
+                        </button>
+                    </div>
+                `;
+
+                messagesContainer.appendChild(message);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 500);
+        }
+
+        // TYPE 5: OPEN ENDED - Free text input
+        function learnFlowOpenEnded() {
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            setTimeout(() => {
+                const message = document.createElement('div');
+                message.className = 'message message-ai';
+
+                message.innerHTML = `
+                    <div class="message-avatar">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            <strong>Question Type Demo: OPEN ENDED</strong><br><br>
+                            What's your biggest challenge with website engagement? (Type your answer below)
+                        </div>
+                    </div>
+                `;
+
+                messagesContainer.appendChild(message);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                // Show typing indicator after brief delay to demonstrate flow
+                setTimeout(() => {
+                    learnFlowAction();
+                }, 2000);
+            }, 500);
+        }
+
+        // TYPE 6: ACTION - Trigger an action
+        function learnFlowAction() {
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            const message = document.createElement('div');
+            message.className = 'message message-ai';
+
+            message.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        <strong>Question Type Demo: ACTION</strong><br><br>
+                        Perfect! Now that you've seen all question types, what would you like to do next?
+                    </div>
+                    <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px; gap: 8px;">
+                        <button class="suggestion-card" onclick="disableSuggestionCards(this); demoBookMeeting()" style="display: flex; align-items: center; gap: 10px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0B3398" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            <strong>Book a Demo</strong>
+                        </button>
+                        <button class="suggestion-card" onclick="disableSuggestionCards(this); startDemoFlow()" style="display: flex; align-items: center; gap: 10px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2">
+                                <polygon points="5 3 19 12 5 21 5 3"/>
+                            </svg>
+                            <strong>See Personalized Content</strong>
+                        </button>
+                        <button class="suggestion-card" onclick="disableSuggestionCards(this); setPosition('chat-button')" style="display: flex; align-items: center; gap: 10px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="15" y1="9" x2="9" y2="15"/>
+                                <line x1="9" y1="9" x2="15" y2="15"/>
+                            </svg>
+                            <strong>Close Demo</strong>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(message);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Global state for multi-select
+        let multiSelectState = {
+            selectedOptions: [],
+            questionId: null
+        };
+
+        // Toggle multi-select option
+        function toggleMultiSelectOption(questionId, value, label, buttonElement) {
+            // Initialize if new question
+            if (multiSelectState.questionId !== questionId) {
+                multiSelectState = { selectedOptions: [], questionId: questionId };
+            }
+
+            const index = multiSelectState.selectedOptions.findIndex(opt => opt.value === value);
+
+            if (index > -1) {
+                // Deselect
+                multiSelectState.selectedOptions.splice(index, 1);
+                buttonElement.classList.remove('selected');
+            } else {
+                // Select
+                multiSelectState.selectedOptions.push({ value, label });
+                buttonElement.classList.add('selected');
+            }
+
+            // Update submit button with count
+            const submitBtn = document.getElementById(`submit-${questionId}`);
+            const selectionCount = document.getElementById(`count-${questionId}`);
+
+            if (submitBtn && selectionCount) {
+                if (multiSelectState.selectedOptions.length > 0) {
+                    submitBtn.style.display = 'flex';
+                    selectionCount.textContent = multiSelectState.selectedOptions.length;
+                } else {
+                    submitBtn.style.display = 'none';
+                }
+            }
+        }
+
+        // Submit multi-select
+        function submitMultiSelect(questionId, callback) {
+            const labels = multiSelectState.selectedOptions.map(opt => opt.label).join(', ');
+            const values = multiSelectState.selectedOptions.map(opt => opt.value);
+
+            // Find and replace the multi-select cards with compact message
+            const submitButton = document.getElementById(`submit-${questionId}`);
+            if (submitButton) {
+                const cardsContainer = submitButton.previousElementSibling;
+
+                // Create compact submitted message
+                const submittedMessage = document.createElement('div');
+                submittedMessage.style.cssText = 'margin-top: 12px; padding: 10px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px; color: #64748b; font-weight: 500;';
+                submittedMessage.innerHTML = `→ ${labels}`;
+
+                // Replace cards and button with compact message
+                cardsContainer.parentNode.replaceChild(submittedMessage, cardsContainer);
+                submitButton.remove();
+            }
+
+            callback(values);
+
+            // Reset state
+            multiSelectState = { selectedOptions: [], questionId: null };
+        }
+
+        // FLOW 3: Customer Stories (MULTI-SELECT EXAMPLE)
+        function startCustomerFlow() {
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            setTimeout(() => {
+                const message = document.createElement('div');
+                message.className = 'message message-ai';
+
+                const questionId = 'customer-industries';
+
+                message.innerHTML = `
+                    <div class="message-avatar">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            Companies like yours use ShowPilot to increase engagement and conversions. What industries are you interested in?
+                            <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #64748b; margin-top: 8px;">
+                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                    <rect x="3" y="3" width="10" height="10" stroke="#64748b" stroke-width="1.5" rx="2"/>
+                                </svg>
+                                <span>Select one or more, then continue</span>
+                            </div>
+                        </div>
+                        <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px; gap: 8px;">
+                            <button class="suggestion-card multi-select-option" onclick="toggleMultiSelectOption('${questionId}', 'saas', 'SaaS', this)">
+                                <strong>SaaS</strong>
+                            </button>
+                            <button class="suggestion-card multi-select-option" onclick="toggleMultiSelectOption('${questionId}', 'ecommerce', 'E-commerce', this)">
+                                <strong>E-commerce</strong>
+                            </button>
+                            <button class="suggestion-card multi-select-option" onclick="toggleMultiSelectOption('${questionId}', 'fintech', 'Financial Services', this)">
+                                <strong>Financial Services</strong>
+                            </button>
+                            <button class="suggestion-card multi-select-option" onclick="toggleMultiSelectOption('${questionId}', 'healthcare', 'Healthcare', this)">
+                                <strong>Healthcare</strong>
+                            </button>
+                        </div>
+                        <button id="submit-${questionId}"
+                                onclick="submitMultiSelect('${questionId}', customerFlowShowStories)"
+                                style="display: none; background: #18181b; color: white; border: none; margin-top: 12px; width: 100%; justify-content: center; align-items: center; animation: slideIn 0.2s ease-out; padding: 12px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; letter-spacing: 0.01em; cursor: pointer; transition: all 0.15s ease;"
+                                onmouseover="this.style.background='#27272a';"
+                                onmouseout="this.style.background='#18181b';">
+                            Continue (<span id="count-${questionId}" style="padding: 0 2px;">0</span> selected)
+                        </button>
+                    </div>
+                `;
+
+                messagesContainer.appendChild(message);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 500);
+        }
+
+        function customerFlowShowStories(industry) {
+            engagementState.userTags.push(industry);
+
+            // ACTION: Show customer stories content
+            actionShowCustomerStories(industry);
+        }
+
+        // ===========================================
+        // ACTIONS - Tools that flows can call
+        // ===========================================
+
+        // ACTION: Show personalized content playlist
+        function actionShowContentPlaylist() {
+            const messagesContainer = document.querySelector('.chat-messages');
+            const recommended = getRecommendedContent(engagementState.userTags).slice(0, 3);
+
+            setTimeout(() => {
+                const contentCardsHTML = recommended.map(item => {
+                    // Professional content type styling like Perplexity
+                    const contentTypes = {
+                        'Video': {
+                            icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0B3398" stroke-width="2">
+                                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                   </svg>`,
+                            badge: `<span style="font-size: 11px; padding: 3px 8px; background: #EEF2FF; color: #0B3398; border-radius: 4px; font-weight: 600;">VIDEO</span>`,
+                            bgColor: '#F0F4FF'
+                        },
+                        'PDF': {
+                            icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                   </svg>`,
+                            badge: `<span style="font-size: 11px; padding: 3px 8px; background: #FEF2F2; color: #DC2626; border-radius: 4px; font-weight: 600;">PDF</span>`,
+                            bgColor: '#FEF2F2'
+                        },
+                        'Demo': {
+                            icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                                   </svg>`,
+                            badge: `<span style="font-size: 11px; padding: 3px 8px; background: #FAF5FF; color: #7C3AED; border-radius: 4px; font-weight: 600;">INTERACTIVE DEMO</span>`,
+                            bgColor: '#FAF5FF'
+                        },
+                        'Article': {
+                            icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2">
+                                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <line x1="10" y1="9" x2="8" y2="9"></line>
+                                   </svg>`,
+                            badge: `<span style="font-size: 11px; padding: 3px 8px; background: #ECFDF5; color: #059669; border-radius: 4px; font-weight: 600;">WEB PAGE</span>`,
+                            bgColor: '#ECFDF5'
+                        }
+                    };
+
+                    const contentType = contentTypes[item.type] || contentTypes['Article'];
+
+                    return `
+                    <button class="content-recommendation-card" onclick='viewPersonalizedContent(${JSON.stringify(item)})'
+                            style="all: unset; cursor: pointer; display: block; width: 100%; max-width: 100%; box-sizing: border-box; background: white; border: 1px solid #E5E7EB; border-radius: 10px; padding: 12px; margin-bottom: 8px; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.06);"
+                            onmouseover="this.style.borderColor='#0B3398'; this.style.boxShadow='0 2px 8px rgba(11,51,152,0.12)'; this.style.transform='translateY(-1px)';"
+                            onmouseout="this.style.borderColor='#E5E7EB'; this.style.boxShadow='0 1px 2px rgba(0,0,0,0.06)'; this.style.transform='translateY(0)';">
+                        <div style="display: flex; gap: 12px; align-items: center; width: 100%;">
+                            <div style="flex-shrink: 0; width: 40px; height: 40px; background: ${contentType.bgColor}; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                ${contentType.icon}
+                            </div>
+                            <div style="flex: 1; min-width: 0; overflow: hidden;">
+                                <div style="font-size: 14px; font-weight: 600; color: #111827; line-height: 1.3; margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                    ${item.title}
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                    ${contentType.badge}
+                                    ${item.duration ? `<span style="font-size: 12px; color: #9CA3AF;">• ${item.duration}</span>` : ''}
+                                </div>
+                            </div>
+                            <div style="flex-shrink: 0;">
+                                <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                                    <path d="M7.5 15L12.5 10L7.5 5" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </button>`;
+                }).join('');
+
+                const message = document.createElement('div');
+                message.className = 'message message-ai';
+
+                message.innerHTML = `
+                    <div class="message-avatar">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    </div>
+                    <div class="message-content" style="flex: 1; min-width: 0;">
+                        <div class="message-bubble">
+                            Perfect! Here's your personalized content playlist:
+                        </div>
+                        <div style="margin-top: 16px; max-width: 100%; box-sizing: border-box;">
+                            ${contentCardsHTML}
+                        </div>
+                    </div>
+                `;
+
+                messagesContainer.appendChild(message);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                // REMOVED: No automatic follow-up - user must interact first
+            }, 500);
+        }
+
+        // ACTION: Show specific content by ID
+        function actionShowContent(contentId) {
+            const content = contentLibrary.find(item => item.id === contentId);
+            if (content) {
+                viewPersonalizedContent(content);
+            }
+        }
+
+        // ACTION: Book meeting
+        function actionBookMeeting() {
+            demoBookMeeting();
+        }
+
+        // ACTION: Guided tour
+        function actionGuidedTour() {
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            setTimeout(() => {
+                const message = document.createElement('div');
+                message.className = 'message message-ai';
+
+                message.innerHTML = `
+                    <div class="message-avatar">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            I'll guide you through the platform. What would you like to see first?
+                        </div>
+                        <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
+                            <button class="suggestion-card" onclick="disableSuggestionCards(this); navigateToSection('.agents-section', 'Agents')">
+                                <strong>AI Agents</strong>
+                            </button>
+                            <button class="suggestion-card" onclick="disableSuggestionCards(this); navigateToSection('.demos-section', 'Demos')">
+                                <strong>Interactive Demos</strong>
+                            </button>
+                            <button class="suggestion-card" onclick="disableSuggestionCards(this); navigateToSection('.insights-section', 'Insights')">
+                                <strong>Analytics</strong>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                messagesContainer.appendChild(message);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 500);
+        }
+
+        // ACTION: Show customer stories
+        function actionShowCustomerStories(industry) {
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            const stories = {
+                'saas': [
+                    { title: 'How Acme SaaS increased conversions by 40%', type: 'PDF' },
+                    { title: 'B2B SaaS company case study', type: 'Video', duration: '5:20' }
+                ],
+                'ecommerce': [
+                    { title: 'E-commerce platform boosts engagement 3x', type: 'PDF' },
+                    { title: 'Online retail success story', type: 'Video', duration: '4:15' }
+                ],
+                'fintech': [
+                    { title: 'Financial services firm case study', type: 'PDF' },
+                    { title: 'Fintech company testimonial', type: 'Video', duration: '3:45' }
+                ],
+                'healthcare': [
+                    { title: 'Healthcare platform case study', type: 'PDF' },
+                    { title: 'Medical technology customer story', type: 'Video', duration: '6:00' }
+                ]
+            };
+
+            const industryStories = stories[industry] || stories['saas'];
+
+            setTimeout(() => {
+                const storiesHTML = industryStories.map((story, idx) => {
+                    const contentTypes = {
+                        'Video': {
+                            icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0B3398" stroke-width="2">
+                                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                   </svg>`,
+                            badge: `<span style="font-size: 11px; padding: 3px 8px; background: #EEF2FF; color: #0B3398; border-radius: 4px; font-weight: 600;">VIDEO</span>`,
+                            bgColor: '#F0F4FF'
+                        },
+                        'PDF': {
+                            icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                   </svg>`,
+                            badge: `<span style="font-size: 11px; padding: 3px 8px; background: #FEF2F2; color: #DC2626; border-radius: 4px; font-weight: 600;">PDF</span>`,
+                            bgColor: '#FEF2F2'
+                        }
+                    };
+
+                    const contentType = contentTypes[story.type] || contentTypes['PDF'];
+
+                    // Create content object for Experience view
+                    const contentObj = {
+                        id: 'story-' + idx,
+                        title: story.title,
+                        type: story.type,
+                        duration: story.duration,
+                        tags: [industry]
+                    };
+
+                    return `
+                    <button class="content-recommendation-card" onclick='viewPersonalizedContent(${JSON.stringify(contentObj)})'
+                            style="all: unset; cursor: pointer; display: block; width: 100%; max-width: 100%; box-sizing: border-box; background: white; border: 1px solid #E5E7EB; border-radius: 10px; padding: 12px; margin-bottom: 8px; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.06);"
+                            onmouseover="this.style.borderColor='#0B3398'; this.style.boxShadow='0 2px 8px rgba(11,51,152,0.12)'; this.style.transform='translateY(-1px)';"
+                            onmouseout="this.style.borderColor='#E5E7EB'; this.style.boxShadow='0 1px 2px rgba(0,0,0,0.06)'; this.style.transform='translateY(0)';">
+                        <div style="display: flex; gap: 12px; align-items: center; width: 100%;">
+                            <div style="flex-shrink: 0; width: 40px; height: 40px; background: ${contentType.bgColor}; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                ${contentType.icon}
+                            </div>
+                            <div style="flex: 1; min-width: 0; overflow: hidden;">
+                                <div style="font-size: 14px; font-weight: 600; color: #111827; line-height: 1.3; margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                    ${story.title}
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                    ${contentType.badge}
+                                    ${story.duration ? `<span style="font-size: 12px; color: #9CA3AF;">• ${story.duration}</span>` : ''}
+                                </div>
+                            </div>
+                            <div style="flex-shrink: 0;">
+                                <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                                    <path d="M7.5 15L12.5 10L7.5 5" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </button>`;
+                }).join('');
+
+                const message = document.createElement('div');
+                message.className = 'message message-ai';
+
+                message.innerHTML = `
+                    <div class="message-avatar">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    </div>
+                    <div class="message-content" style="flex: 1; min-width: 0;">
+                        <div class="message-bubble">
+                            Here are success stories from ${industry} companies:
+                        </div>
+                        <div style="margin-top: 16px; max-width: 100%; box-sizing: border-box;">
+                            ${storiesHTML}
+                        </div>
+                    </div>
+                `;
+
+                messagesContainer.appendChild(message);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                // REMOVED: No automatic follow-up - user must interact first
+            }, 500);
+        }
+
+        // Offer next steps after content
+        function offerNextSteps() {
+            const messagesContainer = document.querySelector('.chat-messages');
+            const message = document.createElement('div');
+            message.className = 'message message-ai';
+
+            message.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        What would you like to do next?
+                    </div>
+                    <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
+                        <button class="suggestion-card" onclick="showUserMessage('Book a demo'); actionBookMeeting()">
+                            <strong>Book a demo</strong>
+                        </button>
+                        <button class="suggestion-card" onclick="showUserMessage('Keep exploring'); showMorePersonalized()">
+                            <strong>Keep exploring</strong>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(message);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // LEGACY FUNCTIONS - Keep for backward compatibility
+        function answerJourneyQ1(topic) {
+            engagementState.userTags.push(topic);
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            setTimeout(() => {
+                const message = document.createElement('div');
+                message.className = 'message message-ai';
+
+                message.innerHTML = `
+                    <div class="message-avatar">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            Perfect! What's your role?
+                            <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #64748b; margin-top: 8px;">
+                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                    <circle cx="8" cy="8" r="6" stroke="#64748b" stroke-width="1.5"/>
+                                </svg>
+                                <span>Click any option to continue</span>
+                            </div>
+                        </div>
+                        <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px; gap: 8px;">
+                            <button class="suggestion-card single-select-option" onclick="disableSuggestionCards(this); answerJourneyQ2('marketing')" style="display: flex; align-items: center; gap: 10px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                    <circle cx="8" cy="8" r="7" stroke="#D1D5DB" stroke-width="1.5"/>
+                                </svg>
+                                <strong>Marketing</strong>
+                            </button>
+                            <button class="suggestion-card single-select-option" onclick="disableSuggestionCards(this); answerJourneyQ2('sales')" style="display: flex; align-items: center; gap: 10px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                    <circle cx="8" cy="8" r="7" stroke="#D1D5DB" stroke-width="1.5"/>
+                                </svg>
+                                <strong>Sales</strong>
+                            </button>
+                            <button class="suggestion-card single-select-option" onclick="disableSuggestionCards(this); answerJourneyQ2('product')" style="display: flex; align-items: center; gap: 10px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                    <circle cx="8" cy="8" r="7" stroke="#D1D5DB" stroke-width="1.5"/>
+                                </svg>
+                                <strong>Product</strong>
+                            </button>
+                            <button class="suggestion-card single-select-option" onclick="disableSuggestionCards(this); answerJourneyQ2('executive')" style="display: flex; align-items: center; gap: 10px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                    <circle cx="8" cy="8" r="7" stroke="#D1D5DB" stroke-width="1.5"/>
+                                </svg>
+                                <strong>Executive</strong>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                messagesContainer.appendChild(message);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 500);
+        }
+
+        // Answer Journey Q2 and show personalized playlist
+        function answerJourneyQ2(role) {
+            engagementState.userTags.push(role);
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            setTimeout(() => {
+                // Get recommended content based on their answers
+                const recommended = getRecommendedContent(engagementState.userTags).slice(0, 3);
+
+                const contentCardsHTML = recommended.map(item => {
+                    const typeIcons = {
+                        'Video': '<svg width="16" height="16" viewBox="0 0 24 24" fill="#0B3398"><path d="M8 5v14l11-7z"/></svg>',
+                        'Demo': '<span style="font-size: 10px; padding: 2px 6px; background: #0B3398; color: white; border-radius: 3px; font-weight: 600;">DEMO</span>',
+                        'PDF': '<svg width="16" height="16" viewBox="0 0 24 24" fill="#ef4444"><path d="M7 18h10M7 14h10M10 10h4M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"/><path d="M14 2v6h6" stroke="#ef4444" fill="none"/></svg>'
+                    };
+
+                    return `
+                    <button class="suggestion-card" onclick='viewPersonalizedContent(${JSON.stringify(item)})' style="text-align: left; padding: 10px; display: flex; gap: 10px; align-items: center;">
+                        <div style="flex-shrink: 0; width: 40px; height: 40px; background: linear-gradient(135deg, rgba(11, 51, 152, 0.1) 0%, rgba(30, 64, 175, 0.05) 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            ${typeIcons[item.type] || '📄'}
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-size: 14px; font-weight: 600; color: #0f172a;">${item.title}</div>
+                            <div style="font-size: 12px; color: #64748b;">${item.duration || item.type}</div>
+                        </div>
+                    </button>`;
+                }).join('');
+
+                const message = document.createElement('div');
+                message.className = 'message message-ai';
+
+                message.innerHTML = `
+                    <div class="message-avatar">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            Great! I've personalized your demo playlist. Watch these next:
+                        </div>
+                        <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
+                            ${contentCardsHTML}
+                        </div>
+                    </div>
+                `;
+
+                messagesContainer.appendChild(message);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                // After showing playlist, offer to book a meeting
+                setTimeout(() => {
+                    offerMeetingSimple();
+                }, 3000);
+            }, 500);
+        }
+
+        // Simple meeting offer at the end
+        function offerMeetingSimple() {
+            const messagesContainer = document.querySelector('.chat-messages');
+            const message = document.createElement('div');
+            message.className = 'message message-ai';
+
+            message.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        Want to see how this works for your specific use case?
+                    </div>
+                    <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
+                        <button class="suggestion-card" onclick="showUserMessage('Book a demo'); demoBookMeeting()">
+                            <strong>Book a Demo</strong>
+                        </button>
+                        <button class="suggestion-card" onclick="showUserMessage('Keep exploring'); showMorePersonalized()">
+                            <strong>Keep Exploring</strong>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(message);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Show contextual content from library
+        function showContextualContent(context) {
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            // Find the 2-minute overview from content library
+            const overview = contentLibrary.find(item => item.id === 'exec-overview');
+
+            if (overview) {
+                viewPersonalizedContent(overview);
+            }
+        }
+
+        // LEGACY - Keep for backward compatibility but renamed
+        function startConversationalJourney() {
+            startPersonalizedDemo();
+        }
+
+        function startNaturalConversation() {
+            startPersonalizedDemo();
+        }
+
+        // NEW: Handle challenge answer and show relevant content immediately
+        function answerChallenge(challengeType, challengeText) {
+            engagementState.userTags.push(challengeType);
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            // AI acknowledges and shows relevant content
+            const responses = {
+                'conversion': {
+                    text: 'Converting visitors is crucial. ShowPilot helps you engage visitors with the right content at the right time.',
+                    contentIds: ['exec-overview', 'marketing-analytics'],
+                    followUp: 'I have some resources that show exactly how companies are improving conversion rates.'
+                },
+                'engagement': {
+                    text: 'Keeping visitors engaged is the foundation of conversion.',
+                    contentIds: ['sales-demo', 'exec-overview'],
+                    followUp: 'Let me show you how interactive content and AI chat keep visitors engaged longer.'
+                },
+                'qualification': {
+                    text: 'Smart qualification is what ShowPilot does best - AI-powered conversations that identify your best opportunities.',
+                    contentIds: ['sales-demo', 'marketing-analytics'],
+                    followUp: 'Here\'s how our AI agents qualify leads in real-time.'
+                },
+                'personalization': {
+                    text: 'Personalization at scale is the future. ShowPilot makes it effortless.',
+                    contentIds: ['exec-overview', 'sales-demo'],
+                    followUp: 'Let me show you how we deliver personalized experiences to every visitor.'
+                }
+            };
+
+            const response = responses[challengeType];
+            const recommended = contentLibrary.filter(item =>
+                response.contentIds.includes(item.id)
+            ).slice(0, 2);
+
+            const contentCardsHTML = recommended.map(item => {
+                const typeIcons = {
+                    'Video': '<svg width="16" height="16" viewBox="0 0 24 24" fill="#0B3398"><path d="M8 5v14l11-7z"/></svg>',
+                    'Demo': '<span style="font-size: 10px; padding: 2px 6px; background: #0B3398; color: white; border-radius: 3px; font-weight: 600;">DEMO</span>'
+                };
+
+                return `
+                <button class="suggestion-card" onclick='viewPersonalizedContent(${JSON.stringify(item)})' style="text-align: left; padding: 10px; display: flex; gap: 10px; align-items: center;">
+                    <div style="flex-shrink: 0; width: 40px; height: 40px; background: linear-gradient(135deg, rgba(11, 51, 152, 0.1) 0%, rgba(30, 64, 175, 0.05) 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                        ${typeIcons[item.type] || '📄'}
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-size: 14px; font-weight: 600; color: #0f172a; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            ${item.title}
+                        </div>
+                        <div style="font-size: 12px; color: #64748b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            ${item.duration || item.type}
+                        </div>
+                    </div>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0">
+                        <path d="M6 12L10 8L6 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>`;
+            }).join('');
+
+            const message = document.createElement('div');
+            message.className = 'message message-ai';
+
+            message.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        ${response.text}
+                        <br><br>
+                        ${response.followUp}
+                    </div>
+                    <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
+                        ${contentCardsHTML}
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(message);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // After showing content, ask about their role for further personalization
+            setTimeout(() => {
+                askRoleForQualification();
+            }, 2000);
+        }
+
+        // Ask about role to further qualify and personalize
+        function askRoleForQualification() {
+            const messagesContainer = document.querySelector('.chat-messages');
+            const message = document.createElement('div');
+            message.className = 'message message-ai';
+
+            message.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        <strong>What's your role?</strong> I'll show you how other teams like yours use ShowPilot.
+                        <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #64748b; margin-top: 8px;">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                <circle cx="8" cy="8" r="6" stroke="#64748b" stroke-width="1.5"/>
+                            </svg>
+                            <span>Click any option to continue</span>
+                        </div>
+                    </div>
+                    <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px; gap: 8px;">
+                        <button class="suggestion-card single-select-option" onclick="disableSuggestionCards(this); answerRoleQualified('marketing')" style="display: flex; align-items: center; gap: 10px;">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                <circle cx="8" cy="8" r="7" stroke="#D1D5DB" stroke-width="1.5"/>
+                            </svg>
+                            <strong>Marketing</strong>
+                        </button>
+                        <button class="suggestion-card single-select-option" onclick="disableSuggestionCards(this); answerRoleQualified('sales-ops')" style="display: flex; align-items: center; gap: 10px;">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                <circle cx="8" cy="8" r="7" stroke="#D1D5DB" stroke-width="1.5"/>
+                            </svg>
+                            <strong>Sales / RevOps</strong>
+                        </button>
+                        <button class="suggestion-card single-select-option" onclick="disableSuggestionCards(this); answerRoleQualified('product-manager')" style="display: flex; align-items: center; gap: 10px;">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                <circle cx="8" cy="8" r="7" stroke="#D1D5DB" stroke-width="1.5"/>
+                            </svg>
+                            <strong>Product</strong>
+                        </button>
+                        <button class="suggestion-card single-select-option" onclick="disableSuggestionCards(this); answerRoleQualified('executive')" style="display: flex; align-items: center; gap: 10px;">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                                <circle cx="8" cy="8" r="7" stroke="#D1D5DB" stroke-width="1.5"/>
+                            </svg>
+                            <strong>Executive</strong>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(message);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // NEW: Answer role and move to qualification/meeting booking
+        function answerRoleQualified(role) {
+            engagementState.userTags.push(role);
+            engagementState.engagementLevel = 'high'; // They've engaged significantly
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            const roleResponses = {
+                'marketing': {
+                    text: 'Marketing teams love ShowPilot because it turns every visitor interaction into engagement data.',
+                    insight: 'Teams like yours see 3-5x more qualified conversations using our AI agents.'
+                },
+                'sales-ops': {
+                    text: 'Sales and RevOps teams use ShowPilot to qualify leads faster and book more meetings.',
+                    insight: 'Our customers report 40% time savings in lead qualification and follow-up.'
+                },
+                'product-manager': {
+                    text: 'Product teams use ShowPilot to deliver interactive demos and gather feedback at scale.',
+                    insight: 'You can create personalized product tours without engineering resources.'
+                },
+                'executive': {
+                    text: 'Executives choose ShowPilot for measurable ROI - more qualified pipeline, faster sales cycles.',
+                    insight: 'Our customers see ROI within the first quarter of deployment.'
+                }
+            };
+
+            const response = roleResponses[role];
+            const message = document.createElement('div');
+            message.className = 'message message-ai';
+
+            message.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        ${response.text}
+                        <br><br>
+                        <strong>${response.insight}</strong>
+                        <br><br>
+                        What would you like to do next?
+                    </div>
+                    <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
+                        <button class="suggestion-card" onclick="disableSuggestionCards(this); offerCustomDemo()">
+                            <strong>See ShowPilot customized for my use case</strong>
+                        </button>
+                        <button class="suggestion-card" onclick="disableSuggestionCards(this); showMorePersonalized()">
+                            <strong>Explore more content first</strong>
+                        </button>
+                        <button class="suggestion-card" onclick="disableSuggestionCards(this); navigateToSection('.demos-section', 'Pricing')">
+                            <strong>View pricing and plans</strong>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(message);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Offer custom demo - final qualification step
+        function offerCustomDemo() {
+            const messagesContainer = document.querySelector('.chat-messages');
+            const message = document.createElement('div');
+            message.className = 'message message-ai';
+
+            message.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        Perfect! I can connect you with our team for a personalized demo.
+                        <br><br>
+                        In the meantime, <strong>would you like me to send you a summary of the content we've discussed?</strong> It'll include all the resources we covered plus some additional ones based on your interests.
+                    </div>
+                    <div class="suggestion-cards" style="grid-template-columns: 1fr 1fr; margin-top: 12px;">
+                        <button class="suggestion-card" onclick="demoBookMeeting()">
+                            <strong>Book demo now</strong>
+                        </button>
+                        <button class="suggestion-card" onclick="requestContentSummary()">
+                            <strong>Email me resources</strong>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(message);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Request content summary (lead capture)
+        function requestContentSummary() {
+            const messagesContainer = document.querySelector('.chat-messages');
+            const message = document.createElement('div');
+            message.className = 'message message-ai';
+
+            message.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        Great! I'll email you a personalized content summary with:
+                        <br><br>
+                        • All the resources we discussed<br>
+                        • Additional case studies relevant to your role<br>
+                        • Next steps to get started<br>
+                        <br>
+                        What's your email address?
+                    </div>
+                    <div style="margin-top: 12px;">
+                        <input type="email" placeholder="your@email.com" style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;" id="email-capture" />
+                        <button class="suggestion-card" onclick="captureEmailAndSend()" style="margin-top: 8px; width: 100%;">
+                            <strong>Send me the resources</strong>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(message);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Capture email and thank user
+        function captureEmailAndSend() {
+            const email = document.getElementById('email-capture')?.value;
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email address');
+                return;
+            }
+
+            const messagesContainer = document.querySelector('.chat-messages');
+            const message = document.createElement('div');
+            message.className = 'message message-ai';
+
+            message.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        Perfect! I've sent your personalized content summary to <strong>${email}</strong>.
+                        <br><br>
+                        You should receive it within the next few minutes. In the meantime, feel free to continue exploring or book that demo!
+                    </div>
+                    <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
+                        <button class="suggestion-card" onclick="demoBookMeeting()">
+                            <strong>Book a personalized demo</strong>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(message);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Store email in engagement state
+            engagementState.email = email;
+        }
+
+        // LEGACY - Keep old function for backward compatibility
+        function answerIntent(intent) {
+            answerChallenge(intent, '');
+        }
+
+        // LEGACY - Handle role answer and IMMEDIATELY show personalized content
+        function answerRole(role) {
+            engagementState.userTags.push(role);
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            // AI delivers personalized value immediately
+            const message = document.createElement('div');
+            message.className = 'message message-ai';
+
+            // Get personalized content based on role + intent
+            const recommended = getRecommendedContent(engagementState.userTags).slice(0, 3);
+
+            const contentCardsHTML = recommended.map(item => {
+                const typeIcons = {
+                    'Video': '<svg width="16" height="16" viewBox="0 0 24 24" fill="#0B3398"><path d="M8 5v14l11-7z"/></svg>',
+                    'PDF': '<svg width="16" height="16" viewBox="0 0 24 24" fill="#ef4444"><path d="M7 18h10M7 14h10M10 10h4M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"/><path d="M14 2v6h6" stroke="#ef4444" fill="none"/></svg>',
+                    'Demo': '<span style="font-size: 10px; padding: 2px 6px; background: #0B3398; color: white; border-radius: 3px; font-weight: 600;">DEMO</span>',
+                    'Article': '<svg width="16" height="16" viewBox="0 0 24 24" fill="#10b981"><path d="M4 6h16M4 12h16M4 18h10"/></svg>'
+                };
+
+                return `
+                <button class="suggestion-card" onclick='viewPersonalizedContent(${JSON.stringify(item)})' style="text-align: left; padding: 10px; display: flex; gap: 10px; align-items: center;">
+                    <div style="flex-shrink: 0; width: 40px; height: 40px; background: linear-gradient(135deg, rgba(11, 51, 152, 0.1) 0%, rgba(30, 64, 175, 0.05) 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                        ${typeIcons[item.type] || '📄'}
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-size: 14px; font-weight: 600; color: #0f172a; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            ${item.title}
+                        </div>
+                        <div style="font-size: 12px; color: #64748b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            ${item.duration || item.type}
+                        </div>
+                    </div>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0">
+                        <path d="M6 12L10 8L6 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            `}).join('');
+
+            const roleLabels = {
+                'product-manager': 'Product Managers',
+                'marketing': 'Marketing Leaders',
+                'sales-ops': 'Sales teams',
+                'executive': 'Executives'
+            };
+
+            message.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        Perfect! Here's what <strong>${roleLabels[role]}</strong> typically find most valuable.
+                        <br><br>
+                        <strong>Choose any content to view it in our immersive content viewer:</strong>
+                    </div>
+                    <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
+                        ${contentCardsHTML}
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(message);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Update engagement level
+            engagementState.engagementLevel = 'high';
+        }
+
+        // View personalized content - launch viewer immediately
+        function viewPersonalizedContent(content) {
+            engagementState.viewedContent.push(content);
+
+            // Launch content viewer IMMEDIATELY
+            launchContentViewer(content);
+
+            // REMOVED: No messages before or after - let user control the experience
+        }
+
+        // Offer next steps after they've seen personalized experience
+        function offerNextSteps() {
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            const message = document.createElement('div');
+            message.className = 'message message-ai';
+
+            message.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        You just experienced ShowPilot's immersive content delivery - personalized videos, PDFs, and demos delivered right at the point of engagement.
+                        <br><br>
+                        <strong>This is exactly what YOUR visitors would experience.</strong> No more "we'll send you a link" - content delivered instantly, in context.
+                        <br><br>
+                        What would you like to do next?
+                    </div>
+                    <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
+                        <button class="suggestion-card" onclick="showMorePersonalized()">
+                            <strong>See More Personalized Content</strong>
+                            <span>Continue exploring relevant resources</span>
+                        </button>
+                        <button class="suggestion-card" onclick="askHowItWorks()">
+                            <strong>How Does This Work?</strong>
+                            <span>Learn about the personalization engine</span>
+                        </button>
+                        <button class="suggestion-card" onclick="demoBookMeeting()">
+                            <strong>Talk to Our Team</strong>
+                            <span>See how this works for your business</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(message);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Show more personalized content
+        function showMorePersonalized() {
+            const recommended = getRecommendedContent(engagementState.userTags)
+                .filter(item => !engagementState.viewedContent.find(v => v.id === item.id))
+                .slice(0, 3);
+
+            if (recommended.length > 0) {
+                showRecommendations(recommended);
+            }
+        }
+
+        // Explain how the personalization works
+        function askHowItWorks() {
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            const message = document.createElement('div');
+            message.className = 'message message-ai';
+
+            message.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        Great question! ShowPilot combines AI chat with immersive content delivery:
+                        <br><br>
+                        <strong>1. AI Chat SDR</strong> - Like you just experienced, our AI understands visitor needs through conversation and smart journey questions
+                        <br><br>
+                        <strong>2. Personalized Content Delivery</strong> - We don't just chat - we deliver actual videos, PDFs, demos, and resources in an immersive viewer
+                        <br><br>
+                        <strong>3. Guided Site Experience</strong> - Visitors can navigate your site guided by AI, with content surfaced at the perfect moment
+                        <br><br>
+                        <strong>4. Meeting Booking</strong> - When they're ready, seamless handoff to sales
+                        <br><br>
+                        Think Qualified + Netflix. Chat + immersive content = higher engagement and better qualified leads.
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(message);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Track content viewing and ask contextual follow-up
+        function viewContent(content) {
+            // Track engagement
+            engagementState.viewedContent.push(content);
+            engagementState.userTags.push(...content.tags);
+
+            // Update engagement level
+            if (engagementState.viewedContent.length >= 2) {
+                engagementState.engagementLevel = 'high';
+            } else if (engagementState.viewedContent.length === 1) {
+                engagementState.engagementLevel = 'medium';
+            }
+
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            // Acknowledge viewing
+            const ackMessage = document.createElement('div');
+            ackMessage.className = 'message message-ai';
+            ackMessage.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        Great choice! Let me show you <strong>${content.title}</strong>...
+                    </div>
+                </div>
+            `;
+            messagesContainer.appendChild(ackMessage);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Launch content viewer
+            setTimeout(() => {
+                launchContentViewer(content);
+
+                // After content viewer loads, ask contextual follow-up
+                setTimeout(() => {
+                    askContextualFollowUp(content);
+                }, 2000);
+            }, 1000);
+        }
+
+        // Ask smart follow-up questions based on what they viewed
+        function askContextualFollowUp(viewedContent) {
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            // Get related content based on tags
+            const related = getRecommendedContent(engagementState.userTags)
+                .filter(item => item.id !== viewedContent.id)
+                .slice(0, 2);
+
+            const message = document.createElement('div');
+            message.className = 'message message-ai';
+
+            const relatedHTML = related.map(item => `
+                <button class="suggestion-card" onclick='viewContent(${JSON.stringify(item)})'>
+                    <strong>${item.title}</strong>
+                    <span>${item.description}</span>
+                </button>
+            `).join('');
+
+            message.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        Based on what you're looking at, these might also be helpful:
+                    </div>
+                    <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
+                        ${relatedHTML}
+                        <button class="suggestion-card" onclick="askQualifyingQuestion()">
+                            <strong>I have some questions</strong>
+                            <span>Chat with me about your needs</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(message);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Progressive profiling - ask qualifying questions AFTER providing value
+        function askQualifyingQuestion() {
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            const message = document.createElement('div');
+            message.className = 'message message-ai';
+
+            message.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        I'd love to help you find exactly what you need. What brings you here today?
+                    </div>
+                    <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
+                        <button class="suggestion-card" onclick="handleIntent('researching')">
+                            <strong>Just researching options</strong>
+                            <span>Exploring what's available</span>
+                        </button>
+                        <button class="suggestion-card" onclick="handleIntent('evaluating')">
+                            <strong>Evaluating solutions</strong>
+                            <span>Comparing different tools</span>
+                        </button>
+                        <button class="suggestion-card" onclick="handleIntent('ready')">
+                            <strong>Ready to implement</strong>
+                            <span>Need a solution soon</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(message);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Handle user intent and adapt conversation
+        function handleIntent(intent) {
+            engagementState.userTags.push(intent);
+
+            const messagesContainer = document.querySelector('.chat-messages');
+            const responses = {
+                'researching': "Perfect! I'll keep showing you helpful resources. Feel free to explore at your own pace.",
+                'evaluating': "Great! I can show you how we compare and what makes us different. Want to see customer examples from your industry?",
+                'ready': "Excellent! Let's make sure you have everything you need. Would you like to talk to our team to get started?"
+            };
+
+            const message = document.createElement('div');
+            message.className = 'message message-ai';
+            message.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        ${responses[intent]}
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(message);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Show more relevant content based on intent
+            if (intent === 'evaluating' || intent === 'ready') {
+                setTimeout(() => {
+                    showMoreRelevantContent();
+                }, 1000);
+            }
+        }
+
+        // Show more relevant content based on engagement
+        function showMoreRelevantContent() {
+            const recommended = getRecommendedContent(engagementState.userTags)
+                .filter(item => !engagementState.viewedContent.find(v => v.id === item.id))
+                .slice(0, 3);
+
+            if (recommended.length > 0) {
+                showRecommendations(recommended);
+            }
+        }
+
+        // Get recommended content based on user tags
+        function getRecommendedContent(userTags) {
+            return contentLibrary
+                .map(item => {
+                    const matchScore = item.tags.filter(tag => userTags.includes(tag)).length;
+                    return { ...item, matchScore };
+                })
+                .filter(item => item.matchScore > 0)
+                .sort((a, b) => {
+                    if (b.matchScore !== a.matchScore) return b.matchScore - a.matchScore;
+                    return (b.priority || 0) - (a.priority || 0);
+                })
+                .slice(0, 5);
+        }
+
+        // Show content recommendations
+        function showRecommendations(recommended) {
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            const recoMessage = document.createElement('div');
+            recoMessage.className = 'message message-ai';
+
+            const contentCardsHTML = recommended.map(item => `
+                <button class="suggestion-card" onclick='launchContentViewer(${JSON.stringify(item)})'>
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <strong>${item.title}</strong>
+                        <span style="font-size: 10px; padding: 2px 8px; background: rgba(11, 51, 152, 0.1); color: #0B3398; border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">${item.type}</span>
+                    </div>
+                    <span>${item.description}</span>
+                    ${item.duration ? `<span style="font-size: 12px; color: #64748b;">${item.duration}</span>` : ''}
+                </button>
+            `).join('');
+
+            recoMessage.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        Here are your personalized recommendations:
+                    </div>
+                    <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px;">
+                        ${contentCardsHTML}
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(recoMessage);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Launch content viewer
+        function launchContentViewer(content) {
+            const messagesContainer = document.querySelector('.chat-messages');
+
+            // Acknowledge selection
+            const ackMessage = document.createElement('div');
+            ackMessage.className = 'message message-ai';
+            ackMessage.innerHTML = `
+                <div class="message-avatar">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        Great choice! Let me launch <strong>${content.title}</strong> for you...
+                    </div>
+                </div>
+            `;
+            messagesContainer.appendChild(ackMessage);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Switch to content viewer mode after brief delay
+            setTimeout(() => {
+                const widget = document.getElementById('showpilot-widget');
+                widget.setAttribute('data-position', 'content-viewer');
+                updateDemoButtons('content-viewer');
+
+                // Update content viewer with selected content
+                const contentTitle = document.querySelector('.content-title');
+                const contentDesc = document.querySelector('.content-description');
+                if (contentTitle) contentTitle.textContent = content.title;
+                if (contentDesc) contentDesc.textContent = content.description;
+            }, 1000);
         }
 
         updateDemoButtons('chat-button');
