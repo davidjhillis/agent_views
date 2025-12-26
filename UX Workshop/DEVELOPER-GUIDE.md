@@ -328,6 +328,100 @@ gap: 0;
 
 ---
 
+## Demo Flows
+
+The prototype includes three pre-built demo flows accessible via the demo controls panel:
+
+### 1. Book Meeting Flow
+
+**Demo Function**: `demoBookMeeting()`
+**Position**: Focus Box (center-midsize-square)
+**Purpose**: Demonstrates conversational meeting booking experience
+
+**Flow**:
+1. Transitions widget to Focus Box position
+2. Displays AI message asking for business email
+3. User can type email to continue booking flow
+4. Demonstrates form-free meeting scheduling UX
+
+**Use Case**: Sales demo, customer onboarding showcase
+
+---
+
+### 2. Page Navigation
+
+**Demo Function**: `demoPageNavigation()`
+**Position**: Skyscraper
+**Purpose**: Demonstrates guided site navigation with AI assistance
+
+**Flow**:
+1. Transitions widget to Skyscraper sidebar position
+2. Displays sample navigation sections on page
+3. Presents 4 navigation options via suggestion cards
+4. Shows how AI guides users through website sections
+
+**Features Demonstrated**:
+- Section highlighting with animated cursor
+- Smooth scrolling to page sections
+- Contextual AI explanations
+- Multi-step navigation flows
+
+**Use Case**: Product tour, feature exploration
+
+---
+
+### 3. Experience Viewer
+
+**Demo Function**: `demoExperienceViewer()`
+**Position**: Skyscraper → Transitions to Experience Viewer
+**Purpose**: Demonstrates complete personalized demo flow with content recommendations
+
+**Flow**:
+1. Widget transitions to Skyscraper position (right sidebar)
+2. Starts personalized demo flow (same as `startDemoFlow()`)
+3. AI asks: "What topics are most important?" (single-select question)
+   - Options: Lead Conversion, Visitor Engagement, Lead Qualification, Personalization
+4. AI asks: "What's your role?" (single-select question)
+   - Options: Marketing, Sales, Product, Executive
+5. AI shows personalized content recommendations (3 cards)
+   - Content matches user's selected topics and role
+6. User clicks recommended content card
+7. Experience Viewer launches with full-screen three-panel layout:
+   - **Left**: Playlist panel (300px)
+   - **Center**: Content viewer with play button
+   - **Right**: Chat panel (420px) for contextual assistance
+8. Page content blurs to focus attention on viewer
+
+**Features Demonstrated**:
+- **Conversational journey** with AI asking qualifying questions
+- **Inline submitted answers** appear as compact messages (→ Lead Conversion)
+- **Smart content recommendations** based on user tags
+- **Content cards** styled with type badges (VIDEO, PDF, DEMO)
+- **Full-screen content presentation** in three-panel layout
+- **Playlist navigation** for multiple content items
+- **Contextual chat** alongside content viewing
+- **Immersive viewing mode** with page blur effect
+
+**Content Matching Logic**:
+```javascript
+// User selections create tags array
+userTags = ['conversion', 'marketing']
+
+// Content library filters by matching tags
+getRecommendedContent(userTags) // Returns 3 best matches
+```
+
+**Content Library Tags**:
+- **Topics**: conversion, engagement, qualification, personalization
+- **Roles**: marketing, sales, product, executive
+- **Types**: Video, PDF, Demo, Article
+
+**Use Case**: Full personalized demo experience from qualification → content viewing
+
+**Implementation Note**: This demo showcases the complete value proposition - qualifying visitors through conversation, then delivering personalized content in an immersive viewer. The flow can be customized by modifying question options in `startDemoFlow()` and content tags in the `contentLibrary` array.
+
+---
+
 ## Interactive Features
 
 ### 1. Guided Navigation
