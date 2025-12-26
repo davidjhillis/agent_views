@@ -14,16 +14,48 @@ Interactive demo showcasing ShowPilot's AI agent interface across 6 different po
 
 ### Interactive Demos
 
-#### Book Meeting Flow
+#### Journey Flows (3 Complete Flows)
+
+**1. Personalized Demo Journey**
+- Survey questions with inline compact answers
+- Topic selection (Lead Conversion, Visitor Engagement, Qualification, Personalization)
+- Role identification (Marketing, Sales, Product, Executive)
+- Smart content recommendations based on selections
+- Launches Experience Viewer with personalized playlist
+
+**2. Learn How ShowPilot Works (Question Types Demo)**
+- Demonstrates all 6 question types developers can use:
+  - **MESSAGE**: Information only, auto-continues
+  - **YES/NO**: Binary choice with green/red icons
+  - **SINGLE SELECT**: Radio buttons with inline submitted answers
+  - **MULTI SELECT**: Card selection with Continue button
+  - **OPEN ENDED**: Free text input field
+  - **ACTION**: Trigger flows (book demo, view content, close)
+- Complete reference implementation for developers
+
+**3. Customer Stories Journey**
+- Multi-select industry selection (SaaS, E-commerce, Financial Services, Healthcare)
+- Content recommendations with type badges (VIDEO, PDF, DEMO, WEB PAGE)
+- Professional Perplexity-style content cards
+
+#### Additional Demos
+
+**Book Meeting Flow**
 - Conversational booking interface
 - Email collection workflow
 - Natural language interaction
 
-#### Page Navigation with Highlights
+**Page Navigation with Highlights**
 - Animated cursor guides user attention
 - Smooth scroll to section center
 - Visual highlights with purple borders
 - AI agent explains each section
+
+**Experience Viewer Demo**
+- Full journey: Skyscraper → Questions → Recommendations → Immersive viewer
+- Three-panel layout (Playlist → Content → Chat)
+- Page blur effect for focus
+- Content cards launch viewer immediately
 
 ### Design Features
 
