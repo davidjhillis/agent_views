@@ -1409,6 +1409,11 @@
             overflow: hidden;
             margin: 16px;
             flex-shrink: 0;
+            transition: height 0.3s ease-out;
+        }
+
+        #showpilot-widget[data-position="skyscraper"] .center-avatar.engaged {
+            height: 80px;
         }
 
         #showpilot-widget[data-position="skyscraper"] .center-avatar-site {
@@ -1494,38 +1499,37 @@
         /* Voice animation overlay for Site Agent when avatar is speaking */
         .site-voice-animation-overlay {
             position: absolute;
-            bottom: 12px;
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: 8px;
+            right: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 4px;
+            gap: 3px;
             background: rgba(99, 102, 241, 0.95);
-            padding: 8px 16px;
-            border-radius: 20px;
+            padding: 6px 10px;
+            border-radius: 16px;
             z-index: 4;
         }
 
         .site-voice-bar {
-            width: 4px;
+            width: 3px;
             background: white;
             border-radius: 2px;
             animation: siteVoiceWave 1.2s ease-in-out infinite;
         }
 
         .site-voice-bar:nth-child(1) {
-            height: 14px;
+            height: 10px;
             animation-delay: 0s;
         }
 
         .site-voice-bar:nth-child(2) {
-            height: 22px;
+            height: 16px;
             animation-delay: 0.2s;
         }
 
         .site-voice-bar:nth-child(3) {
-            height: 18px;
+            height: 13px;
             animation-delay: 0.4s;
         }
 
@@ -1738,8 +1742,16 @@
             gap: 8px;
             box-shadow: 0 2px 8px rgba(11, 51, 152, 0.3);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease-out;
             white-space: nowrap;
+        }
+
+        .center-avatar.engaged .center-avatar-badge {
+            bottom: auto;
+            top: 12px;
+            left: 50%;
+            padding: 6px 12px;
+            font-size: 12px;
         }
 
         .center-avatar-badge:hover {
@@ -2380,32 +2392,22 @@
                 }
             }
 
-            // Skyscraper: collapse video to compact header
+            // Skyscraper: shrink video and reposition badge
             if (currentPosition === 'skyscraper' && !skyscraperEngaged) {
                 skyscraperEngaged = true;
 
                 const centerAvatar = document.querySelector('.center-avatar');
-                const compactHeader = document.querySelector('.compact-chat-header');
+                const badge = document.querySelector('.center-avatar-badge');
 
-                if (centerAvatar && compactHeader) {
-                    // Fade out video greeter
-                    centerAvatar.style.transition = 'opacity 0.3s ease-out, max-height 0.3s ease-out';
-                    centerAvatar.style.opacity = '0';
-                    centerAvatar.style.maxHeight = '0';
-                    centerAvatar.style.overflow = 'hidden';
-                    centerAvatar.style.margin = '0';
+                if (centerAvatar && badge) {
+                    // Add engaged class to shrink container and reposition badge
+                    centerAvatar.classList.add('engaged');
 
-                    // Fade in compact header
-                    setTimeout(() => {
-                        centerAvatar.style.display = 'none';
-                        compactHeader.style.display = 'flex';
-                        compactHeader.style.opacity = '0';
-
-                        setTimeout(() => {
-                            compactHeader.style.transition = 'opacity 0.3s ease-out';
-                            compactHeader.style.opacity = '1';
-                        }, 50);
-                    }, 300);
+                    // Change badge text to status
+                    const badgeText = badge.childNodes[badge.childNodes.length - 1];
+                    if (badgeText && badgeText.nodeType === Node.TEXT_NODE) {
+                        badgeText.textContent = 'Listening...';
+                    }
                 }
             }
         }
@@ -2425,20 +2427,20 @@
             if (position === 'skyscraper') {
                 skyscraperEngaged = false;
 
-                // Reset center avatar and compact header visibility
+                // Reset center avatar engaged state
                 const centerAvatar = document.querySelector('.center-avatar');
-                const compactHeader = document.querySelector('.compact-chat-header');
+                const badge = document.querySelector('.center-avatar-badge');
 
                 if (centerAvatar) {
-                    centerAvatar.style.display = 'block';
-                    centerAvatar.style.opacity = '1';
-                    centerAvatar.style.maxHeight = '';
-                    centerAvatar.style.overflow = '';
-                    centerAvatar.style.margin = '';
+                    centerAvatar.classList.remove('engaged');
                 }
 
-                if (compactHeader) {
-                    compactHeader.style.display = 'none';
+                if (badge) {
+                    // Reset badge text to "Talk now"
+                    const badgeText = badge.childNodes[badge.childNodes.length - 1];
+                    if (badgeText && badgeText.nodeType === Node.TEXT_NODE) {
+                        badgeText.textContent = 'Talk now';
+                    }
                 }
             }
 
