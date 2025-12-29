@@ -1413,7 +1413,7 @@
         }
 
         #showpilot-widget[data-position="skyscraper"] .center-avatar.engaged {
-            height: 80px;
+            height: 40px;
         }
 
         #showpilot-widget[data-position="skyscraper"] .center-avatar-site {
@@ -2376,6 +2376,7 @@
                 const centerAvatarSiteImg = document.getElementById('center-avatar-site-img');
                 const centerAvatarSiteVideo = document.getElementById('center-avatar-site-video');
                 const videoOverlay = document.querySelector('.video-overlay-site');
+                const voiceAnimOverlay = document.querySelector('.site-voice-animation-overlay');
 
                 if (centerAvatarSiteVideo && centerAvatarSiteImg && videoOverlay) {
                     // Switch from video to still image
@@ -2388,6 +2389,16 @@
                     videoOverlay.style.opacity = '0';
                     setTimeout(() => {
                         videoOverlay.style.display = 'none';
+
+                        // Show voice animation overlay after "Talk now" fades out
+                        if (voiceAnimOverlay) {
+                            voiceAnimOverlay.style.display = 'flex';
+                            voiceAnimOverlay.style.opacity = '0';
+                            setTimeout(() => {
+                                voiceAnimOverlay.style.transition = 'opacity 0.3s ease-out';
+                                voiceAnimOverlay.style.opacity = '1';
+                            }, 50);
+                        }
                     }, 300);
                 }
             }
@@ -2449,10 +2460,16 @@
 
                 // Reset site agent video overlay visibility
                 const videoOverlay = document.querySelector('.video-overlay-site');
+                const voiceAnimOverlay = document.querySelector('.site-voice-animation-overlay');
 
                 if (videoOverlay) {
                     videoOverlay.style.display = 'flex';
                     videoOverlay.style.opacity = '1';
+                }
+
+                if (voiceAnimOverlay) {
+                    voiceAnimOverlay.style.display = 'none';
+                    voiceAnimOverlay.style.opacity = '0';
                 }
             }
 
