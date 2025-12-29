@@ -1,3 +1,7 @@
 {
-  "trailingSlash": false
+  "trailingSlash": false,
+  "buildCommand": "",
+  "devCommand": "",
+  "installCommand": "",
+  "outputDirectory": "."
 }
