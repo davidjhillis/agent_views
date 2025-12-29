@@ -1752,6 +1752,8 @@
             left: 50%;
             padding: 6px 12px;
             font-size: 12px;
+            background: transparent;
+            box-shadow: none;
         }
 
         .center-avatar-badge:hover {
@@ -2413,13 +2415,13 @@
                 const centerAvatarVideo = document.getElementById('center-avatar-video');
 
                 if (centerAvatar && badge) {
-                    // Fade out video/image
+                    // Fade out video/image (slower)
                     if (centerAvatarImg) {
-                        centerAvatarImg.style.transition = 'opacity 0.3s ease-out';
+                        centerAvatarImg.style.transition = 'opacity 0.8s ease-out';
                         centerAvatarImg.style.opacity = '0';
                     }
                     if (centerAvatarVideo) {
-                        centerAvatarVideo.style.transition = 'opacity 0.3s ease-out';
+                        centerAvatarVideo.style.transition = 'opacity 0.8s ease-out';
                         centerAvatarVideo.style.opacity = '0';
                     }
 
@@ -2430,7 +2432,7 @@
 
                         // Add engaged class to shrink container (badge slides up with it)
                         centerAvatar.classList.add('engaged');
-                    }, 300);
+                    }, 800);
 
                     // Change badge text to status
                     const badgeText = badge.childNodes[badge.childNodes.length - 1];
