@@ -1491,28 +1491,53 @@
             flex: 1;
         }
 
-        /* Compact header for Site Agent engaged state */
-        .compact-site-header {
-            display: none; /* Hidden by default, shown only on site agent when engaged */
+        /* Voice animation overlay for Site Agent when avatar is speaking */
+        .site-voice-animation-overlay {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            padding: 8px 12px;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            border-radius: 14px;
-            flex-shrink: 0;
-            transition: all 0.3s ease-out;
-            width: 140px;
-            height: 60px;
+            gap: 4px;
+            background: rgba(99, 102, 241, 0.95);
+            padding: 8px 16px;
+            border-radius: 20px;
+            z-index: 4;
         }
 
-        .compact-site-header .compact-avatar-circle {
-            width: 40px;
-            height: 40px;
+        .site-voice-bar {
+            width: 4px;
+            background: white;
+            border-radius: 2px;
+            animation: siteVoiceWave 1.2s ease-in-out infinite;
         }
 
-        .compact-site-header .compact-voice-animation {
-            gap: 2px;
+        .site-voice-bar:nth-child(1) {
+            height: 14px;
+            animation-delay: 0s;
+        }
+
+        .site-voice-bar:nth-child(2) {
+            height: 22px;
+            animation-delay: 0.2s;
+        }
+
+        .site-voice-bar:nth-child(3) {
+            height: 18px;
+            animation-delay: 0.4s;
+        }
+
+        @keyframes siteVoiceWave {
+            0%, 100% {
+                transform: scaleY(0.5);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scaleY(1);
+                opacity: 1;
+            }
         }
 
         /* Command Center: Side-by-side layout */
@@ -2033,17 +2058,11 @@
                                 Talk now
                             </button>
                         </div>
-                    </div>
-
-                    <!-- Compact header for Site Agent engaged state -->
-                    <div class="compact-site-header" style="display: none;">
-                        <div class="compact-avatar-circle">
-                            <img id="compact-site-avatar-img" src="/av44.png" alt="Alex">
-                        </div>
-                        <div class="compact-voice-animation">
-                            <div class="compact-soundwave-bar"></div>
-                            <div class="compact-soundwave-bar"></div>
-                            <div class="compact-soundwave-bar"></div>
+                        <!-- Voice animation overlay for when avatar is speaking -->
+                        <div class="site-voice-animation-overlay" style="display: none;">
+                            <div class="site-voice-bar"></div>
+                            <div class="site-voice-bar"></div>
+                            <div class="site-voice-bar"></div>
                         </div>
                     </div>
 
@@ -2338,28 +2357,25 @@
         function transitionFromSiteAgent() {
             const currentPosition = widget.getAttribute('data-position');
 
-            // Site Agent: collapse video to compact header
+            // Site Agent: switch video to still PNG
             if (currentPosition === 'center-low-rectangle' && !siteAgentEngaged) {
                 siteAgentEngaged = true;
 
-                const videoContainer = document.querySelector('.video-container-site');
-                const compactSiteHeader = document.querySelector('.compact-site-header');
+                const centerAvatarSiteImg = document.getElementById('center-avatar-site-img');
+                const centerAvatarSiteVideo = document.getElementById('center-avatar-site-video');
+                const videoOverlay = document.querySelector('.video-overlay-site');
 
-                if (videoContainer && compactSiteHeader) {
-                    // Fade out video greeter
-                    videoContainer.style.transition = 'opacity 0.3s ease-out';
-                    videoContainer.style.opacity = '0';
+                if (centerAvatarSiteVideo && centerAvatarSiteImg && videoOverlay) {
+                    // Switch from video to still image
+                    centerAvatarSiteVideo.style.setProperty('display', 'none', 'important');
+                    centerAvatarSiteVideo.pause();
+                    centerAvatarSiteImg.style.setProperty('display', 'block', 'important');
 
-                    // Fade in compact header
+                    // Hide the "Talk now" button overlay
+                    videoOverlay.style.transition = 'opacity 0.3s ease-out';
+                    videoOverlay.style.opacity = '0';
                     setTimeout(() => {
-                        videoContainer.style.display = 'none';
-                        compactSiteHeader.style.display = 'flex';
-                        compactSiteHeader.style.opacity = '0';
-
-                        setTimeout(() => {
-                            compactSiteHeader.style.transition = 'opacity 0.3s ease-out';
-                            compactSiteHeader.style.opacity = '1';
-                        }, 50);
+                        videoOverlay.style.display = 'none';
                     }, 300);
                 }
             }
@@ -2429,17 +2445,12 @@
             if (position === 'center-low-rectangle') {
                 siteAgentEngaged = false;
 
-                // Reset site agent video and compact header visibility
-                const videoContainer = document.querySelector('.video-container-site');
-                const compactSiteHeader = document.querySelector('.compact-site-header');
+                // Reset site agent video overlay visibility
+                const videoOverlay = document.querySelector('.video-overlay-site');
 
-                if (videoContainer) {
-                    videoContainer.style.display = 'block';
-                    videoContainer.style.opacity = '1';
-                }
-
-                if (compactSiteHeader) {
-                    compactSiteHeader.style.display = 'none';
+                if (videoOverlay) {
+                    videoOverlay.style.display = 'flex';
+                    videoOverlay.style.opacity = '1';
                 }
             }
 
