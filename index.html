@@ -2116,6 +2116,7 @@
         const widget = document.getElementById('showpilot-widget');
         let previousPosition = null;
         let isVoiceActive = false;
+        let siteAgentEngaged = false;
 
         // Initialize video/image visibility on page load
         window.addEventListener('DOMContentLoaded', function() {
@@ -2169,7 +2170,15 @@
             // Handle site agent input for voice/send toggle
             const siteAgentInput = document.getElementById('site-agent-input');
             if (siteAgentInput) {
+                // Transition on focus
+                siteAgentInput.addEventListener('focus', function() {
+                    transitionFromSiteAgent();
+                });
+
+                // Transition on first typing
                 siteAgentInput.addEventListener('input', function() {
+                    transitionFromSiteAgent();
+
                     const chatInputAreaSite = document.querySelector('.chat-input-area-site');
                     if (siteAgentInput.value.trim().length > 0) {
                         chatInputAreaSite.classList.add('has-text');
@@ -2196,6 +2205,23 @@
                 centerAvatarImg.style.setProperty('display', 'block', 'important');
                 centerAvatarVideo.style.setProperty('display', 'none', 'important');
                 centerAvatarVideo.pause();
+            }
+        }
+
+        function transitionFromSiteAgent() {
+            const currentPosition = widget.getAttribute('data-position');
+
+            // Only transition if on site agent and haven't engaged yet
+            if (currentPosition === 'center-low-rectangle' && !siteAgentEngaged) {
+                siteAgentEngaged = true;
+
+                // Add smooth transition
+                widget.style.transition = 'all 0.3s ease-out';
+
+                // Transition to full chat widget
+                setTimeout(() => {
+                    setPosition('center-midsize-square');
+                }, 100);
             }
         }
 
@@ -2316,6 +2342,9 @@
         }
 
         function toggleVoice() {
+            // Transition from site agent on first interaction
+            transitionFromSiteAgent();
+
             isVoiceActive = !isVoiceActive;
             const voiceBtn = document.querySelector('.voice-btn');
             if (isVoiceActive) {
