@@ -1395,6 +1395,12 @@
             overflow: hidden;
             margin: 16px;
             flex-shrink: 0;
+            transition: height 0.3s ease-out;
+        }
+
+        #showpilot-widget[data-position="center-midsize-square"] .center-avatar.engaged {
+            height: 40px;
+            background: transparent;
         }
 
         #showpilot-widget[data-position="center-midsize-square"] .center-avatar-site {
@@ -1563,6 +1569,13 @@
             justify-content: center;
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             position: relative;
+            transition: width 0.3s ease-out, padding 0.3s ease-out;
+        }
+
+        #showpilot-widget[data-position="full-height-center"] .center-avatar.engaged {
+            width: 60px;
+            padding: 12px;
+            background: transparent;
         }
 
         #showpilot-widget[data-position="full-height-center"] .center-avatar img,
@@ -2407,8 +2420,8 @@
                 }
             }
 
-            // Skyscraper: fade out video, shrink container, badge slides up
-            if (currentPosition === 'skyscraper' && !skyscraperEngaged) {
+            // Skyscraper, Focus Box, Command Center: fade out video, shrink container, badge slides up
+            if ((currentPosition === 'skyscraper' || currentPosition === 'center-midsize-square' || currentPosition === 'full-height-center') && !skyscraperEngaged) {
                 skyscraperEngaged = true;
 
                 const centerAvatar = document.querySelector('.center-avatar');
@@ -2457,7 +2470,7 @@
             }
 
             // Reset engagement states when changing positions
-            if (position === 'skyscraper') {
+            if (position === 'skyscraper' || position === 'center-midsize-square' || position === 'full-height-center') {
                 skyscraperEngaged = false;
 
                 // Reset center avatar engaged state
