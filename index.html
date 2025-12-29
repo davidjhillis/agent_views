@@ -1491,6 +1491,30 @@
             flex: 1;
         }
 
+        /* Compact header for Site Agent engaged state */
+        .compact-site-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-radius: 14px;
+            flex-shrink: 0;
+            transition: all 0.3s ease-out;
+            width: 140px;
+            height: 60px;
+        }
+
+        .compact-site-header .compact-avatar-circle {
+            width: 40px;
+            height: 40px;
+        }
+
+        .compact-site-header .compact-voice-animation {
+            gap: 2px;
+        }
+
         /* Command Center: Side-by-side layout */
         #showpilot-widget[data-position="full-height-center"] .chat-panel {
             flex-direction: row;
@@ -2011,6 +2035,18 @@
                         </div>
                     </div>
 
+                    <!-- Compact header for Site Agent engaged state -->
+                    <div class="compact-site-header" style="display: none;">
+                        <div class="compact-avatar-circle">
+                            <img id="compact-site-avatar-img" src="/av44.png" alt="Alex">
+                        </div>
+                        <div class="compact-voice-animation">
+                            <div class="compact-soundwave-bar"></div>
+                            <div class="compact-soundwave-bar"></div>
+                            <div class="compact-soundwave-bar"></div>
+                        </div>
+                    </div>
+
                     <!-- Chat Container for Site Agent -->
                     <div class="chat-container-site">
                         <div class="hover-controls">
@@ -2302,17 +2338,30 @@
         function transitionFromSiteAgent() {
             const currentPosition = widget.getAttribute('data-position');
 
-            // Site Agent: transition to full chat widget
+            // Site Agent: collapse video to compact header
             if (currentPosition === 'center-low-rectangle' && !siteAgentEngaged) {
                 siteAgentEngaged = true;
 
-                // Add smooth transition
-                widget.style.transition = 'all 0.3s ease-out';
+                const videoContainer = document.querySelector('.video-container-site');
+                const compactSiteHeader = document.querySelector('.compact-site-header');
 
-                // Transition to full chat widget
-                setTimeout(() => {
-                    setPosition('center-midsize-square');
-                }, 100);
+                if (videoContainer && compactSiteHeader) {
+                    // Fade out video greeter
+                    videoContainer.style.transition = 'opacity 0.3s ease-out';
+                    videoContainer.style.opacity = '0';
+
+                    // Fade in compact header
+                    setTimeout(() => {
+                        videoContainer.style.display = 'none';
+                        compactSiteHeader.style.display = 'flex';
+                        compactSiteHeader.style.opacity = '0';
+
+                        setTimeout(() => {
+                            compactSiteHeader.style.transition = 'opacity 0.3s ease-out';
+                            compactSiteHeader.style.opacity = '1';
+                        }, 50);
+                    }, 300);
+                }
             }
 
             // Skyscraper: collapse video to compact header
@@ -2374,6 +2423,23 @@
 
                 if (compactHeader) {
                     compactHeader.style.display = 'none';
+                }
+            }
+
+            if (position === 'center-low-rectangle') {
+                siteAgentEngaged = false;
+
+                // Reset site agent video and compact header visibility
+                const videoContainer = document.querySelector('.video-container-site');
+                const compactSiteHeader = document.querySelector('.compact-site-header');
+
+                if (videoContainer) {
+                    videoContainer.style.display = 'block';
+                    videoContainer.style.opacity = '1';
+                }
+
+                if (compactSiteHeader) {
+                    compactSiteHeader.style.display = 'none';
                 }
             }
 
