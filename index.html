@@ -2403,16 +2403,34 @@
                 }
             }
 
-            // Skyscraper: shrink video and reposition badge
+            // Skyscraper: fade out video, shrink container, badge slides up
             if (currentPosition === 'skyscraper' && !skyscraperEngaged) {
                 skyscraperEngaged = true;
 
                 const centerAvatar = document.querySelector('.center-avatar');
                 const badge = document.querySelector('.center-avatar-badge');
+                const centerAvatarImg = document.getElementById('center-avatar-img');
+                const centerAvatarVideo = document.getElementById('center-avatar-video');
 
                 if (centerAvatar && badge) {
-                    // Add engaged class to shrink container and reposition badge
-                    centerAvatar.classList.add('engaged');
+                    // Fade out video/image
+                    if (centerAvatarImg) {
+                        centerAvatarImg.style.transition = 'opacity 0.3s ease-out';
+                        centerAvatarImg.style.opacity = '0';
+                    }
+                    if (centerAvatarVideo) {
+                        centerAvatarVideo.style.transition = 'opacity 0.3s ease-out';
+                        centerAvatarVideo.style.opacity = '0';
+                    }
+
+                    // After fade, hide video and shrink container
+                    setTimeout(() => {
+                        if (centerAvatarImg) centerAvatarImg.style.display = 'none';
+                        if (centerAvatarVideo) centerAvatarVideo.style.display = 'none';
+
+                        // Add engaged class to shrink container (badge slides up with it)
+                        centerAvatar.classList.add('engaged');
+                    }, 300);
 
                     // Change badge text to status
                     const badgeText = badge.childNodes[badge.childNodes.length - 1];
@@ -2441,9 +2459,21 @@
                 // Reset center avatar engaged state
                 const centerAvatar = document.querySelector('.center-avatar');
                 const badge = document.querySelector('.center-avatar-badge');
+                const centerAvatarImg = document.getElementById('center-avatar-img');
+                const centerAvatarVideo = document.getElementById('center-avatar-video');
 
                 if (centerAvatar) {
                     centerAvatar.classList.remove('engaged');
+                }
+
+                // Reset video/image visibility and opacity
+                if (centerAvatarImg) {
+                    centerAvatarImg.style.display = 'block';
+                    centerAvatarImg.style.opacity = '1';
+                }
+                if (centerAvatarVideo) {
+                    centerAvatarVideo.style.display = 'block';
+                    centerAvatarVideo.style.opacity = '1';
                 }
 
                 if (badge) {
