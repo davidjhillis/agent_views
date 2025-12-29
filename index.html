@@ -153,6 +153,7 @@
             width: 900px !important;
             height: auto;
             max-width: 900px;
+            overflow: visible;
         }
 
         /* POSITION 3: CENTER MIDSIZE */
@@ -307,12 +308,27 @@
             overflow: hidden;
             flex-shrink: 0;
             background: #f1f5f9;
+            position: relative;
         }
 
         .header-avatar img {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            z-index: 1;
+        }
+
+        .header-avatar video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 2;
         }
 
         #showpilot-widget[data-position="center-low-rectangle"] .header-avatar {
@@ -581,8 +597,9 @@
             width: 100%;
             height: 100%;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
+            padding-top: 35%;
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
         }
 
@@ -624,6 +641,27 @@
             border-left: 1px solid #e2e8f0;
             background: white;
             width: auto;
+            display: flex !important;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        #showpilot-widget[data-position="content-viewer"] .center-avatar {
+            display: none !important;
+        }
+
+        #showpilot-widget[data-position="content-viewer"] .center-avatar-site {
+            display: none !important;
+        }
+
+        #showpilot-widget[data-position="content-viewer"] .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+        }
+
+        #showpilot-widget[data-position="content-viewer"] .chat-input-area {
+            flex-shrink: 0;
         }
 
         .chat-messages {
@@ -727,6 +765,83 @@
         .suggestion-card.selected-answer {
             border-color: #0B3398;
             background: rgba(11, 51, 152, 0.05);
+        }
+
+        /* Sticky Prompt Suggestions Modal */
+        .prompt-suggestions-modal {
+            background: #f8fafc;
+            padding: 12px 16px;
+            margin: 0 16px 12px 16px;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+        }
+
+        .prompt-suggestions-modal.hidden {
+            display: none;
+        }
+
+        /* Hide cold start modal for Site Agent and Content Viewer */
+        #showpilot-widget[data-position="center-low-rectangle"] .prompt-suggestions-modal,
+        #showpilot-widget[data-position="content-viewer"] .prompt-suggestions-modal {
+            display: none;
+        }
+
+        .prompt-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .prompt-modal-title {
+            font-size: 12px;
+            font-weight: 500;
+            color: #94a3b8;
+        }
+
+        .prompt-modal-close {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            padding: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+
+        .prompt-modal-close:hover {
+            color: #475569;
+        }
+
+        .prompt-modal-close svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .prompt-suggestions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .prompt-suggestion-item {
+            background: transparent;
+            border: none;
+            padding: 4px 0;
+            font-size: 13px;
+            font-weight: 400;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            text-decoration: none;
+        }
+
+        .prompt-suggestion-item:hover {
+            color: #475569;
         }
 
         /* Multi-select selected state - no checkboxes, just card highlight */
@@ -868,15 +983,15 @@
         .voice-btn .soundwave-bar:nth-child(2) { height: 14px; }
         .voice-btn .soundwave-bar:nth-child(3) { height: 9px; }
 
-        /* Send button - circular paper airplane */
+        /* Send button - square submit button */
         .send-btn {
             width: 32px;
             height: 32px;
-            background: transparent;
-            border: 2px solid #e2e8f0;
-            border-radius: 50%;
+            background: #0B3398;
+            border: none;
+            border-radius: 6px;
             cursor: pointer;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
@@ -884,16 +999,23 @@
         }
 
         .send-btn:hover {
+            background: #0a2d7a;
             transform: scale(1.05);
-            border-color: #0B3398;
-            box-shadow: 0 2px 8px rgba(11, 51, 152, 0.15);
+            box-shadow: 0 2px 8px rgba(11, 51, 152, 0.25);
         }
 
         .send-btn svg {
-            width: 14px;
-            height: 14px;
-            fill: #0B3398;
-            stroke: none;
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Toggle between voice and send based on input */
+        .chat-input-area.has-text .voice-btn {
+            display: none;
+        }
+
+        .chat-input-area.has-text .send-btn {
+            display: flex;
         }
 
         /* Book a demo badge - smaller */
@@ -961,12 +1083,7 @@
         }
 
         #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area {
-            padding: 20px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
+            display: none; /* Hide old input area for site agent */
         }
 
         #showpilot-widget[data-position="center-low-rectangle"] .input-row {
@@ -976,8 +1093,394 @@
             margin-bottom: 0;
         }
 
-        #showpilot-widget[data-position="center-low-rectangle"] .center-avatar {
+        /* NEW SEPARATED LAYOUT FOR SITE AGENT */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] {
+            width: 780px !important;
+            height: auto;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .chat-panel {
             display: flex;
+            flex-direction: row;
+            gap: 16px;
+            align-items: stretch;
+            position: relative;
+            overflow: visible;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .widget-window {
+            overflow: visible !important;
+        }
+
+        /* Greeting Tooltip */
+        .greeting-tooltip-site {
+            display: none; /* Hidden by default */
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site {
+            display: block;
+            position: absolute;
+            bottom: 148px;
+            left: 0;
+            background: white;
+            padding: 14px 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12), 0 4px 12px rgba(15, 23, 42, 0.08);
+            max-width: 600px;
+            z-index: 10;
+            animation: fadeIn 0.5s ease-out 0.3s backwards;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site .greeting-text {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #0f172a;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site .greeting-arrow {
+            position: absolute;
+            bottom: -8px;
+            left: 24px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid white;
+        }
+
+        /* Video Container for Site Agent */
+        .video-container-site {
+            display: none; /* Hidden by default */
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .video-container-site {
+            display: block;
+            position: relative;
+            width: 140px;
+            height: 120px;
+            margin-top: 14px;
+            flex-shrink: 0;
+            border-radius: 14px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3), 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .video-container-site img,
+        #showpilot-widget[data-position="center-low-rectangle"] .video-container-site video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .video-overlay-site {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(15, 23, 42, 0.4) 100%);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .talk-now-button-site {
+            background: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-family: 'Geist', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            color: #6366f1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .talk-now-button-site:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .talk-now-button-site .soundwave-bar {
+            width: 2px;
+            background: #6366f1;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .talk-now-button-site .soundwave-bar:nth-child(1) { height: 4px; }
+        #showpilot-widget[data-position="center-low-rectangle"] .talk-now-button-site .soundwave-bar:nth-child(2) { height: 9px; }
+        #showpilot-widget[data-position="center-low-rectangle"] .talk-now-button-site .soundwave-bar:nth-child(3) { height: 6px; }
+
+        /* Chat Container for Site Agent */
+        .chat-container-site {
+            display: none; /* Hidden by default */
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site {
+            display: flex;
+            flex: 1;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(15, 23, 42, 0.12), 0 4px 16px rgba(15, 23, 42, 0.08);
+            flex-direction: column;
+            overflow: visible;
+            position: relative;
+            height: 120px;
+            margin-top: 14px;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site .hover-controls {
+            position: absolute;
+            top: -12px;
+            right: 8px;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.2s;
+            display: inline-flex;
+            gap: 4px;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site:hover .hover-controls {
+            opacity: 1;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site .hover-controls .control-btn {
+            width: 20px;
+            height: 20px;
+            border: none;
+            background: #f1f5f9 !important;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site .hover-controls .control-btn:hover {
+            background: #e2e8f0 !important;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site .hover-controls .control-btn svg {
+            width: 10px;
+            height: 10px;
+            stroke: #64748b;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area-site {
+            padding: 12px 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .input-row-site {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex: 1;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .input-row-site .chat-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            background: transparent;
+            font-weight: 400;
+            color: #0f172a;
+            font-family: 'Geist', sans-serif;
+            padding: 0;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .input-bottom-row-site {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .input-bottom-row-site .demo-badge {
+            padding: 5px 10px;
+            font-size: 10px;
+            gap: 4px;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .input-bottom-row-site .privacy-disclaimer {
+            font-size: 10px;
+            text-align: left;
+            line-height: 1.3;
+            flex: 1;
+        }
+
+        /* Hide old center-avatar for site agent */
+        #showpilot-widget[data-position="center-low-rectangle"] .center-avatar {
+            display: none;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .chat-content-wrapper {
+            display: none;
+        }
+
+        /* Video toggle support */
+        body.video-greeter-disabled #showpilot-widget[data-position="center-low-rectangle"] .video-container-site video {
+            display: none !important;
+        }
+
+        body.video-greeter-disabled #showpilot-widget[data-position="center-low-rectangle"] .video-container-site img {
+            display: block !important;
+        }
+
+        body:not(.video-greeter-disabled) #showpilot-widget[data-position="center-low-rectangle"] .video-container-site video {
+            display: block !important;
+        }
+
+        body:not(.video-greeter-disabled) #showpilot-widget[data-position="center-low-rectangle"] .video-container-site img {
+            display: none !important;
+        }
+
+        /* Voice/Send button toggle for site agent */
+        #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area-site .voice-btn {
+            display: flex;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area-site .send-btn {
+            display: none;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area-site.has-text .voice-btn {
+            display: none;
+        }
+
+        #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area-site.has-text .send-btn {
+            display: flex;
+        }
+
+        /* Hide top center-avatar for all positions by default, show for specific positions */
+        .center-avatar-site {
+            display: none;
+        }
+
+        /* Hide video greeter when disabled */
+        body.video-greeter-disabled #showpilot-widget[data-position="skyscraper"] .center-avatar:not(.center-avatar-site),
+        body.video-greeter-disabled #showpilot-widget[data-position="center-midsize-square"] .center-avatar:not(.center-avatar-site),
+        body.video-greeter-disabled #showpilot-widget[data-position="full-height-center"] .center-avatar:not(.center-avatar-site) {
+            display: none !important;
+        }
+
+        #showpilot-widget[data-position="center-midsize-square"] .center-avatar:not(.center-avatar-site) {
+            display: block;
+            width: calc(100% - 32px);
+            height: 280px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 16px;
+            flex-shrink: 0;
+        }
+
+        #showpilot-widget[data-position="center-midsize-square"] .center-avatar-site {
+            display: none !important;
+        }
+
+        #showpilot-widget[data-position="skyscraper"] .center-avatar:not(.center-avatar-site) {
+            display: block;
+            width: calc(100% - 32px);
+            height: 240px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 16px;
+            flex-shrink: 0;
+        }
+
+        #showpilot-widget[data-position="skyscraper"] .center-avatar-site {
+            display: none !important;
+        }
+
+        /* Command Center: Side-by-side layout */
+        #showpilot-widget[data-position="full-height-center"] .chat-panel {
+            flex-direction: row;
+        }
+
+        #showpilot-widget[data-position="full-height-center"] .center-avatar:not(.center-avatar-site) {
+            display: flex;
+            width: 40%;
+            height: 100%;
+            border-radius: 0;
+            overflow: visible;
+            margin: 0;
+            padding: 40px;
+            flex-shrink: 0;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            position: relative;
+        }
+
+        #showpilot-widget[data-position="full-height-center"] .center-avatar img,
+        #showpilot-widget[data-position="full-height-center"] .center-avatar video {
+            width: 100%;
+            height: auto;
+            max-height: 85%;
+            object-fit: contain;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        #showpilot-widget[data-position="full-height-center"] .center-avatar-badge {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #showpilot-widget[data-position="full-height-center"] .center-avatar-site {
+            display: none !important;
+        }
+
+        /* Wrapper for chat content on the right (only for Command Center) */
+        .chat-content-wrapper {
+            display: contents; /* Default: acts transparent for other layouts */
+        }
+
+        #showpilot-widget[data-position="full-height-center"] .chat-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        #showpilot-widget[data-position="content-viewer"] .chat-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0;
+        }
+
+        #showpilot-widget[data-position="full-height-center"] .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        #showpilot-widget[data-position="full-height-center"] .chat-input-area {
+            flex-shrink: 0;
         }
 
         #showpilot-widget[data-position="center-low-rectangle"] .input-wrapper {
@@ -999,10 +1502,6 @@
 
         #showpilot-widget[data-position="center-low-rectangle"] .demo-badge {
             margin-right: auto;
-        }
-
-        #showpilot-widget[data-position="center-low-rectangle"] .send-btn {
-            display: none;
         }
 
         #showpilot-widget[data-position="center-low-rectangle"] .privacy-disclaimer {
@@ -1065,38 +1564,53 @@
             opacity: 1;
         }
 
-        /* Center avatar (hidden by default, shown in center-low-rectangle) */
+        /* Center avatar (shown at top for video positions) */
         .center-avatar {
             display: none;
-            width: 120px;
-            height: 120px;
-            border-radius: 16px;
+            width: 100%;
+            position: relative;
+            height: auto;
+            border-radius: 0;
             overflow: hidden;
             flex-shrink: 0;
             background: #f1f5f9;
-            position: relative;
         }
 
         .center-avatar img {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            z-index: 1;
+        }
+
+        .center-avatar video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 2;
         }
 
         .center-avatar-badge {
             position: absolute;
-            bottom: 8px;
+            bottom: 16px;
             left: 50%;
             transform: translateX(-50%);
-            padding: 5px 10px;
+            padding: 10px 20px;
             background: #0B3398;
             color: white;
-            font-size: 10px;
+            font-size: 14px;
             font-weight: 600;
-            border-radius: 16px;
+            border-radius: 24px;
+            z-index: 3;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 8px;
             box-shadow: 0 2px 8px rgba(11, 51, 152, 0.3);
             cursor: pointer;
             transition: all 0.2s;
@@ -1109,11 +1623,11 @@
         }
 
         .center-avatar-badge .soundwave-icon {
-            height: 10px;
+            height: 14px;
         }
 
         .center-avatar-badge .soundwave-bar {
-            width: 2px;
+            width: 3px;
             background: white;
         }
 
@@ -1248,6 +1762,7 @@
             <button class="demo-btn" onclick="demoFocusBox()">3. Focus Box</button>
             <button class="demo-btn" onclick="setPosition('skyscraper')">4. Skyscraper</button>
             <button class="demo-btn" onclick="setPosition('full-height-center')">5. Command Center</button>
+            <button class="demo-btn" onclick="setPosition('content-viewer')">6. Experience Viewer</button>
         </div>
 
         <div class="demo-section">
@@ -1262,6 +1777,20 @@
         <div class="demo-section">
             <div class="demo-section-title">Voice</div>
             <button class="demo-btn" onclick="toggleVoice()">Toggle Recording</button>
+        </div>
+
+        <div class="demo-section">
+            <div class="demo-section-title">Agent Avatar</div>
+            <div class="device-btns">
+                <button class="demo-btn device-btn active" onclick="setAvatar('av44', event)">Avatar 1</button>
+                <button class="demo-btn device-btn" onclick="setAvatar('av22', event)">Avatar 2</button>
+                <button class="demo-btn device-btn" onclick="setAvatar('av33', event)">Avatar 3</button>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <div class="demo-section-title">Video Greeter</div>
+            <button class="demo-btn" id="video-greeter-toggle" onclick="toggleVideoGreeter()">Hide Video Greeter</button>
         </div>
 
         <div class="demo-section">
@@ -1295,7 +1824,10 @@
             <div class="widget-header">
                 <div class="header-left">
                     <div class="header-avatar">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                        <img id="header-avatar-img" src="public/av44.png" alt="Alex" style="display: block;">
+                        <video id="header-avatar-video" muted playsinline loop preload="metadata" style="display: none;">
+                            <source src="public/av44.mp4" type="video/mp4">
+                        </video>
                     </div>
                     <div class="header-info">
                         <h3>Alex</h3>
@@ -1377,10 +1909,100 @@
                 </div>
 
                 <div class="chat-panel">
+                    <!-- Greeting Tooltip for Site Agent -->
+                    <div class="greeting-tooltip-site">
+                        <div class="greeting-text">
+                            You're in good company! Over 500 companies have hired me to help them engage buyers, book meetings, and generate pipeline.
+                        </div>
+                        <div class="greeting-arrow"></div>
+                    </div>
+
+                    <!-- Video Container for Site Agent -->
+                    <div class="video-container-site">
+                        <img id="center-avatar-site-img" src="public/av44.png" alt="Alex" style="display: block;">
+                        <video id="center-avatar-site-video" muted playsinline loop preload="metadata" style="display: none;">
+                            <source src="public/av44.mp4" type="video/mp4">
+                        </video>
+                        <div class="video-overlay-site">
+                            <button class="talk-now-button-site" onclick="toggleVoice()">
+                                <div class="soundwave-icon">
+                                    <div class="soundwave-bar"></div>
+                                    <div class="soundwave-bar"></div>
+                                    <div class="soundwave-bar"></div>
+                                </div>
+                                Talk now
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Chat Container for Site Agent -->
+                    <div class="chat-container-site">
+                        <div class="hover-controls">
+                            <button class="control-btn control-expand" onclick="expand()" title="Expand">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                                </svg>
+                            </button>
+                            <button class="control-btn control-close" onclick="closeWidget()" title="Close">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="chat-input-area-site">
+                            <div class="input-row-site">
+                                <input type="text" class="chat-input" id="site-agent-input" placeholder="Chat with ShowPilot Agent">
+                                <button class="voice-btn" onclick="toggleVoice()" title="Voice input">
+                                    <div class="soundwave-icon">
+                                        <div class="soundwave-bar"></div>
+                                        <div class="soundwave-bar"></div>
+                                        <div class="soundwave-bar"></div>
+                                    </div>
+                                </button>
+                                <button class="send-btn" title="Send message">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 19V5M5 12l7-7 7 7"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="input-bottom-row-site">
+                                <button class="demo-badge" onclick="demoBookMeeting()">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                        <line x1="16" y1="2" x2="16" y2="6"/>
+                                        <line x1="8" y1="2" x2="8" y2="6"/>
+                                        <line x1="3" y1="10" x2="21" y2="10"/>
+                                    </svg>
+                                    Book a demo
+                                </button>
+                                <div class="privacy-disclaimer">
+                                    By continuing, you agree this conversation may be recorded and used per our <a href="#privacy">Privacy Policy</a>.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Original center-avatar for other positions -->
+                    <div class="center-avatar">
+                        <img id="center-avatar-img" src="public/av44.png" alt="Alex" style="display: block;">
+                        <video id="center-avatar-video" muted playsinline loop preload="metadata" style="display: none;">
+                            <source src="public/av44.mp4" type="video/mp4">
+                        </video>
+                        <div class="center-avatar-badge" onclick="toggleVoice()">
+                            <div class="soundwave-icon">
+                                <div class="soundwave-bar"></div>
+                                <div class="soundwave-bar"></div>
+                                <div class="soundwave-bar"></div>
+                            </div>
+                            Talk now
+                        </div>
+                    </div>
+                    <div class="chat-content-wrapper">
                     <div class="chat-messages">
                         <div class="message message-ai">
                             <div class="message-avatar">
-                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                                <img class="message-avatar-img" src="public/av44.png" alt="Alex">
                             </div>
                             <div class="message-content">
                                 <div class="message-bubble">
@@ -1406,6 +2028,33 @@
                         </div>
                     </div>
 
+                    <!-- Sticky Prompt Suggestions Modal -->
+                    <div class="prompt-suggestions-modal" id="prompt-suggestions-modal">
+                        <div class="prompt-modal-header">
+                            <div class="prompt-modal-title">Ask me things like:</div>
+                            <button class="prompt-modal-close" onclick="closePromptModal()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="prompt-suggestions-list">
+                            <div class="prompt-suggestion-item" onclick="demoPageNavigation()">
+                                Navigate me through your site
+                            </div>
+                            <div class="prompt-suggestion-item" onclick="demoExperienceViewer()">
+                                Show me personalized content
+                            </div>
+                            <div class="prompt-suggestion-item" onclick="startLearnFlow()">
+                                Learn how ShowPilot works
+                            </div>
+                            <div class="prompt-suggestion-item" onclick="selectPrompt(this, 'Can you help me schedule a meeting?')">
+                                Can you help me schedule a meeting?
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="chat-input-area">
                         <div class="hover-controls">
                             <button class="control-btn control-expand" onclick="expand()" title="Expand">
@@ -1421,17 +2070,6 @@
                             </button>
                         </div>
                         <div class="input-row">
-                            <div class="center-avatar">
-                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=240&h=240&fit=crop" alt="Alex">
-                                <div class="center-avatar-badge" onclick="toggleVoice()">
-                                    <div class="soundwave-icon">
-                                        <div class="soundwave-bar"></div>
-                                        <div class="soundwave-bar"></div>
-                                        <div class="soundwave-bar"></div>
-                                    </div>
-                                    Talk now
-                                </div>
-                            </div>
                             <div class="input-wrapper">
                                 <div class="input-top-row">
                                     <input type="text" class="chat-input" placeholder="Chat with ShowPilot Agent">
@@ -1455,8 +2093,8 @@
                                             </div>
                                         </button>
                                         <button class="send-btn" title="Send message">
-                                            <svg viewBox="0 0 24 24" fill="white">
-                                                <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z"/>
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M12 19V5M5 12l7-7 7 7"/>
                                             </svg>
                                         </button>
                                     </div>
@@ -1467,7 +2105,8 @@
                             By continuing, you agree this conversation may be recorded and used per our <a href="#privacy">Privacy Policy</a>.
                         </div>
                     </div>
-                </div>
+                    </div><!-- /chat-content-wrapper -->
+                </div><!-- /chat-panel -->
 
             </div>
         </div>
@@ -1477,6 +2116,88 @@
         const widget = document.getElementById('showpilot-widget');
         let previousPosition = null;
         let isVoiceActive = false;
+
+        // Initialize video/image visibility on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const currentPosition = widget.getAttribute('data-position');
+            const headerAvatarImg = document.getElementById('header-avatar-img');
+            const headerAvatarVideo = document.getElementById('header-avatar-video');
+            const centerAvatarImg = document.getElementById('center-avatar-img');
+            const centerAvatarVideo = document.getElementById('center-avatar-video');
+            const centerAvatarSiteImg = document.getElementById('center-avatar-site-img');
+            const centerAvatarSiteVideo = document.getElementById('center-avatar-site-video');
+
+            // Header always shows still image
+            headerAvatarImg.style.setProperty('display', 'block', 'important');
+            headerAvatarVideo.style.setProperty('display', 'none', 'important');
+
+            if (currentPosition === 'center-low-rectangle') {
+                // Site Agent: Video in input area
+                centerAvatarSiteImg.style.setProperty('display', 'none', 'important');
+                centerAvatarSiteVideo.style.setProperty('display', 'block', 'important');
+                centerAvatarSiteVideo.play();
+            } else if (currentPosition === 'skyscraper' || currentPosition === 'center-midsize-square' || currentPosition === 'full-height-center') {
+                // Skyscraper, Focus Box & Command Center: Video at top
+                centerAvatarImg.style.setProperty('display', 'none', 'important');
+                centerAvatarVideo.style.setProperty('display', 'block', 'important');
+                centerAvatarVideo.play();
+            } else {
+                // Other positions: All still images
+                centerAvatarImg.style.setProperty('display', 'block', 'important');
+                centerAvatarVideo.style.setProperty('display', 'none', 'important');
+                centerAvatarSiteImg.style.setProperty('display', 'block', 'important');
+                centerAvatarSiteVideo.style.setProperty('display', 'none', 'important');
+            }
+
+            // Switch to still image when user starts chatting
+            const chatInput = document.querySelector('.chat-input');
+            if (chatInput) {
+                chatInput.addEventListener('focus', switchToStillImage);
+                chatInput.addEventListener('input', switchToStillImage);
+
+                // Toggle between voice and send button based on input
+                chatInput.addEventListener('input', function() {
+                    const chatInputArea = document.querySelector('.chat-input-area');
+                    if (chatInput.value.trim().length > 0) {
+                        chatInputArea.classList.add('has-text');
+                    } else {
+                        chatInputArea.classList.remove('has-text');
+                    }
+                });
+            }
+
+            // Handle site agent input for voice/send toggle
+            const siteAgentInput = document.getElementById('site-agent-input');
+            if (siteAgentInput) {
+                siteAgentInput.addEventListener('input', function() {
+                    const chatInputAreaSite = document.querySelector('.chat-input-area-site');
+                    if (siteAgentInput.value.trim().length > 0) {
+                        chatInputAreaSite.classList.add('has-text');
+                    } else {
+                        chatInputAreaSite.classList.remove('has-text');
+                    }
+                });
+            }
+        });
+
+        function switchToStillImage() {
+            const currentPosition = widget.getAttribute('data-position');
+            if (currentPosition === 'center-low-rectangle') {
+                // Site Agent: Switch center-avatar-site to still
+                const centerAvatarSiteImg = document.getElementById('center-avatar-site-img');
+                const centerAvatarSiteVideo = document.getElementById('center-avatar-site-video');
+                centerAvatarSiteImg.style.setProperty('display', 'block', 'important');
+                centerAvatarSiteVideo.style.setProperty('display', 'none', 'important');
+                centerAvatarSiteVideo.pause();
+            } else if (currentPosition === 'skyscraper' || currentPosition === 'center-midsize-square' || currentPosition === 'full-height-center') {
+                // Skyscraper, Focus Box & Command Center: Switch center-avatar to still
+                const centerAvatarImg = document.getElementById('center-avatar-img');
+                const centerAvatarVideo = document.getElementById('center-avatar-video');
+                centerAvatarImg.style.setProperty('display', 'block', 'important');
+                centerAvatarVideo.style.setProperty('display', 'none', 'important');
+                centerAvatarVideo.pause();
+            }
+        }
 
         function setPosition(position) {
             previousPosition = widget.getAttribute('data-position');
@@ -1488,6 +2209,88 @@
             } else {
                 document.body.classList.remove('content-viewer-active');
             }
+
+            // Check if video greeter is disabled
+            const videoGreeterDisabled = document.body.classList.contains('video-greeter-disabled');
+
+            // Auto-play video greeter in avatar for Site Agent, Skyscraper, and Focus Box positions
+            const headerAvatarImg = document.getElementById('header-avatar-img');
+            const headerAvatarVideo = document.getElementById('header-avatar-video');
+            const centerAvatarImg = document.getElementById('center-avatar-img');
+            const centerAvatarVideo = document.getElementById('center-avatar-video');
+            const centerAvatarSiteImg = document.getElementById('center-avatar-site-img');
+            const centerAvatarSiteVideo = document.getElementById('center-avatar-site-video');
+
+            // Header always shows still image
+            headerAvatarImg.style.setProperty('display', 'block', 'important');
+            headerAvatarVideo.style.setProperty('display', 'none', 'important');
+            headerAvatarVideo.pause();
+
+            if (position === 'center-low-rectangle') {
+                // Site Agent: Video in input area (center-avatar-site) - unless disabled
+                if (videoGreeterDisabled) {
+                    centerAvatarSiteImg.style.setProperty('display', 'block', 'important');
+                    centerAvatarSiteVideo.style.setProperty('display', 'none', 'important');
+                    centerAvatarSiteVideo.pause();
+                } else {
+                    centerAvatarSiteImg.style.setProperty('display', 'none', 'important');
+                    centerAvatarSiteVideo.style.setProperty('display', 'block', 'important');
+                    centerAvatarSiteVideo.play();
+                }
+            } else if (position === 'skyscraper' || position === 'center-midsize-square' || position === 'full-height-center') {
+                // Skyscraper, Focus Box & Command Center: Video at top (center-avatar) - unless disabled
+                if (!videoGreeterDisabled) {
+                    centerAvatarImg.style.setProperty('display', 'none', 'important');
+                    centerAvatarVideo.style.setProperty('display', 'block', 'important');
+                    centerAvatarVideo.play();
+                }
+
+                // Show preset conversation for these positions
+                showPresetConversation();
+            } else {
+                // Other positions - show images, hide and pause all videos
+                centerAvatarImg.style.setProperty('display', 'block', 'important');
+                centerAvatarVideo.style.setProperty('display', 'none', 'important');
+                centerAvatarVideo.pause();
+                centerAvatarSiteImg.style.setProperty('display', 'block', 'important');
+                centerAvatarSiteVideo.style.setProperty('display', 'none', 'important');
+                centerAvatarSiteVideo.pause();
+            }
+        }
+
+        function showPresetConversation() {
+            const messagesContainer = document.querySelector('.chat-messages');
+            messagesContainer.innerHTML = `
+                <div class="message message-user">
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            How do you help marketers generate more pipeline?
+                        </div>
+                    </div>
+                </div>
+                <div class="message message-ai">
+                    <div class="message-avatar">
+                        <img class="message-avatar-img" src="public/${currentAvatar}.png" alt="Alex">
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            ShowPilot is your 24/7 conversational AI that engages prospects, qualifies intent, and automates product demos.
+                            <br><br>
+                            <strong>AI conversations (not just chat)</strong> mix surveys, Q&A, and demos to qualify and educate buyers
+                            <br><br>
+                            <strong>Personalized content experiences</strong> deliver the right resources based on visitor context and behavior
+                            <br><br>
+                            <strong>Automated demo delivery</strong> showcases your product through interactive tours and video—anytime, anywhere
+                            <br><br>
+                            <strong>First-party intent data</strong> captures what prospects actually want, then routes qualified leads with full engagement history
+                            <br><br>
+                            <strong>Result:</strong> More qualified pipeline. Less guesswork. Zero manual work.
+                            <br><br>
+                            Want to see how?
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
         function updateDemoButtons(activePosition) {
@@ -1519,6 +2322,112 @@
                 voiceBtn.classList.add('recording');
             } else {
                 voiceBtn.classList.remove('recording');
+            }
+        }
+
+        // Prompt Suggestions Modal Functions
+        function closePromptModal() {
+            const modal = document.getElementById('prompt-suggestions-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function selectPrompt(element, promptText) {
+            // Insert the selected prompt into the chat input
+            const chatInput = document.querySelector('.chat-input');
+            if (chatInput) {
+                chatInput.value = promptText;
+            }
+
+            // Trigger appropriate flow based on the prompt (auto-submits)
+            if (promptText.includes('schedule a meeting')) {
+                actionBookMeeting();
+            }
+        }
+
+        // Avatar and Video Greeter Functions
+        let currentAvatar = 'av44';
+
+        function setAvatar(avatarId, event) {
+            currentAvatar = avatarId;
+
+            // Update all avatar images
+            const headerAvatar = document.getElementById('header-avatar-img');
+            const centerAvatar = document.getElementById('center-avatar-img');
+            const centerAvatarSite = document.getElementById('center-avatar-site-img');
+            const messageAvatars = document.querySelectorAll('.message-avatar-img');
+
+            if (headerAvatar) headerAvatar.src = `public/${avatarId}.png`;
+            if (centerAvatar) centerAvatar.src = `public/${avatarId}.png`;
+            if (centerAvatarSite) centerAvatarSite.src = `public/${avatarId}.png`;
+            messageAvatars.forEach(img => img.src = `public/${avatarId}.png`);
+
+            // Update video sources
+            const headerAvatarVideo = document.getElementById('header-avatar-video');
+            const centerAvatarVideo = document.getElementById('center-avatar-video');
+            const centerAvatarSiteVideo = document.getElementById('center-avatar-site-video');
+
+            const headerVideoSource = headerAvatarVideo.querySelector('source');
+            headerVideoSource.src = `public/${avatarId}.mp4`;
+            headerAvatarVideo.load();
+
+            const centerVideoSource = centerAvatarVideo.querySelector('source');
+            centerVideoSource.src = `public/${avatarId}.mp4`;
+            centerAvatarVideo.load();
+
+            const centerSiteVideoSource = centerAvatarSiteVideo.querySelector('source');
+            centerSiteVideoSource.src = `public/${avatarId}.mp4`;
+            centerAvatarSiteVideo.load();
+
+            // Restart videos if visible
+            if (headerAvatarVideo.style.display === 'block') {
+                headerAvatarVideo.play();
+            }
+            if (centerAvatarVideo.style.display === 'block') {
+                centerAvatarVideo.play();
+            }
+            if (centerAvatarSiteVideo.style.display === 'block') {
+                centerAvatarSiteVideo.play();
+            }
+
+            // Update active button state
+            const avatarSection = Array.from(document.querySelectorAll('.demo-section')).find(section => {
+                const title = section.querySelector('.demo-section-title');
+                return title && title.textContent.includes('Agent Avatar');
+            });
+
+            if (avatarSection) {
+                avatarSection.querySelectorAll('.device-btn').forEach(btn => btn.classList.remove('active'));
+            }
+
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+        }
+
+        function toggleVideoGreeter() {
+            const toggleButton = document.getElementById('video-greeter-toggle');
+            const isEnabled = !document.body.classList.contains('video-greeter-disabled');
+
+            if (isEnabled) {
+                // Disable video greeter
+                document.body.classList.add('video-greeter-disabled');
+                toggleButton.textContent = 'Show Video Greeter';
+
+                // Pause all videos
+                const centerAvatarVideo = document.getElementById('center-avatar-video');
+                const centerAvatarSiteVideo = document.getElementById('center-avatar-site-video');
+                if (centerAvatarVideo) centerAvatarVideo.pause();
+                if (centerAvatarSiteVideo) centerAvatarSiteVideo.pause();
+            } else {
+                // Enable video greeter
+                document.body.classList.remove('video-greeter-disabled');
+                toggleButton.textContent = 'Hide Video Greeter';
+
+                // Re-apply current position to restart videos if needed
+                const currentPosition = widget.getAttribute('data-position');
+                setPosition(currentPosition);
             }
         }
 
@@ -1600,7 +2509,7 @@
             messagesContainer.innerHTML = `
                 <div class="message message-ai">
                     <div class="message-avatar">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                        <img class="message-avatar-img" src="public/av44.png" alt="Alex">
                     </div>
                     <div class="message-content">
                         <div class="message-bubble">
@@ -1624,7 +2533,7 @@
             messagesContainer.innerHTML = `
                 <div class="message message-ai">
                     <div class="message-avatar">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                        <img class="message-avatar-img" src="public/av44.png" alt="Alex">
                     </div>
                     <div class="message-content">
                         <div class="message-bubble">
@@ -1659,7 +2568,7 @@
             messagesContainer.innerHTML = `
                 <div class="message message-ai">
                     <div class="message-avatar">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                        <img class="message-avatar-img" src="public/av44.png" alt="Alex">
                     </div>
                     <div class="message-content">
                         <div class="message-bubble">
@@ -2126,7 +3035,7 @@
 
                 message.innerHTML = `
                     <div class="message-avatar">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                        <img class="message-avatar-img" src="public/av44.png" alt="Alex">
                     </div>
                     <div class="message-content">
                         <div class="message-bubble">
@@ -2182,7 +3091,7 @@
 
                 message.innerHTML = `
                     <div class="message-avatar">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                        <img class="message-avatar-img" src="public/av44.png" alt="Alex">
                     </div>
                     <div class="message-content">
                         <div class="message-bubble">
@@ -2249,7 +3158,7 @@
 
                 message.innerHTML = `
                     <div class="message-avatar">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                        <img class="message-avatar-img" src="public/av44.png" alt="Alex">
                     </div>
                     <div class="message-content">
                         <div class="message-bubble">
@@ -2318,7 +3227,7 @@
 
                 message.innerHTML = `
                     <div class="message-avatar">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                        <img class="message-avatar-img" src="public/av44.png" alt="Alex">
                     </div>
                     <div class="message-content">
                         <div class="message-bubble">
@@ -2370,7 +3279,7 @@
 
                 message.innerHTML = `
                     <div class="message-avatar">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                        <img class="message-avatar-img" src="public/av44.png" alt="Alex">
                     </div>
                     <div class="message-content">
                         <div class="message-bubble">
@@ -2419,7 +3328,7 @@
 
                 message.innerHTML = `
                     <div class="message-avatar">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                        <img class="message-avatar-img" src="public/av44.png" alt="Alex">
                     </div>
                     <div class="message-content">
                         <div class="message-bubble">
@@ -2564,7 +3473,7 @@
 
                 message.innerHTML = `
                     <div class="message-avatar">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                        <img class="message-avatar-img" src="public/av44.png" alt="Alex">
                     </div>
                     <div class="message-content">
                         <div class="message-bubble">
@@ -2699,7 +3608,7 @@
 
                 message.innerHTML = `
                     <div class="message-avatar">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                        <img class="message-avatar-img" src="public/av44.png" alt="Alex">
                     </div>
                     <div class="message-content" style="flex: 1; min-width: 0;">
                         <div class="message-bubble">
@@ -2741,7 +3650,7 @@
 
                 message.innerHTML = `
                     <div class="message-avatar">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                        <img class="message-avatar-img" src="public/av44.png" alt="Alex">
                     </div>
                     <div class="message-content">
                         <div class="message-bubble">
@@ -2854,7 +3763,7 @@
 
                 message.innerHTML = `
                     <div class="message-avatar">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                        <img class="message-avatar-img" src="public/av44.png" alt="Alex">
                     </div>
                     <div class="message-content" style="flex: 1; min-width: 0;">
                         <div class="message-bubble">
@@ -2913,7 +3822,7 @@
 
                 message.innerHTML = `
                     <div class="message-avatar">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                        <img class="message-avatar-img" src="public/av44.png" alt="Alex">
                     </div>
                     <div class="message-content">
                         <div class="message-bubble">
@@ -2992,7 +3901,7 @@
 
                 message.innerHTML = `
                     <div class="message-avatar">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                        <img class="message-avatar-img" src="public/av44.png" alt="Alex">
                     </div>
                     <div class="message-content">
                         <div class="message-bubble">
