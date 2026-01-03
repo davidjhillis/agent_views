@@ -8,6 +8,22 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Theme CSS Variables - Tailwind Color Scale */
+        :root {
+            /* Primary theme colors (default: indigo) */
+            --theme-50: #eef2ff;
+            --theme-100: #e0e7ff;
+            --theme-200: #c7d2fe;
+            --theme-300: #a5b4fc;
+            --theme-400: #818cf8;
+            --theme-500: var(--theme-500);
+            --theme-600: var(--theme-600);
+            --theme-700: #4338ca;
+            --theme-800: #3730a3;
+            --theme-900: #312e81;
+            --theme-950: #1e1b4b;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -113,9 +129,36 @@
         }
 
         .demo-btn.active {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, var(--theme-500) 0%, #8b5cf6 100%);
             color: white;
             border-color: transparent;
+        }
+
+        .demo-select {
+            display: block;
+            width: 100%;
+            padding: 10px 14px;
+            margin-bottom: 6px;
+            background: #f8f9fa;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #1e293b;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Geist', sans-serif;
+        }
+
+        .demo-select:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .demo-select:focus {
+            outline: none;
+            border-color: var(--theme-500);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
 
         .device-btns {
@@ -215,7 +258,7 @@
         .pill-button {
             display: none;
             padding: 14px 24px;
-            background: linear-gradient(135deg, #0B3398 0%, #1e40af 100%);
+            background: linear-gradient(135deg, var(--theme-700) 0%, var(--theme-800) 100%);
             border: none;
             border-radius: 100px;
             cursor: pointer;
@@ -237,7 +280,7 @@
         .pill-button:hover {
             transform: translateY(-2px) scale(1.02);
             box-shadow: 0 12px 40px rgba(11, 51, 152, 0.4);
-            background: linear-gradient(135deg, #1e40af 0%, #0B3398 100%);
+            background: linear-gradient(135deg, #1e40af 0%, var(--theme-700) 100%);
         }
 
         .pill-badge {
@@ -555,7 +598,7 @@
 
         .playlist-item.active {
             background: rgba(99, 102, 241, 0.05);
-            border-left-color: #6366f1;
+            border-left-color: var(--theme-500);
         }
 
         .playlist-item-title {
@@ -612,7 +655,7 @@
         .play-btn {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, var(--theme-500) 0%, #8b5cf6 100%);
             border: none;
             border-radius: 50%;
             cursor: pointer;
@@ -722,7 +765,7 @@
         }
 
         .message-user .message-bubble {
-            background: #0B3398;
+            background: var(--theme-700);
             color: white;
             border-radius: 18px 18px 4px 18px;
             padding: 12px 16px;
@@ -784,7 +827,7 @@
         }
 
         .suggestion-card:hover {
-            border-color: #6366f1;
+            border-color: var(--theme-500);
             background: rgba(99, 102, 241, 0.03);
             transform: translateY(-2px);
         }
@@ -797,7 +840,7 @@
         }
 
         .suggestion-card.selected-answer {
-            border-color: #0B3398;
+            border-color: var(--theme-700);
             background: rgba(11, 51, 152, 0.05);
         }
 
@@ -880,13 +923,13 @@
 
         /* Multi-select selected state - no checkboxes, just card highlight */
         .multi-select-option.selected {
-            border-color: #0B3398;
+            border-color: var(--theme-700);
             background: rgba(11, 51, 152, 0.08);
             box-shadow: 0 0 0 3px rgba(11, 51, 152, 0.1);
         }
 
         .multi-select-option.selected strong {
-            color: #0B3398;
+            color: var(--theme-700);
         }
 
         /* Slide in animation for Continue button */
@@ -947,7 +990,7 @@
         }
 
         .input-wrapper:focus-within {
-            border-color: #0B3398;
+            border-color: var(--theme-700);
             box-shadow: 0 0 0 4px rgba(11, 51, 152, 0.08);
         }
 
@@ -998,11 +1041,11 @@
         }
 
         .voice-btn:hover {
-            color: #6366f1;
+            color: var(--theme-500);
         }
 
         .voice-btn.recording {
-            color: #6366f1;
+            color: var(--theme-500);
         }
 
         .voice-btn .soundwave-icon {
@@ -1021,7 +1064,7 @@
         .send-btn {
             width: 32px;
             height: 32px;
-            background: #0B3398;
+            background: var(--theme-700);
             border: none;
             border-radius: 6px;
             cursor: pointer;
@@ -1068,7 +1111,7 @@
             align-items: center;
             gap: 5px;
             padding: 6px 10px;
-            background: #0B3398;
+            background: var(--theme-700);
             border-radius: 6px;
             font-size: 11px;
             color: white;
@@ -1108,7 +1151,7 @@
         }
 
         .privacy-disclaimer a {
-            color: #6366f1;
+            color: var(--theme-500);
             text-decoration: none;
             font-weight: 500;
         }
@@ -1214,7 +1257,7 @@
             flex-shrink: 0;
             border-radius: 14px;
             overflow: hidden;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, var(--theme-500) 0%, #8b5cf6 100%);
             box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3), 0 4px 12px rgba(99, 102, 241, 0.2);
         }
 
@@ -1243,7 +1286,7 @@
             font-family: 'Geist', sans-serif;
             font-size: 11px;
             font-weight: 600;
-            color: #6366f1;
+            color: var(--theme-500);
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -1259,7 +1302,7 @@
 
         #showpilot-widget[data-position="center-low-rectangle"] .talk-now-button-site .soundwave-bar {
             width: 2px;
-            background: #6366f1;
+            background: var(--theme-500);
         }
 
         #showpilot-widget[data-position="center-low-rectangle"] .talk-now-button-site .soundwave-bar:nth-child(1) { height: 4px; }
@@ -1495,7 +1538,7 @@
             align-items: center;
             gap: 12px;
             padding: 12px 16px;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, var(--theme-500) 0%, #8b5cf6 100%);
             border-radius: 12px;
             margin: 16px 16px 0 16px;
             flex-shrink: 0;
@@ -1758,7 +1801,7 @@
             align-items: center;
             gap: 8px;
             padding: 8px 16px;
-            background: #0B3398;
+            background: var(--theme-700);
             color: white;
             font-size: 13px;
             font-weight: 600;
@@ -1925,7 +1968,7 @@
             left: 50%;
             transform: translateX(-50%);
             padding: 10px 20px;
-            background: #0B3398;
+            background: var(--theme-700);
             color: white;
             font-size: 14px;
             font-weight: 600;
@@ -2111,6 +2154,29 @@
         <div class="demo-section">
             <div class="demo-section-title">Voice</div>
             <button class="demo-btn" onclick="toggleVoice()">Toggle Recording</button>
+        </div>
+
+        <div class="demo-section">
+            <div class="demo-section-title">Theme</div>
+            <select class="demo-select" id="theme-select" onchange="setTheme(this.value, event)">
+                <option value="indigo" selected>Indigo</option>
+                <option value="blue">Blue</option>
+                <option value="violet">Violet</option>
+                <option value="purple">Purple</option>
+                <option value="fuchsia">Fuchsia</option>
+                <option value="pink">Pink</option>
+                <option value="rose">Rose</option>
+                <option value="red">Red</option>
+                <option value="orange">Orange</option>
+                <option value="amber">Amber</option>
+                <option value="yellow">Yellow</option>
+                <option value="lime">Lime</option>
+                <option value="green">Green</option>
+                <option value="emerald">Emerald</option>
+                <option value="teal">Teal</option>
+                <option value="cyan">Cyan</option>
+                <option value="sky">Sky</option>
+            </select>
         </div>
 
         <div class="demo-section">
@@ -2922,6 +2988,37 @@
             if (event && event.target) {
                 event.target.classList.add('active');
             }
+        }
+
+        // Theme switching with Tailwind color palettes
+        const themeColors = {
+            indigo: { 50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: 'var(--theme-500)', 600: 'var(--theme-600)', 700: '#4338ca', 800: '#3730a3', 900: '#312e81', 950: '#1e1b4b' },
+            blue: { 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 800: '#1e40af', 900: '#1e3a8a', 950: '#172554' },
+            violet: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+            purple: { 50: '#faf5ff', 100: '#f3e8ff', 200: '#e9d5ff', 300: '#d8b4fe', 400: '#c084fc', 500: '#a855f7', 600: '#9333ea', 700: '#7e22ce', 800: '#6b21a8', 900: '#581c87', 950: '#3b0764' },
+            fuchsia: { 50: '#fdf4ff', 100: '#fae8ff', 200: '#f5d0fe', 300: '#f0abfc', 400: '#e879f9', 500: '#d946ef', 600: '#c026d3', 700: '#a21caf', 800: '#86198f', 900: '#701a75', 950: '#4a044e' },
+            pink: { 50: '#fdf2f8', 100: '#fce7f3', 200: '#fbcfe8', 300: '#f9a8d4', 400: '#f472b6', 500: '#ec4899', 600: '#db2777', 700: '#be185d', 800: '#9d174d', 900: '#831843', 950: '#500724' },
+            rose: { 50: '#fff1f2', 100: '#ffe4e6', 200: '#fecdd3', 300: '#fda4af', 400: '#fb7185', 500: '#f43f5e', 600: '#e11d48', 700: '#be123c', 800: '#9f1239', 900: '#881337', 950: '#4c0519' },
+            red: { 50: '#fef2f2', 100: '#fee2e2', 200: '#fecaca', 300: '#fca5a5', 400: '#f87171', 500: '#ef4444', 600: '#dc2626', 700: '#b91c1c', 800: '#991b1b', 900: '#7f1d1d', 950: '#450a0a' },
+            orange: { 50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c', 500: '#f97316', 600: '#ea580c', 700: '#c2410c', 800: '#9a3412', 900: '#7c2d12', 950: '#431407' },
+            amber: { 50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 300: '#fcd34d', 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309', 800: '#92400e', 900: '#78350f', 950: '#451a03' },
+            yellow: { 50: '#fefce8', 100: '#fef9c3', 200: '#fef08a', 300: '#fde047', 400: '#facc15', 500: '#eab308', 600: '#ca8a04', 700: '#a16207', 800: '#854d0e', 900: '#713f12', 950: '#422006' },
+            lime: { 50: '#f7fee7', 100: '#ecfccb', 200: '#d9f99d', 300: '#bef264', 400: '#a3e635', 500: '#84cc16', 600: '#65a30d', 700: '#4d7c0f', 800: '#3f6212', 900: '#365314', 950: '#1a2e05' },
+            green: { 50: '#f0fdf4', 100: '#dcfce7', 200: '#bbf7d0', 300: '#86efac', 400: '#4ade80', 500: '#22c55e', 600: '#16a34a', 700: '#15803d', 800: '#166534', 900: '#14532d', 950: '#052e16' },
+            emerald: { 50: '#ecfdf5', 100: '#d1fae5', 200: '#a7f3d0', 300: '#6ee7b7', 400: '#34d399', 500: '#10b981', 600: '#059669', 700: '#047857', 800: '#065f46', 900: '#064e3b', 950: '#022c22' },
+            teal: { 50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 300: '#5eead4', 400: '#2dd4bf', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a', 950: '#042f2e' },
+            cyan: { 50: '#ecfeff', 100: '#cffafe', 200: '#a5f3fc', 300: '#67e8f9', 400: '#22d3ee', 500: '#06b6d4', 600: '#0891b2', 700: '#0e7490', 800: '#155e75', 900: '#164e63', 950: '#083344' },
+            sky: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 800: '#075985', 900: '#0c4a6e', 950: '#082f49' }
+        };
+
+        function setTheme(themeName) {
+            const colors = themeColors[themeName];
+            if (!colors) return;
+
+            const root = document.documentElement;
+            Object.keys(colors).forEach(shade => {
+                root.style.setProperty(`--theme-${shade}`, colors[shade]);
+            });
         }
 
         function toggleVideoGreeter() {
@@ -3905,7 +4002,7 @@
                     </div>
                     <div class="suggestion-cards" style="grid-template-columns: 1fr; margin-top: 12px; gap: 8px;">
                         <button class="suggestion-card" onclick="disableSuggestionCards(this); demoBookMeeting()" style="display: flex; align-items: center; gap: 10px;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0B3398" stroke-width="2">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--theme-700)" stroke-width="2">
                                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
                                 <line x1="16" y1="2" x2="16" y2="6"/>
                                 <line x1="8" y1="2" x2="8" y2="6"/>
@@ -4072,10 +4169,10 @@
                     // Professional content type styling like Perplexity
                     const contentTypes = {
                         'Video': {
-                            icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0B3398" stroke-width="2">
+                            icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--theme-700)" stroke-width="2">
                                     <polygon points="5 3 19 12 5 21 5 3"></polygon>
                                    </svg>`,
-                            badge: `<span style="font-size: 11px; padding: 3px 8px; background: #EEF2FF; color: #0B3398; border-radius: 4px; font-weight: 600;">VIDEO</span>`,
+                            badge: `<span style="font-size: 11px; padding: 3px 8px; background: #EEF2FF; color: var(--theme-700); border-radius: 4px; font-weight: 600;">VIDEO</span>`,
                             bgColor: '#F0F4FF'
                         },
                         'PDF': {
@@ -4116,7 +4213,7 @@
                     return `
                     <button class="content-recommendation-card" onclick='viewPersonalizedContent(${JSON.stringify(item)})'
                             style="all: unset; cursor: pointer; display: block; width: 100%; max-width: 100%; box-sizing: border-box; background: white; border: 1px solid #E5E7EB; border-radius: 10px; padding: 12px; margin-bottom: 8px; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.06);"
-                            onmouseover="this.style.borderColor='#0B3398'; this.style.boxShadow='0 2px 8px rgba(11,51,152,0.12)'; this.style.transform='translateY(-1px)';"
+                            onmouseover="this.style.borderColor='var(--theme-700)'; this.style.boxShadow='0 2px 8px rgba(11,51,152,0.12)'; this.style.transform='translateY(-1px)';"
                             onmouseout="this.style.borderColor='#E5E7EB'; this.style.boxShadow='0 1px 2px rgba(0,0,0,0.06)'; this.style.transform='translateY(0)';">
                         <div style="display: flex; gap: 12px; align-items: center; width: 100%;">
                             <div style="flex-shrink: 0; width: 40px; height: 40px; background: ${contentType.bgColor}; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
@@ -4241,10 +4338,10 @@
                 const storiesHTML = industryStories.map((story, idx) => {
                     const contentTypes = {
                         'Video': {
-                            icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0B3398" stroke-width="2">
+                            icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--theme-700)" stroke-width="2">
                                     <polygon points="5 3 19 12 5 21 5 3"></polygon>
                                    </svg>`,
-                            badge: `<span style="font-size: 11px; padding: 3px 8px; background: #EEF2FF; color: #0B3398; border-radius: 4px; font-weight: 600;">VIDEO</span>`,
+                            badge: `<span style="font-size: 11px; padding: 3px 8px; background: #EEF2FF; color: var(--theme-700); border-radius: 4px; font-weight: 600;">VIDEO</span>`,
                             bgColor: '#F0F4FF'
                         },
                         'PDF': {
@@ -4271,7 +4368,7 @@
                     return `
                     <button class="content-recommendation-card" onclick='viewPersonalizedContent(${JSON.stringify(contentObj)})'
                             style="all: unset; cursor: pointer; display: block; width: 100%; max-width: 100%; box-sizing: border-box; background: white; border: 1px solid #E5E7EB; border-radius: 10px; padding: 12px; margin-bottom: 8px; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.06);"
-                            onmouseover="this.style.borderColor='#0B3398'; this.style.boxShadow='0 2px 8px rgba(11,51,152,0.12)'; this.style.transform='translateY(-1px)';"
+                            onmouseover="this.style.borderColor='var(--theme-700)'; this.style.boxShadow='0 2px 8px rgba(11,51,152,0.12)'; this.style.transform='translateY(-1px)';"
                             onmouseout="this.style.borderColor='#E5E7EB'; this.style.boxShadow='0 1px 2px rgba(0,0,0,0.06)'; this.style.transform='translateY(0)';">
                         <div style="display: flex; gap: 12px; align-items: center; width: 100%;">
                             <div style="flex-shrink: 0; width: 40px; height: 40px; background: ${contentType.bgColor}; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
@@ -4416,8 +4513,8 @@
 
                 const contentCardsHTML = recommended.map(item => {
                     const typeIcons = {
-                        'Video': '<svg width="16" height="16" viewBox="0 0 24 24" fill="#0B3398"><path d="M8 5v14l11-7z"/></svg>',
-                        'Demo': '<span style="font-size: 10px; padding: 2px 6px; background: #0B3398; color: white; border-radius: 3px; font-weight: 600;">DEMO</span>',
+                        'Video': '<svg width="16" height="16" viewBox="0 0 24 24" fill="var(--theme-700)"><path d="M8 5v14l11-7z"/></svg>',
+                        'Demo': '<span style="font-size: 10px; padding: 2px 6px; background: var(--theme-700); color: white; border-radius: 3px; font-weight: 600;">DEMO</span>',
                         'PDF': '<svg width="16" height="16" viewBox="0 0 24 24" fill="#ef4444"><path d="M7 18h10M7 14h10M10 10h4M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"/><path d="M14 2v6h6" stroke="#ef4444" fill="none"/></svg>'
                     };
 
@@ -4546,8 +4643,8 @@
 
             const contentCardsHTML = recommended.map(item => {
                 const typeIcons = {
-                    'Video': '<svg width="16" height="16" viewBox="0 0 24 24" fill="#0B3398"><path d="M8 5v14l11-7z"/></svg>',
-                    'Demo': '<span style="font-size: 10px; padding: 2px 6px; background: #0B3398; color: white; border-radius: 3px; font-weight: 600;">DEMO</span>'
+                    'Video': '<svg width="16" height="16" viewBox="0 0 24 24" fill="var(--theme-700)"><path d="M8 5v14l11-7z"/></svg>',
+                    'Demo': '<span style="font-size: 10px; padding: 2px 6px; background: var(--theme-700); color: white; border-radius: 3px; font-weight: 600;">DEMO</span>'
                 };
 
                 return `
@@ -4829,9 +4926,9 @@
 
             const contentCardsHTML = recommended.map(item => {
                 const typeIcons = {
-                    'Video': '<svg width="16" height="16" viewBox="0 0 24 24" fill="#0B3398"><path d="M8 5v14l11-7z"/></svg>',
+                    'Video': '<svg width="16" height="16" viewBox="0 0 24 24" fill="var(--theme-700)"><path d="M8 5v14l11-7z"/></svg>',
                     'PDF': '<svg width="16" height="16" viewBox="0 0 24 24" fill="#ef4444"><path d="M7 18h10M7 14h10M10 10h4M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"/><path d="M14 2v6h6" stroke="#ef4444" fill="none"/></svg>',
-                    'Demo': '<span style="font-size: 10px; padding: 2px 6px; background: #0B3398; color: white; border-radius: 3px; font-weight: 600;">DEMO</span>',
+                    'Demo': '<span style="font-size: 10px; padding: 2px 6px; background: var(--theme-700); color: white; border-radius: 3px; font-weight: 600;">DEMO</span>',
                     'Article': '<svg width="16" height="16" viewBox="0 0 24 24" fill="#10b981"><path d="M4 6h16M4 12h16M4 18h10"/></svg>'
                 };
 
@@ -5168,7 +5265,7 @@
                 <button class="suggestion-card" onclick='launchContentViewer(${JSON.stringify(item)})'>
                     <div style="display: flex; justify-content: space-between; align-items: start;">
                         <strong>${item.title}</strong>
-                        <span style="font-size: 10px; padding: 2px 8px; background: rgba(11, 51, 152, 0.1); color: #0B3398; border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">${item.type}</span>
+                        <span style="font-size: 10px; padding: 2px 8px; background: rgba(11, 51, 152, 0.1); color: var(--theme-700); border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">${item.type}</span>
                     </div>
                     <span>${item.description}</span>
                     ${item.duration ? `<span style="font-size: 12px; color: #64748b;">${item.duration}</span>` : ''}
