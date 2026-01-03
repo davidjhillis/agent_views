@@ -1043,6 +1043,16 @@
         }
 
         /* Toggle between voice and send based on input */
+        /* Hide send button by default, show voice button */
+        .chat-input-area .voice-btn {
+            display: flex;
+        }
+
+        .chat-input-area .send-btn {
+            display: none;
+        }
+
+        /* When input has text, hide voice and show send */
         .chat-input-area.has-text .voice-btn {
             display: none;
         }
@@ -1108,22 +1118,19 @@
 
         /* Center Low Rectangle Optimizations */
         #showpilot-widget[data-position="center-low-rectangle"] .widget-header {
-            display: none;
+            display: none !important;
         }
 
         #showpilot-widget[data-position="center-low-rectangle"] .chat-messages {
-            display: none;
+            display: none !important;
         }
 
         #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area {
-            display: none; /* Hide old input area for site agent */
+            display: none !important; /* Hide old input area for site agent */
         }
 
         #showpilot-widget[data-position="center-low-rectangle"] .input-row {
-            flex-direction: row;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 0;
+            display: none !important; /* Hide regular input row for site agent */
         }
 
         /* NEW SEPARATED LAYOUT FOR SITE AGENT */
@@ -1371,7 +1378,12 @@
         }
 
         #showpilot-widget[data-position="center-low-rectangle"] .chat-content-wrapper {
-            display: none;
+            display: none !important;
+        }
+
+        /* Make sure voice status bar doesn't show for Site Agent */
+        #showpilot-widget[data-position="center-low-rectangle"] .voice-status-bar {
+            display: none !important;
         }
 
         /* Video toggle support */
