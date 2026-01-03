@@ -16,13 +16,74 @@
             --theme-200: #c7d2fe;
             --theme-300: #a5b4fc;
             --theme-400: #818cf8;
-            --theme-500: var(--theme-500);
-            --theme-600: var(--theme-600);
+            --theme-500: #6366f1;
+            --theme-600: #4f46e5;
             --theme-700: #4338ca;
             --theme-800: #3730a3;
             --theme-900: #312e81;
             --theme-950: #1e1b4b;
         }
+
+        /* ============================================
+           RESPONSIVE VIEWPORT SYSTEM
+           ============================================ */
+
+        .demo-viewport-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #e5e7eb;
+            padding: 40px 20px;
+        }
+
+        .demo-viewport {
+            background: white;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Desktop Viewport (1440px × 900px) */
+        .demo-viewport[data-device="desktop"] {
+            width: 1440px;
+            height: 900px;
+            border-radius: 12px;
+        }
+
+        /* Tablet Viewport (iPad Air portrait: 834px × 1194px) */
+        .demo-viewport[data-device="tablet"] {
+            width: 834px;
+            height: 1194px;
+            border-radius: 24px;
+            border: 8px solid #1f2937;
+        }
+
+        /* Mobile Viewport (iPhone 14: 390px × 844px) */
+        .demo-viewport[data-device="mobile"] {
+            width: 390px;
+            height: 844px;
+            border-radius: 48px;
+            border: 12px solid #1f2937;
+        }
+
+        /* iPhone notch simulation */
+        .demo-viewport[data-device="mobile"]::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 30px;
+            background: #1f2937;
+            border-radius: 0 0 16px 16px;
+            z-index: 999999;
+        }
+
+        /* ============================================ */
 
         * {
             margin: 0;
@@ -32,9 +93,8 @@
 
         body {
             font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: white;
+            background: #e5e7eb;
             min-height: 100vh;
-            padding: 2rem;
             overflow-x: hidden;
         }
 
@@ -2083,54 +2143,228 @@
         #showpilot-widget:fullscreen .widget-window {
             border-radius: 0 !important;
         }
+
+        /* ============================================
+           MOBILE RESPONSIVE CSS (max-width: 767px)
+           Within demo-viewport[data-device="mobile"]
+           ============================================ */
+
+        .demo-viewport[data-device="mobile"] .page-content {
+            font-size: 14px;
+        }
+
+        .demo-viewport[data-device="mobile"] .page-content h1 {
+            font-size: 32px;
+        }
+
+        .demo-viewport[data-device="mobile"] .page-content p {
+            font-size: 14px;
+        }
+
+        /* All positions become full-screen except chat button */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position]:not([data-position="chat-button"]) {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+            border-radius: 0 !important;
+            transform: none !important;
+        }
+
+        /* Chat button - larger and lower for thumb reach */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="chat-button"] .pill-button {
+            width: 64px !important;
+            height: 64px !important;
+            bottom: 16px !important;
+            right: 16px !important;
+            font-size: 18px;
+        }
+
+        /* Widget header - mobile optimized with safe area */
+        .demo-viewport[data-device="mobile"] .widget-header {
+            padding: 12px 16px !important;
+            padding-top: 42px !important; /* Account for notch */
+        }
+
+        .demo-viewport[data-device="mobile"] .header-avatar {
+            width: 36px !important;
+            height: 36px !important;
+        }
+
+        .demo-viewport[data-device="mobile"] .header-info h3 {
+            font-size: 16px !important;
+        }
+
+        .demo-viewport[data-device="mobile"] .header-status {
+            font-size: 12px !important;
+        }
+
+        /* Hide some header controls on mobile */
+        .demo-viewport[data-device="mobile"] .control-expand,
+        .demo-viewport[data-device="mobile"] .control-fullscreen,
+        .demo-viewport[data-device="mobile"] .control-right {
+            display: none !important;
+        }
+
+        /* Larger tap targets for remaining controls */
+        .demo-viewport[data-device="mobile"] .control-btn {
+            width: 44px !important;
+            height: 44px !important;
+        }
+
+        /* Messages - optimized for mobile */
+        .demo-viewport[data-device="mobile"] .message {
+            margin-bottom: 16px !important;
+        }
+
+        .demo-viewport[data-device="mobile"] .message-bubble {
+            max-width: 85% !important;
+            padding: 16px !important;
+            font-size: 16px !important; /* Prevent zoom on input focus */
+            line-height: 1.5 !important;
+        }
+
+        /* Chat input - keyboard-aware with safe area */
+        .demo-viewport[data-device="mobile"] .chat-input {
+            padding: 12px 16px !important;
+            padding-bottom: 28px !important; /* Safe area inset bottom */
+            position: sticky !important;
+            bottom: 0 !important;
+        }
+
+        .demo-viewport[data-device="mobile"] .chat-input textarea {
+            font-size: 16px !important; /* Prevent iOS zoom */
+            padding: 12px !important;
+            min-height: 48px !important;
+        }
+
+        .demo-viewport[data-device="mobile"] .send-btn {
+            width: 48px !important;
+            height: 48px !important;
+            min-width: 48px !important;
+        }
+
+        /* Experience Viewer - vertical stack on mobile */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="content-viewer"] .content-viewer {
+            height: 40% !important;
+            width: 100% !important;
+        }
+
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="content-viewer"] .chat-container {
+            height: 60% !important;
+            width: 100% !important;
+        }
+
+        .demo-viewport[data-device="mobile"] .playlist-panel {
+            display: none !important; /* Hide on mobile, show in drawer */
+        }
+
+        /* Bottom sheet for Site Agent */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] {
+            height: auto !important;
+            max-height: 85% !important;
+            border-radius: 24px 24px 0 0 !important;
+            bottom: 0 !important;
+            top: auto !important;
+        }
+
+        /* Add drag handle for bottom sheet */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"]::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 4px;
+            background: #cbd5e1;
+            border-radius: 2px;
+            z-index: 10;
+        }
+
+        /* Voice status badge - larger for mobile */
+        .demo-viewport[data-device="mobile"] .voice-status-badge {
+            font-size: 13px !important;
+            padding: 8px 14px !important;
+        }
+
+        /* Center avatar badge - larger */
+        .demo-viewport[data-device="mobile"] .center-avatar-badge {
+            font-size: 13px !important;
+            padding: 8px 16px !important;
+        }
+
+        /* Greeting tooltip - adjusted for mobile */
+        .demo-viewport[data-device="mobile"] .greeting-tooltip {
+            font-size: 14px !important;
+            padding: 12px 16px !important;
+            bottom: 80px !important;
+        }
+
+        /* ============================================
+           TABLET RESPONSIVE CSS (768px-1024px equivalent)
+           Within demo-viewport[data-device="tablet"]
+           ============================================ */
+
+        /* Skyscraper - narrower on tablet */
+        .demo-viewport[data-device="tablet"] #showpilot-widget[data-position="skyscraper"] {
+            width: 360px !important;
+        }
+
+        /* Command Center - respect tablet dimensions */
+        .demo-viewport[data-device="tablet"] #showpilot-widget[data-position="full-height-center"] {
+            width: 90% !important;
+            max-width: 700px !important;
+        }
+
+        /* Touch targets - minimum 44px */
+        .demo-viewport[data-device="tablet"] .control-btn {
+            width: 44px !important;
+            height: 44px !important;
+        }
+
+        .demo-viewport[data-device="tablet"] .pill-button {
+            min-width: 160px !important;
+            height: 56px !important;
+            font-size: 16px !important;
+        }
+
+        /* Messages - slightly wider */
+        .demo-viewport[data-device="tablet"] .message-bubble {
+            max-width: 80% !important;
+            padding: 14px 16px !important;
+        }
+
+        /* Experience Viewer - collapsible playlist */
+        .demo-viewport[data-device="tablet"] .playlist-panel {
+            width: 280px !important;
+        }
+
+        /* Focus Box and Command Center - full screen on tablet */
+        .demo-viewport[data-device="tablet"] #showpilot-widget[data-position="center-midsize-square"],
+        .demo-viewport[data-device="tablet"] #showpilot-widget[data-position="full-height-center"] {
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+            border-radius: 0 !important;
+        }
+
+        /* Stack content viewer vertically on tablet */
+        .demo-viewport[data-device="tablet"] #showpilot-widget[data-position="content-viewer"] .content-viewer {
+            height: 45% !important;
+        }
+
+        .demo-viewport[data-device="tablet"] #showpilot-widget[data-position="content-viewer"] .chat-container {
+            height: 55% !important;
+        }
     </style>
 </head>
 <body class="device-desktop">
-    <div class="page-content">
-        <h1>ShowPilot</h1>
-        <p>AI-powered product guidance and qualification</p>
-        <div style="margin-top: 24px;">
-            <a href="DEVELOPER-GUIDE.md" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background: #f8f9fa; border: 1px solid #e2e8f0; border-radius: 10px; text-decoration: none; color: #0f172a; font-size: 14px; font-weight: 600; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14 2 14 8 20 8"/>
-                    <line x1="12" y1="18" x2="12" y2="12"/>
-                    <line x1="9" y1="15" x2="15" y2="15"/>
-                </svg>
-                Developer Guide
-            </a>
-        </div>
-        <div style="margin-top: 60px; max-width: 1200px; margin-left: auto; margin-right: auto;" class="sample-sections">
-            <div style="background: #f8f9fa; border: 1px solid #e2e8f0; padding: 40px; border-radius: 16px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);" class="agents-section">
-                <h2 style="font-size: 32px; margin-bottom: 16px; font-weight: 700; color: #0f172a;">Agents</h2>
-                <p style="font-size: 18px; color: #475569; line-height: 1.6; margin-bottom: 20px;">Intelligent AI agents that understand your business, products, and customers.</p>
-                <ul style="font-size: 16px; color: #64748b; line-height: 1.8; list-style: none; padding: 0;">
-                    <li style="margin-bottom: 12px;">✓ Train AI agents with your product knowledge and sales playbook</li>
-                    <li style="margin-bottom: 12px;">✓ Customize qualification paths for different customer segments</li>
-                    <li style="margin-bottom: 12px;">✓ Integrate with your tech stack to automate follow-up</li>
-                </ul>
-            </div>
-            <div style="background: #f8f9fa; border: 1px solid #e2e8f0; padding: 40px; border-radius: 16px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);" class="demos-section">
-                <h2 style="font-size: 32px; margin-bottom: 16px; font-weight: 700; color: #0f172a;">Interactive Demos</h2>
-                <p style="font-size: 18px; color: #475569; line-height: 1.6; margin-bottom: 20px;">Convert your live product into interactive demos without coding.</p>
-                <ul style="font-size: 16px; color: #64748b; line-height: 1.8; list-style: none; padding: 0;">
-                    <li style="margin-bottom: 12px;">✓ Create guided product tours directly from your live application</li>
-                    <li style="margin-bottom: 12px;">✓ Customize demos for different use cases and personas</li>
-                    <li style="margin-bottom: 12px;">✓ Deploy across multiple channels</li>
-                </ul>
-            </div>
-            <div style="background: #f8f9fa; border: 1px solid #e2e8f0; padding: 40px; border-radius: 16px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);" class="insights-section">
-                <h2 style="font-size: 32px; margin-bottom: 16px; font-weight: 700; color: #0f172a;">Insights</h2>
-                <p style="font-size: 18px; color: #475569; line-height: 1.6; margin-bottom: 20px;">Comprehensive customer interaction analytics and buyer intent signals.</p>
-                <ul style="font-size: 16px; color: #64748b; line-height: 1.8; list-style: none; padding: 0;">
-                    <li style="margin-bottom: 12px;">✓ Get real-time visibility into engagement metrics</li>
-                    <li style="margin-bottom: 12px;">✓ Uncover buyer intent from conversation patterns</li>
-                    <li style="margin-bottom: 12px;">✓ Monitor account-level engagement and content performance</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
     <div class="demo-controls">
         <h4>Agent Positions</h4>
         <div class="demo-section">
@@ -2199,6 +2433,53 @@
             <button class="demo-btn" onclick="demoPageNavigation()">Page Navigation</button>
             <button class="demo-btn" onclick="demoExperienceViewer()">Experience Viewer</button>
             <button class="demo-btn" onclick="startLearnFlow()">Journey</button>
+        </div>
+    </div>
+
+    <div class="demo-viewport-wrapper">
+        <div class="demo-viewport" data-device="desktop">
+            <div class="page-content">
+        <h1>ShowPilot</h1>
+        <p>AI-powered product guidance and qualification</p>
+        <div style="margin-top: 24px;">
+            <a href="DEVELOPER-GUIDE.md" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background: #f8f9fa; border: 1px solid #e2e8f0; border-radius: 10px; text-decoration: none; color: #0f172a; font-size: 14px; font-weight: 600; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="12" y1="18" x2="12" y2="12"/>
+                    <line x1="9" y1="15" x2="15" y2="15"/>
+                </svg>
+                Developer Guide
+            </a>
+        </div>
+        <div style="margin-top: 60px; max-width: 1200px; margin-left: auto; margin-right: auto;" class="sample-sections">
+            <div style="background: #f8f9fa; border: 1px solid #e2e8f0; padding: 40px; border-radius: 16px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);" class="agents-section">
+                <h2 style="font-size: 32px; margin-bottom: 16px; font-weight: 700; color: #0f172a;">Agents</h2>
+                <p style="font-size: 18px; color: #475569; line-height: 1.6; margin-bottom: 20px;">Intelligent AI agents that understand your business, products, and customers.</p>
+                <ul style="font-size: 16px; color: #64748b; line-height: 1.8; list-style: none; padding: 0;">
+                    <li style="margin-bottom: 12px;">✓ Train AI agents with your product knowledge and sales playbook</li>
+                    <li style="margin-bottom: 12px;">✓ Customize qualification paths for different customer segments</li>
+                    <li style="margin-bottom: 12px;">✓ Integrate with your tech stack to automate follow-up</li>
+                </ul>
+            </div>
+            <div style="background: #f8f9fa; border: 1px solid #e2e8f0; padding: 40px; border-radius: 16px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);" class="demos-section">
+                <h2 style="font-size: 32px; margin-bottom: 16px; font-weight: 700; color: #0f172a;">Interactive Demos</h2>
+                <p style="font-size: 18px; color: #475569; line-height: 1.6; margin-bottom: 20px;">Convert your live product into interactive demos without coding.</p>
+                <ul style="font-size: 16px; color: #64748b; line-height: 1.8; list-style: none; padding: 0;">
+                    <li style="margin-bottom: 12px;">✓ Create guided product tours directly from your live application</li>
+                    <li style="margin-bottom: 12px;">✓ Customize demos for different use cases and personas</li>
+                    <li style="margin-bottom: 12px;">✓ Deploy across multiple channels</li>
+                </ul>
+            </div>
+            <div style="background: #f8f9fa; border: 1px solid #e2e8f0; padding: 40px; border-radius: 16px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);" class="insights-section">
+                <h2 style="font-size: 32px; margin-bottom: 16px; font-weight: 700; color: #0f172a;">Insights</h2>
+                <p style="font-size: 18px; color: #475569; line-height: 1.6; margin-bottom: 20px;">Comprehensive customer interaction analytics and buyer intent signals.</p>
+                <ul style="font-size: 16px; color: #64748b; line-height: 1.8; list-style: none; padding: 0;">
+                    <li style="margin-bottom: 12px;">✓ Get real-time visibility into engagement metrics</li>
+                    <li style="margin-bottom: 12px;">✓ Uncover buyer intent from conversation patterns</li>
+                    <li style="margin-bottom: 12px;">✓ Monitor account-level engagement and content performance</li>
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -2882,14 +3163,40 @@
         }
 
         function setDevice(device) {
+            // Update body class
             document.body.className = `device-${device}`;
             if (widget.getAttribute('data-position') === 'content-viewer') {
                 document.body.classList.add('content-viewer-active');
             }
+
+            // Update viewport container
+            const viewport = document.querySelector('.demo-viewport');
+            if (viewport) {
+                viewport.setAttribute('data-device', device);
+            }
+
+            // Update active button
             document.querySelectorAll('.device-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
+
+            // Get current widget position
+            const widget = document.getElementById('showpilot-widget');
+            const position = widget.getAttribute('data-position');
+
+            // Handle device-specific constraints
+            if (device === 'mobile') {
+                // On mobile, skyscraper doesn't make sense - switch to Focus Box
+                if (position === 'skyscraper') {
+                    console.log('Skyscraper view is not optimal on mobile. Auto-switching to Focus Box.');
+                    setTimeout(() => {
+                        demoFocusBox();
+                    }, 100);
+                }
+            }
+
+            console.log(`Device view switched to: ${device}`);
         }
 
         function toggleVoice() {
@@ -5324,7 +5631,213 @@
             }, 1000);
         }
 
+        // ============================================
+        // MOBILE KEYBOARD VISIBILITY HANDLING
+        // ============================================
+
+        // Check if we're in mobile viewport
+        function isMobileViewport() {
+            const viewport = document.querySelector('.demo-viewport');
+            return viewport && viewport.getAttribute('data-device') === 'mobile';
+        }
+
+        // Handle keyboard visibility on mobile devices (within mobile viewport simulation)
+        if ('visualViewport' in window) {
+            window.visualViewport.addEventListener('resize', () => {
+                if (!isMobileViewport()) return; // Only apply in mobile viewport
+
+                const viewport = window.visualViewport;
+                const chatInput = document.querySelector('.chat-input');
+
+                if (!chatInput) return;
+
+                // Keyboard is likely visible if viewport height is significantly reduced
+                if (viewport.height < window.innerHeight * 0.75) {
+                    // Keyboard visible - adjust input position
+                    const keyboardHeight = window.innerHeight - viewport.height;
+                    chatInput.style.transform = `translateY(-${keyboardHeight}px)`;
+                    chatInput.style.transition = 'transform 0.2s';
+
+                    // Scroll active input into view
+                    const activeInput = document.activeElement;
+                    if (activeInput && (activeInput.tagName === 'TEXTAREA' || activeInput.tagName === 'INPUT')) {
+                        setTimeout(() => {
+                            activeInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 100);
+                    }
+                } else {
+                    // Keyboard hidden - reset position
+                    chatInput.style.transform = '';
+                }
+            });
+        }
+
+        // ============================================
+        // TOUCH GESTURE SUPPORT (SWIPE TO DISMISS)
+        // ============================================
+
+        if ('ontouchstart' in window) {
+            let touchStartY = 0;
+            let touchEndY = 0;
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            const widgetElement = document.getElementById('showpilot-widget');
+
+            widgetElement.addEventListener('touchstart', (e) => {
+                touchStartY = e.changedTouches[0].screenY;
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            widgetElement.addEventListener('touchend', (e) => {
+                touchEndY = e.changedTouches[0].screenY;
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+
+            function handleSwipe() {
+                if (!isMobileViewport()) return; // Only in mobile viewport
+
+                const swipeDistanceY = touchStartY - touchEndY;
+                const swipeDistanceX = Math.abs(touchStartX - touchEndX);
+
+                // Only process if it's primarily vertical swipe (not horizontal)
+                if (swipeDistanceX > 50) return;
+
+                const widget = document.getElementById('showpilot-widget');
+                const position = widget.getAttribute('data-position');
+
+                // Swipe down to dismiss (for modals and full-screen positions)
+                if (swipeDistanceY < -100) {
+                    if (position !== 'chat-button') {
+                        console.log('Swipe down detected - minimizing widget');
+                        minimize(); // Use existing minimize function
+                    }
+                }
+
+                // Swipe up for bottom sheet (Site Agent)
+                if (swipeDistanceY > 100 && position === 'center-low-rectangle') {
+                    console.log('Swipe up detected on Site Agent - expanding');
+                    // Could trigger expansion animation here if needed
+                }
+            }
+        }
+
+        // ============================================
+        // MOBILE PLAYLIST TOGGLE FOR EXPERIENCE VIEWER
+        // ============================================
+
+        // Add mobile playlist toggle button (only visible in mobile viewport)
+        function createMobilePlaylistToggle() {
+            const existingToggle = document.querySelector('.mobile-playlist-toggle');
+            if (existingToggle) return; // Already exists
+
+            const toggle = document.createElement('button');
+            toggle.className = 'mobile-playlist-toggle';
+            toggle.innerHTML = `
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="white">
+                    <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="2" fill="none"/>
+                </svg>
+            `;
+            toggle.style.cssText = `
+                display: none;
+                position: fixed;
+                bottom: 96px;
+                right: 16px;
+                width: 56px;
+                height: 56px;
+                background: var(--theme-700);
+                border: none;
+                border-radius: 50%;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                cursor: pointer;
+                z-index: 999998;
+                align-items: center;
+                justify-content: center;
+            `;
+
+            toggle.onclick = () => {
+                // Create/toggle playlist drawer
+                let drawer = document.querySelector('.mobile-playlist-drawer');
+                if (!drawer) {
+                    drawer = createPlaylistDrawer();
+                    document.body.appendChild(drawer);
+                }
+                drawer.classList.toggle('open');
+            };
+
+            document.body.appendChild(toggle);
+
+            // Show/hide based on viewport and position
+            const observer = new MutationObserver(() => {
+                const viewport = document.querySelector('.demo-viewport');
+                const widget = document.getElementById('showpilot-widget');
+                const isMobile = viewport && viewport.getAttribute('data-device') === 'mobile';
+                const isContentViewer = widget && widget.getAttribute('data-position') === 'content-viewer';
+
+                toggle.style.display = (isMobile && isContentViewer) ? 'flex' : 'none';
+            });
+
+            observer.observe(document.querySelector('.demo-viewport'), { attributes: true });
+            observer.observe(document.getElementById('showpilot-widget'), { attributes: true });
+        }
+
+        function createPlaylistDrawer() {
+            const drawer = document.createElement('div');
+            drawer.className = 'mobile-playlist-drawer';
+            drawer.style.cssText = `
+                position: fixed;
+                bottom: -400px;
+                left: 0;
+                right: 0;
+                height: 400px;
+                background: white;
+                border-radius: 24px 24px 0 0;
+                box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+                z-index: 999999;
+                transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                padding: 20px;
+                overflow-y: auto;
+            `;
+
+            // Clone playlist content
+            const playlistPanel = document.querySelector('.playlist-panel');
+            if (playlistPanel) {
+                drawer.innerHTML = playlistPanel.innerHTML;
+            }
+
+            // Add handle
+            const handle = document.createElement('div');
+            handle.style.cssText = `
+                width: 40px;
+                height: 4px;
+                background: #cbd5e1;
+                border-radius: 2px;
+                position: absolute;
+                top: 8px;
+                left: 50%;
+                transform: translateX(-50%);
+            `;
+            drawer.prepend(handle);
+
+            return drawer;
+        }
+
+        // Initialize mobile playlist toggle
+        createMobilePlaylistToggle();
+
+        // Add CSS for open state
+        const style = document.createElement('style');
+        style.textContent = `
+            .mobile-playlist-drawer.open {
+                bottom: 0 !important;
+            }
+        `;
+        document.head.appendChild(style);
+
         updateDemoButtons('chat-button');
     </script>
+        </div><!-- .demo-viewport -->
+    </div><!-- .demo-viewport-wrapper -->
 </body>
 </html>
