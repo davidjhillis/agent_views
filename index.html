@@ -2379,9 +2379,9 @@
         <div class="demo-section">
             <div class="demo-section-title">Device View</div>
             <div class="device-btns">
-                <button class="demo-btn device-btn active" onclick="setDevice('desktop')">Desktop</button>
-                <button class="demo-btn device-btn" onclick="setDevice('tablet')">Tablet</button>
-                <button class="demo-btn device-btn" onclick="setDevice('mobile')">Mobile</button>
+                <button class="demo-btn device-btn active" onclick="setDevice('desktop', event)">Desktop</button>
+                <button class="demo-btn device-btn" onclick="setDevice('tablet', event)">Tablet</button>
+                <button class="demo-btn device-btn" onclick="setDevice('mobile', event)">Mobile</button>
             </div>
         </div>
 
@@ -3162,7 +3162,10 @@
             }
         }
 
-        function setDevice(device) {
+        function setDevice(device, event) {
+            // Get widget reference first
+            const widget = document.getElementById('showpilot-widget');
+
             // Update body class
             document.body.className = `device-${device}`;
             if (widget.getAttribute('data-position') === 'content-viewer') {
@@ -3179,10 +3182,11 @@
             document.querySelectorAll('.device-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            event.target.classList.add('active');
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
 
             // Get current widget position
-            const widget = document.getElementById('showpilot-widget');
             const position = widget.getAttribute('data-position');
 
             // Handle device-specific constraints
