@@ -1620,8 +1620,7 @@
         }
 
         body.video-greeter-disabled #showpilot-widget[data-position="full-height-center"] .center-avatar-badge {
-            opacity: 0;
-            transform: translateX(-50%) translateY(10px);
+            display: none !important;
         }
 
         #showpilot-widget[data-position="full-height-center"] .center-avatar-site {
@@ -1664,11 +1663,12 @@
         body.video-greeter-disabled #showpilot-widget[data-position="full-height-center"] .voice-status-bar {
             display: flex;
             align-items: center;
-            gap: 16px;
-            padding: 16px 24px;
+            gap: 12px;
+            padding: 12px 24px;
             background: white;
             border-bottom: 1px solid #e2e8f0;
             flex-shrink: 0;
+            width: 100%;
             animation: slideInFromTop 0.4s ease 0.3s both;
         }
 
@@ -1684,8 +1684,8 @@
         }
 
         .voice-status-avatar {
-            width: 48px;
-            height: 48px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             overflow: hidden;
             flex-shrink: 0;
@@ -1699,6 +1699,8 @@
 
         .voice-status-content {
             flex: 1;
+            display: flex;
+            align-items: center;
         }
 
         .voice-status-badge {
@@ -1706,48 +1708,38 @@
             align-items: center;
             gap: 8px;
             padding: 8px 16px;
-            background: #f1f5f9;
-            color: #334155;
+            background: #0B3398;
+            color: white;
             font-size: 13px;
             font-weight: 600;
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.2s;
-            border: 1px solid #e2e8f0;
+            border: none;
+            box-shadow: 0 2px 4px rgba(11, 51, 152, 0.2);
         }
 
         .voice-status-badge:hover {
-            background: #e2e8f0;
-            border-color: #cbd5e1;
-        }
-
-        body.video-greeter-disabled #showpilot-widget[data-position="full-height-center"] .voice-status-badge {
-            background: #0B3398;
-            color: white;
-            border-color: #0B3398;
-        }
-
-        body.video-greeter-disabled #showpilot-widget[data-position="full-height-center"] .voice-status-badge:hover {
             background: #0a2d85;
-            border-color: #0a2d85;
+            box-shadow: 0 4px 8px rgba(11, 51, 152, 0.3);
         }
 
         .voice-status-badge .soundwave-icon {
             height: 14px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
         }
 
         .voice-status-badge .soundwave-bar {
             width: 3px;
-            background: #64748b;
-        }
-
-        body.video-greeter-disabled #showpilot-widget[data-position="full-height-center"] .voice-status-badge .soundwave-bar {
             background: white;
+            border-radius: 2px;
         }
 
-        .voice-status-badge .soundwave-bar:nth-child(1) { height: 4px; }
-        .voice-status-badge .soundwave-bar:nth-child(2) { height: 9px; }
-        .voice-status-badge .soundwave-bar:nth-child(3) { height: 6px; }
+        .voice-status-badge .soundwave-bar:nth-child(1) { height: 6px; }
+        .voice-status-badge .soundwave-bar:nth-child(2) { height: 12px; }
+        .voice-status-badge .soundwave-bar:nth-child(3) { height: 8px; }
 
         .voice-status-text {
             white-space: nowrap;
