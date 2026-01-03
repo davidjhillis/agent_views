@@ -1409,7 +1409,12 @@
             overflow: hidden;
             margin: 16px;
             flex-shrink: 0;
-            transition: opacity 0.4s ease, transform 0.4s ease, max-height 0.4s ease, margin 0.4s ease, padding 0.4s ease;
+            transition: opacity 0.4s ease, transform 0.4s ease, max-height 0.4s ease, margin 0.4s ease, padding 0.4s ease, height 0.3s ease-out;
+        }
+
+        #showpilot-widget[data-position="center-midsize-square"] .center-avatar.engaged {
+            height: 40px;
+            background: transparent;
         }
 
         #showpilot-widget[data-position="center-midsize-square"] .center-avatar-site {
@@ -1424,11 +1429,140 @@
             overflow: hidden;
             margin: 16px;
             flex-shrink: 0;
-            transition: opacity 0.4s ease, transform 0.4s ease, max-height 0.4s ease, margin 0.4s ease, padding 0.4s ease;
+            transition: opacity 0.4s ease, transform 0.4s ease, max-height 0.4s ease, margin 0.4s ease, padding 0.4s ease, height 0.3s ease-out;
+        }
+
+        #showpilot-widget[data-position="skyscraper"] .center-avatar.engaged {
+            height: 40px;
+            background: transparent;
         }
 
         #showpilot-widget[data-position="skyscraper"] .center-avatar-site {
             display: none !important;
+        }
+
+        /* Compact Chat Header (for skyscraper engaged state) */
+        .compact-chat-header {
+            display: none; /* Hidden by default, shown only on skyscraper when engaged */
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-radius: 12px;
+            margin: 16px 16px 0 16px;
+            flex-shrink: 0;
+            transition: all 0.3s ease-out;
+        }
+
+        .compact-avatar-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .compact-avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .compact-voice-animation {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            height: 24px;
+        }
+
+        .compact-soundwave-bar {
+            width: 4px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 2px;
+            animation: compactSoundwave 1.2s ease-in-out infinite;
+        }
+
+        .compact-soundwave-bar:nth-child(1) {
+            height: 12px;
+            animation-delay: 0s;
+        }
+
+        .compact-soundwave-bar:nth-child(2) {
+            height: 20px;
+            animation-delay: 0.2s;
+        }
+
+        .compact-soundwave-bar:nth-child(3) {
+            height: 16px;
+            animation-delay: 0.4s;
+        }
+
+        @keyframes compactSoundwave {
+            0%, 100% {
+                transform: scaleY(0.5);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scaleY(1);
+                opacity: 1;
+            }
+        }
+
+        .compact-label {
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        /* Voice animation overlay for Site Agent when avatar is speaking */
+        .site-voice-animation-overlay {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            background: rgba(99, 102, 241, 0.95);
+            padding: 6px 10px;
+            border-radius: 16px;
+            z-index: 4;
+        }
+
+        .site-voice-bar {
+            width: 3px;
+            background: white;
+            border-radius: 2px;
+            animation: siteVoiceWave 1.2s ease-in-out infinite;
+        }
+
+        .site-voice-bar:nth-child(1) {
+            height: 10px;
+            animation-delay: 0s;
+        }
+
+        .site-voice-bar:nth-child(2) {
+            height: 16px;
+            animation-delay: 0.2s;
+        }
+
+        .site-voice-bar:nth-child(3) {
+            height: 13px;
+            animation-delay: 0.4s;
+        }
+
+        @keyframes siteVoiceWave {
+            0%, 100% {
+                transform: scaleY(0.5);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scaleY(1);
+                opacity: 1;
+            }
         }
 
         /* Command Center: Side-by-side layout */
@@ -1450,6 +1584,12 @@
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             position: relative;
             transition: opacity 0.4s ease, width 0.4s ease, padding 0.4s ease, margin 0.4s ease;
+        }
+
+        #showpilot-widget[data-position="full-height-center"] .center-avatar.engaged {
+            width: 60px;
+            padding: 12px;
+            background: transparent;
         }
 
         #showpilot-widget[data-position="full-height-center"] .center-avatar img,
@@ -1711,8 +1851,19 @@
             gap: 8px;
             box-shadow: 0 2px 8px rgba(11, 51, 152, 0.3);
             cursor: pointer;
-            transition: all 0.4s ease, transform 0.2s ease;
+            transition: all 0.3s ease-out;
             white-space: nowrap;
+        }
+
+        .center-avatar.engaged .center-avatar-badge {
+            bottom: auto;
+            top: 12px;
+            left: 50%;
+            padding: 6px 12px;
+            font-size: 12px;
+            background: transparent;
+            color: #334155;
+            box-shadow: none;
         }
 
         .center-avatar-badge:hover {
@@ -1907,7 +2058,7 @@
         </svg>
     </div>
 
-    <div id="showpilot-widget" data-position="chat-button">
+    <div id="showpilot-widget" data-position="skyscraper">
 
         <div class="greeting-tooltip">
             Hi! I'm Alex. How can I help you today?
@@ -2031,6 +2182,12 @@
                                 Talk now
                             </button>
                         </div>
+                        <!-- Voice animation overlay for when avatar is speaking -->
+                        <div class="site-voice-animation-overlay" style="display: none;">
+                            <div class="site-voice-bar"></div>
+                            <div class="site-voice-bar"></div>
+                            <div class="site-voice-bar"></div>
+                        </div>
                     </div>
 
                     <!-- Chat Container for Site Agent -->
@@ -2096,6 +2253,20 @@
                             Talk now
                         </div>
                     </div>
+
+                    <!-- Compact header for engaged state -->
+                    <div class="compact-chat-header" style="display: none;">
+                        <div class="compact-avatar-circle">
+                            <img id="compact-avatar-img" src="/av44.png" alt="Alex">
+                        </div>
+                        <div class="compact-voice-animation">
+                            <div class="compact-soundwave-bar"></div>
+                            <div class="compact-soundwave-bar"></div>
+                            <div class="compact-soundwave-bar"></div>
+                        </div>
+                        <div class="compact-label">Chatting with Alex AI</div>
+                    </div>
+
                     <div class="chat-content-wrapper">
                     <!-- Voice Status Bar for Command Center (shown when video greeter is hidden) -->
                     <div class="voice-status-bar">
@@ -2224,6 +2395,8 @@
         const widget = document.getElementById('showpilot-widget');
         let previousPosition = null;
         let isVoiceActive = false;
+        let siteAgentEngaged = false;
+        let skyscraperEngaged = false;
 
         // Initialize video/image visibility on page load
         window.addEventListener('DOMContentLoaded', function() {
@@ -2277,7 +2450,15 @@
             // Handle site agent input for voice/send toggle
             const siteAgentInput = document.getElementById('site-agent-input');
             if (siteAgentInput) {
+                // Transition on focus
+                siteAgentInput.addEventListener('focus', function() {
+                    transitionFromSiteAgent();
+                });
+
+                // Transition on first typing
                 siteAgentInput.addEventListener('input', function() {
+                    transitionFromSiteAgent();
+
                     const chatInputAreaSite = document.querySelector('.chat-input-area-site');
                     if (siteAgentInput.value.trim().length > 0) {
                         chatInputAreaSite.classList.add('has-text');
@@ -2307,6 +2488,81 @@
             }
         }
 
+        function transitionFromSiteAgent() {
+            const currentPosition = widget.getAttribute('data-position');
+
+            // Site Agent: switch video to still PNG
+            if (currentPosition === 'center-low-rectangle' && !siteAgentEngaged) {
+                siteAgentEngaged = true;
+
+                const centerAvatarSiteImg = document.getElementById('center-avatar-site-img');
+                const centerAvatarSiteVideo = document.getElementById('center-avatar-site-video');
+                const videoOverlay = document.querySelector('.video-overlay-site');
+                const voiceAnimOverlay = document.querySelector('.site-voice-animation-overlay');
+
+                if (centerAvatarSiteVideo && centerAvatarSiteImg && videoOverlay) {
+                    // Switch from video to still image
+                    centerAvatarSiteVideo.style.setProperty('display', 'none', 'important');
+                    centerAvatarSiteVideo.pause();
+                    centerAvatarSiteImg.style.setProperty('display', 'block', 'important');
+
+                    // Hide the "Talk now" button overlay
+                    videoOverlay.style.transition = 'opacity 0.3s ease-out';
+                    videoOverlay.style.opacity = '0';
+                    setTimeout(() => {
+                        videoOverlay.style.display = 'none';
+
+                        // Show voice animation overlay after "Talk now" fades out
+                        if (voiceAnimOverlay) {
+                            voiceAnimOverlay.style.display = 'flex';
+                            voiceAnimOverlay.style.opacity = '0';
+                            setTimeout(() => {
+                                voiceAnimOverlay.style.transition = 'opacity 0.3s ease-out';
+                                voiceAnimOverlay.style.opacity = '1';
+                            }, 50);
+                        }
+                    }, 300);
+                }
+            }
+
+            // Skyscraper, Focus Box, Command Center: fade out video, shrink container, badge slides up
+            if ((currentPosition === 'skyscraper' || currentPosition === 'center-midsize-square' || currentPosition === 'full-height-center') && !skyscraperEngaged) {
+                skyscraperEngaged = true;
+
+                const centerAvatar = document.querySelector('.center-avatar');
+                const badge = document.querySelector('.center-avatar-badge');
+                const centerAvatarImg = document.getElementById('center-avatar-img');
+                const centerAvatarVideo = document.getElementById('center-avatar-video');
+
+                if (centerAvatar && badge) {
+                    // Fade out video/image (slower)
+                    if (centerAvatarImg) {
+                        centerAvatarImg.style.transition = 'opacity 0.8s ease-out';
+                        centerAvatarImg.style.opacity = '0';
+                    }
+                    if (centerAvatarVideo) {
+                        centerAvatarVideo.style.transition = 'opacity 0.8s ease-out';
+                        centerAvatarVideo.style.opacity = '0';
+                    }
+
+                    // After fade, hide video and shrink container
+                    setTimeout(() => {
+                        if (centerAvatarImg) centerAvatarImg.style.display = 'none';
+                        if (centerAvatarVideo) centerAvatarVideo.style.display = 'none';
+
+                        // Add engaged class to shrink container (badge slides up with it)
+                        centerAvatar.classList.add('engaged');
+                    }, 800);
+
+                    // Change badge text to status
+                    const badgeText = badge.childNodes[badge.childNodes.length - 1];
+                    if (badgeText && badgeText.nodeType === Node.TEXT_NODE) {
+                        badgeText.textContent = 'Listening...';
+                    }
+                }
+            }
+        }
+
         function setPosition(position) {
             previousPosition = widget.getAttribute('data-position');
             widget.setAttribute('data-position', position);
@@ -2316,6 +2572,57 @@
                 document.body.classList.add('content-viewer-active');
             } else {
                 document.body.classList.remove('content-viewer-active');
+            }
+
+            // Reset engagement states when changing positions
+            if (position === 'skyscraper' || position === 'center-midsize-square' || position === 'full-height-center') {
+                skyscraperEngaged = false;
+
+                // Reset center avatar engaged state
+                const centerAvatar = document.querySelector('.center-avatar');
+                const badge = document.querySelector('.center-avatar-badge');
+                const centerAvatarImg = document.getElementById('center-avatar-img');
+                const centerAvatarVideo = document.getElementById('center-avatar-video');
+
+                if (centerAvatar) {
+                    centerAvatar.classList.remove('engaged');
+                }
+
+                // Reset video/image visibility and opacity
+                if (centerAvatarImg) {
+                    centerAvatarImg.style.display = 'block';
+                    centerAvatarImg.style.opacity = '1';
+                }
+                if (centerAvatarVideo) {
+                    centerAvatarVideo.style.display = 'block';
+                    centerAvatarVideo.style.opacity = '1';
+                }
+
+                if (badge) {
+                    // Reset badge text to "Talk now"
+                    const badgeText = badge.childNodes[badge.childNodes.length - 1];
+                    if (badgeText && badgeText.nodeType === Node.TEXT_NODE) {
+                        badgeText.textContent = 'Talk now';
+                    }
+                }
+            }
+
+            if (position === 'center-low-rectangle') {
+                siteAgentEngaged = false;
+
+                // Reset site agent video overlay visibility
+                const videoOverlay = document.querySelector('.video-overlay-site');
+                const voiceAnimOverlay = document.querySelector('.site-voice-animation-overlay');
+
+                if (videoOverlay) {
+                    videoOverlay.style.display = 'flex';
+                    videoOverlay.style.opacity = '1';
+                }
+
+                if (voiceAnimOverlay) {
+                    voiceAnimOverlay.style.display = 'none';
+                    voiceAnimOverlay.style.opacity = '0';
+                }
             }
 
             // Check if video greeter is disabled
@@ -2424,6 +2731,9 @@
         }
 
         function toggleVoice() {
+            // Transition from site agent on first interaction
+            transitionFromSiteAgent();
+
             isVoiceActive = !isVoiceActive;
             const voiceBtn = document.querySelector('.voice-btn');
             const voiceStatusText = document.querySelector('.voice-status-text');
