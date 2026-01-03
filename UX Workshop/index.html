@@ -479,8 +479,13 @@
             border-top: 10px solid white;
         }
 
-        #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip {
+        #showpilot-widget[data-position="chat-button"] .greeting-tooltip {
             opacity: 1;
+        }
+
+        /* Hide main greeting tooltip for Site Agent - it uses greeting-tooltip-site instead */
+        #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip {
+            display: none;
         }
 
         /* ========================
@@ -2729,16 +2734,18 @@
                     centerAvatarSiteVideo.style.setProperty('display', 'block', 'important');
                     centerAvatarSiteVideo.play();
                 }
-            } else if (position === 'skyscraper' || position === 'center-midsize-square' || position === 'full-height-center') {
-                // Skyscraper, Focus Box & Command Center: Video at top (center-avatar) - unless disabled
+            } else if (position === 'skyscraper' || position === 'center-midsize-square' || position === 'full-height-center' || position === 'content-viewer') {
+                // Skyscraper, Focus Box, Command Center & Experience Viewer: Video at top (center-avatar) - unless disabled
                 if (!videoGreeterDisabled) {
                     centerAvatarImg.style.setProperty('display', 'none', 'important');
                     centerAvatarVideo.style.setProperty('display', 'block', 'important');
                     centerAvatarVideo.play();
                 }
 
-                // Show preset conversation for these positions
-                showPresetConversation();
+                // Show preset conversation for these positions (except content-viewer which has its own content)
+                if (position !== 'content-viewer') {
+                    showPresetConversation();
+                }
             } else {
                 // Other positions - show images, hide and pause all videos
                 centerAvatarImg.style.setProperty('display', 'block', 'important');
