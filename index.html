@@ -451,8 +451,8 @@
         .greeting-tooltip {
             position: absolute;
             bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%) translateY(-16px);
+            right: 0;
+            transform: translateY(-16px);
             background: white;
             border: 1px solid #e2e8f0;
             border-radius: 14px;
@@ -460,9 +460,9 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
             font-size: 14px;
             color: #64748b;
-            max-width: 280px;
-            text-align: center;
-            line-height: 1.4;
+            width: 320px;
+            text-align: left;
+            line-height: 1.5;
             opacity: 0;
             pointer-events: none;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -474,8 +474,7 @@
             content: '';
             position: absolute;
             top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
+            right: 24px;
             border-left: 10px solid transparent;
             border-right: 10px solid transparent;
             border-top: 10px solid white;
@@ -2888,15 +2887,15 @@
             const centerAvatarSiteVideo = document.getElementById('center-avatar-site-video');
 
             const headerVideoSource = headerAvatarVideo.querySelector('source');
-            headerVideoSource.src = `public/${avatarId}.mp4`;
+            headerVideoSource.src = `/${avatarId}.mp4`;
             headerAvatarVideo.load();
 
             const centerVideoSource = centerAvatarVideo.querySelector('source');
-            centerVideoSource.src = `public/${avatarId}.mp4`;
+            centerVideoSource.src = `/${avatarId}.mp4`;
             centerAvatarVideo.load();
 
             const centerSiteVideoSource = centerAvatarSiteVideo.querySelector('source');
-            centerSiteVideoSource.src = `public/${avatarId}.mp4`;
+            centerSiteVideoSource.src = `/${avatarId}.mp4`;
             centerAvatarSiteVideo.load();
 
             // Restart videos if visible
