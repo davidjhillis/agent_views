@@ -1393,10 +1393,11 @@
         }
 
         body.video-greeter-disabled #showpilot-widget[data-position="full-height-center"] .center-avatar:not(.center-avatar-site) {
+            width: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            min-width: 0 !important;
             opacity: 0;
-            width: 0;
-            padding: 0;
-            margin: 0;
             overflow: hidden;
             pointer-events: none;
         }
@@ -1600,6 +1601,7 @@
             object-fit: contain;
             border-radius: 16px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
         #showpilot-widget[data-position="full-height-center"] .center-avatar-badge {
@@ -1607,6 +1609,19 @@
             bottom: 50px;
             left: 50%;
             transform: translateX(-50%);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Fade out video and badge when greeter is disabled */
+        body.video-greeter-disabled #showpilot-widget[data-position="full-height-center"] .center-avatar img,
+        body.video-greeter-disabled #showpilot-widget[data-position="full-height-center"] .center-avatar video {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        body.video-greeter-disabled #showpilot-widget[data-position="full-height-center"] .center-avatar-badge {
+            opacity: 0;
+            transform: translateX(-50%) translateY(10px);
         }
 
         #showpilot-widget[data-position="full-height-center"] .center-avatar-site {
@@ -1643,9 +1658,6 @@
         /* Voice Status Bar - Hidden by default */
         .voice-status-bar {
             display: none;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s;
         }
 
         /* Show Voice Status Bar when video greeter is disabled (Command Center only) */
@@ -1653,12 +1665,22 @@
             display: flex;
             align-items: center;
             gap: 16px;
-            padding: 20px 24px;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 16px 24px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
             flex-shrink: 0;
-            opacity: 1;
-            transform: translateY(0);
+            animation: slideInFromTop 0.4s ease 0.3s both;
+        }
+
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .voice-status-avatar {
@@ -1683,20 +1705,31 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 10px 20px;
-            background: #0B3398;
-            color: white;
-            font-size: 14px;
+            padding: 8px 16px;
+            background: #f1f5f9;
+            color: #334155;
+            font-size: 13px;
             font-weight: 600;
-            border-radius: 24px;
+            border-radius: 20px;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(11, 51, 152, 0.3);
+            border: 1px solid #e2e8f0;
         }
 
         .voice-status-badge:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(11, 51, 152, 0.4);
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+
+        body.video-greeter-disabled #showpilot-widget[data-position="full-height-center"] .voice-status-badge {
+            background: #0B3398;
+            color: white;
+            border-color: #0B3398;
+        }
+
+        body.video-greeter-disabled #showpilot-widget[data-position="full-height-center"] .voice-status-badge:hover {
+            background: #0a2d85;
+            border-color: #0a2d85;
         }
 
         .voice-status-badge .soundwave-icon {
@@ -1705,6 +1738,10 @@
 
         .voice-status-badge .soundwave-bar {
             width: 3px;
+            background: #64748b;
+        }
+
+        body.video-greeter-disabled #showpilot-widget[data-position="full-height-center"] .voice-status-badge .soundwave-bar {
             background: white;
         }
 
@@ -1719,6 +1756,12 @@
         /* Smooth transitions for Command Center chat wrapper */
         #showpilot-widget[data-position="full-height-center"] .chat-content-wrapper {
             transition: all 0.4s ease;
+        }
+
+        /* Ensure chat expands to full width when video greeter is disabled */
+        body.video-greeter-disabled #showpilot-widget[data-position="full-height-center"] .chat-content-wrapper {
+            width: 100%;
+            max-width: 100%;
         }
 
         #showpilot-widget[data-position="center-low-rectangle"] .input-wrapper {
