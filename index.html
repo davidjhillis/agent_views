@@ -691,7 +691,28 @@
         .message-user {
             display: flex;
             justify-content: flex-end;
+            gap: 12px;
             margin-bottom: 16px;
+        }
+
+        .message-user .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            order: 2;
+            background: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .message-user .message-content {
+            order: 1;
         }
 
         .message-user .message-bubble {
@@ -3472,6 +3493,12 @@
                         ${text}
                     </div>
                 </div>
+                <div class="message-avatar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
             `;
             messagesContainer.appendChild(userMessage);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -3486,13 +3513,11 @@
             // Get the selected text
             const selectedText = clickedButton.querySelector('strong')?.textContent || clickedButton.textContent.trim();
 
-            // Create compact submitted message
-            const submittedMessage = document.createElement('div');
-            submittedMessage.style.cssText = 'margin-top: 12px; padding: 10px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px; color: #64748b; font-weight: 500;';
-            submittedMessage.innerHTML = `→ ${selectedText}`;
+            // Show the selection as a user message
+            showUserMessage(selectedText);
 
-            // Replace the cards container with the compact message
-            cardsContainer.parentNode.replaceChild(submittedMessage, cardsContainer);
+            // Hide the suggestion cards
+            cardsContainer.style.display = 'none';
         }
 
         // ===========================================
