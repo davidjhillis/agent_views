@@ -2484,8 +2484,8 @@
                 centerAvatarSiteImg.style.setProperty('display', 'none', 'important');
                 centerAvatarSiteVideo.style.setProperty('display', 'block', 'important');
                 centerAvatarSiteVideo.play();
-            } else if (currentPosition === 'skyscraper' || currentPosition === 'center-midsize-square' || currentPosition === 'full-height-center') {
-                // Skyscraper, Focus Box & Command Center: Video at top
+            } else if (currentPosition === 'skyscraper' || currentPosition === 'center-midsize-square' || currentPosition === 'full-height-center' || currentPosition === 'content-viewer') {
+                // Skyscraper, Focus Box, Command Center & Experience Viewer: Video at top
                 centerAvatarImg.style.setProperty('display', 'none', 'important');
                 centerAvatarVideo.style.setProperty('display', 'block', 'important');
                 centerAvatarVideo.play();
@@ -2545,8 +2545,8 @@
                 centerAvatarSiteImg.style.setProperty('display', 'block', 'important');
                 centerAvatarSiteVideo.style.setProperty('display', 'none', 'important');
                 centerAvatarSiteVideo.pause();
-            } else if (currentPosition === 'skyscraper' || currentPosition === 'center-midsize-square' || currentPosition === 'full-height-center') {
-                // Skyscraper, Focus Box & Command Center: Switch center-avatar to still
+            } else if (currentPosition === 'skyscraper' || currentPosition === 'center-midsize-square' || currentPosition === 'full-height-center' || currentPosition === 'content-viewer') {
+                // Skyscraper, Focus Box, Command Center & Experience Viewer: Switch center-avatar to still
                 const centerAvatarImg = document.getElementById('center-avatar-img');
                 const centerAvatarVideo = document.getElementById('center-avatar-video');
                 centerAvatarImg.style.setProperty('display', 'block', 'important');
@@ -2682,6 +2682,10 @@
 
             if (position === 'center-low-rectangle') {
                 siteAgentEngaged = false;
+                skyscraperEngaged = false;
+
+                // Remove video-greeter-disabled class when returning to Site Agent
+                document.body.classList.remove('video-greeter-disabled');
 
                 // Reset site agent video overlay visibility
                 const videoOverlay = document.querySelector('.video-overlay-site');
