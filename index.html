@@ -1619,6 +1619,8 @@
             transform: scale(0.9);
         }
 
+        body.video-greeter-disabled #showpilot-widget[data-position="skyscraper"] .center-avatar-badge,
+        body.video-greeter-disabled #showpilot-widget[data-position="center-midsize-square"] .center-avatar-badge,
         body.video-greeter-disabled #showpilot-widget[data-position="full-height-center"] .center-avatar-badge {
             display: none !important;
         }
@@ -1659,7 +1661,9 @@
             display: none;
         }
 
-        /* Show Voice Status Bar when video greeter is disabled (Command Center only) */
+        /* Show Voice Status Bar when video greeter is disabled (Skyscraper, Focus Box, Command Center) */
+        body.video-greeter-disabled #showpilot-widget[data-position="skyscraper"] .voice-status-bar,
+        body.video-greeter-disabled #showpilot-widget[data-position="center-midsize-square"] .voice-status-bar,
         body.video-greeter-disabled #showpilot-widget[data-position="full-height-center"] .voice-status-bar {
             display: flex;
             align-items: center;
@@ -1670,6 +1674,12 @@
             flex-shrink: 0;
             width: 100%;
             animation: slideInFromTop 0.4s ease 0.3s both;
+        }
+
+        /* Adjust padding for smaller positions */
+        body.video-greeter-disabled #showpilot-widget[data-position="skyscraper"] .voice-status-bar,
+        body.video-greeter-disabled #showpilot-widget[data-position="center-midsize-square"] .voice-status-bar {
+            padding: 10px 16px;
         }
 
         @keyframes slideInFromTop {
@@ -2564,10 +2574,8 @@
             if ((currentPosition === 'skyscraper' || currentPosition === 'center-midsize-square' || currentPosition === 'full-height-center') && !skyscraperEngaged) {
                 skyscraperEngaged = true;
 
-                // For Command Center: add video-greeter-disabled class to trigger voice status bar
-                if (currentPosition === 'full-height-center') {
-                    document.body.classList.add('video-greeter-disabled');
-                }
+                // Add video-greeter-disabled class to trigger voice status bar
+                document.body.classList.add('video-greeter-disabled');
 
                 const centerAvatar = document.querySelector('.center-avatar');
                 const badge = document.querySelector('.center-avatar-badge');
@@ -2618,10 +2626,8 @@
             if (position === 'skyscraper' || position === 'center-midsize-square' || position === 'full-height-center') {
                 skyscraperEngaged = false;
 
-                // For Command Center: remove video-greeter-disabled class to reset
-                if (position === 'full-height-center') {
-                    document.body.classList.remove('video-greeter-disabled');
-                }
+                // Remove video-greeter-disabled class to reset
+                document.body.classList.remove('video-greeter-disabled');
 
                 // Reset center avatar engaged state
                 const centerAvatar = document.querySelector('.center-avatar');
