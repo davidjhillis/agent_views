@@ -460,7 +460,9 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
             font-size: 14px;
             color: #64748b;
-            white-space: nowrap;
+            max-width: 280px;
+            text-align: center;
+            line-height: 1.4;
             opacity: 0;
             pointer-events: none;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -2143,7 +2145,7 @@
         </svg>
     </div>
 
-    <div id="showpilot-widget" data-position="skyscraper">
+    <div id="showpilot-widget" data-position="chat-button">
 
         <div class="greeting-tooltip">
             Hi! I'm Alex. How can I help you today?
@@ -2875,10 +2877,10 @@
             const centerAvatarSite = document.getElementById('center-avatar-site-img');
             const messageAvatars = document.querySelectorAll('.message-avatar-img');
 
-            if (headerAvatar) headerAvatar.src = `public/${avatarId}.png`;
-            if (centerAvatar) centerAvatar.src = `public/${avatarId}.png`;
-            if (centerAvatarSite) centerAvatarSite.src = `public/${avatarId}.png`;
-            messageAvatars.forEach(img => img.src = `public/${avatarId}.png`);
+            if (headerAvatar) headerAvatar.src = `/${avatarId}.png`;
+            if (centerAvatar) centerAvatar.src = `/${avatarId}.png`;
+            if (centerAvatarSite) centerAvatarSite.src = `/${avatarId}.png`;
+            messageAvatars.forEach(img => img.src = `/${avatarId}.png`);
 
             // Update video sources
             const headerAvatarVideo = document.getElementById('header-avatar-video');
@@ -3158,7 +3160,7 @@
             navMessage.className = 'message message-ai';
             navMessage.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -3209,7 +3211,7 @@
             insightMessage.className = 'message message-ai';
             insightMessage.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -3240,7 +3242,7 @@
 
             followUpMessage.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -3346,7 +3348,7 @@
             newMessage.className = 'message message-ai';
             newMessage.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -3476,7 +3478,7 @@
 
             message.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -3508,7 +3510,7 @@
 
             message.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -3725,7 +3727,7 @@
 
             message.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -3895,7 +3897,7 @@
 
             message.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -4326,7 +4328,7 @@
 
             message.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -4467,7 +4469,7 @@
 
             message.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -4573,7 +4575,7 @@
 
             message.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -4604,7 +4606,7 @@
 
             message.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -4680,7 +4682,7 @@
 
             message.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -4716,7 +4718,7 @@
 
             message.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -4747,7 +4749,7 @@
 
             message.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -4786,7 +4788,7 @@
 
             message.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -4862,7 +4864,7 @@
 
             message.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -4902,7 +4904,7 @@
 
             message.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -4953,7 +4955,7 @@
 
             message.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -4996,7 +4998,7 @@
             ackMessage.className = 'message message-ai';
             ackMessage.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -5039,7 +5041,7 @@
 
             message.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -5068,7 +5070,7 @@
 
             message.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -5110,7 +5112,7 @@
             message.className = 'message message-ai';
             message.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -5176,7 +5178,7 @@
 
             recoMessage.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
@@ -5201,7 +5203,7 @@
             ackMessage.className = 'message message-ai';
             ackMessage.innerHTML = `
                 <div class="message-avatar">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Alex">
+                    <img src="/av44.png" alt="Alex">
                 </div>
                 <div class="message-content">
                     <div class="message-bubble">
