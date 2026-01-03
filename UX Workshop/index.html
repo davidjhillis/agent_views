@@ -2131,6 +2131,7 @@
             <button class="demo-btn" onclick="demoBookMeeting()">Book Meeting Flow</button>
             <button class="demo-btn" onclick="demoPageNavigation()">Page Navigation</button>
             <button class="demo-btn" onclick="demoExperienceViewer()">Experience Viewer</button>
+            <button class="demo-btn" onclick="startLearnFlow()">Journey</button>
         </div>
     </div>
 
@@ -3977,19 +3978,17 @@
             const labels = multiSelectState.selectedOptions.map(opt => opt.label).join(', ');
             const values = multiSelectState.selectedOptions.map(opt => opt.value);
 
-            // Find and replace the multi-select cards with compact message
+            // Show the selections as a user message
+            showUserMessage(labels);
+
+            // Find and hide the multi-select cards and button
             const submitButton = document.getElementById(`submit-${questionId}`);
             if (submitButton) {
                 const cardsContainer = submitButton.previousElementSibling;
-
-                // Create compact submitted message
-                const submittedMessage = document.createElement('div');
-                submittedMessage.style.cssText = 'margin-top: 12px; padding: 10px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px; color: #64748b; font-weight: 500;';
-                submittedMessage.innerHTML = `→ ${labels}`;
-
-                // Replace cards and button with compact message
-                cardsContainer.parentNode.replaceChild(submittedMessage, cardsContainer);
-                submitButton.remove();
+                if (cardsContainer) {
+                    cardsContainer.style.display = 'none';
+                }
+                submitButton.style.display = 'none';
             }
 
             callback(values);
