@@ -2514,24 +2514,29 @@
                 centerAvatarSiteVideo.style.setProperty('display', 'none', 'important');
             }
 
-            // Switch to still image when user starts chatting
-            const chatInput = document.querySelector('.chat-input');
-            if (chatInput) {
+            // Switch to still image when user starts chatting (for regular positions)
+            const chatInputs = document.querySelectorAll('.chat-input');
+            chatInputs.forEach(function(chatInput) {
                 chatInput.addEventListener('focus', switchToStillImage);
                 chatInput.addEventListener('input', switchToStillImage);
 
                 // Toggle between voice and send button based on input
                 chatInput.addEventListener('input', function() {
-                    const chatInputArea = document.querySelector('.chat-input-area');
-                    if (chatInput.value.trim().length > 0) {
-                        chatInputArea.classList.add('has-text');
-                    } else {
-                        chatInputArea.classList.remove('has-text');
+                    const chatInputArea = this.closest('.chat-input-area');
+                    const chatInputAreaSite = this.closest('.chat-input-area-site');
+                    const targetArea = chatInputArea || chatInputAreaSite;
+
+                    if (targetArea) {
+                        if (this.value.trim().length > 0) {
+                            targetArea.classList.add('has-text');
+                        } else {
+                            targetArea.classList.remove('has-text');
+                        }
                     }
                 });
-            }
+            });
 
-            // Handle site agent input for voice/send toggle
+            // Handle site agent input for transition
             const siteAgentInput = document.getElementById('site-agent-input');
             if (siteAgentInput) {
                 // Transition on focus
@@ -2542,13 +2547,6 @@
                 // Transition on first typing
                 siteAgentInput.addEventListener('input', function() {
                     transitionFromSiteAgent();
-
-                    const chatInputAreaSite = document.querySelector('.chat-input-area-site');
-                    if (siteAgentInput.value.trim().length > 0) {
-                        chatInputAreaSite.classList.add('has-text');
-                    } else {
-                        chatInputAreaSite.classList.remove('has-text');
-                    }
                 });
             }
         });
@@ -2955,6 +2953,23 @@
 
         function minimize() {
             const currentPos = widget.getAttribute('data-position');
+
+            // Exit fullscreen if currently in fullscreen mode
+            if (document.fullscreenElement) {
+                document.exitFullscreen().then(() => {
+                    // After exiting fullscreen, change position
+                    performMinimize(currentPos);
+                }).catch(err => {
+                    console.log('Error exiting fullscreen:', err);
+                    // Try to minimize anyway
+                    performMinimize(currentPos);
+                });
+            } else {
+                performMinimize(currentPos);
+            }
+        }
+
+        function performMinimize(currentPos) {
             if (currentPos === 'center-low-rectangle') {
                 setPosition('chat-button');
             } else if (currentPos === 'skyscraper') {
