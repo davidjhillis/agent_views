@@ -2564,6 +2564,11 @@
             if ((currentPosition === 'skyscraper' || currentPosition === 'center-midsize-square' || currentPosition === 'full-height-center') && !skyscraperEngaged) {
                 skyscraperEngaged = true;
 
+                // For Command Center: add video-greeter-disabled class to trigger voice status bar
+                if (currentPosition === 'full-height-center') {
+                    document.body.classList.add('video-greeter-disabled');
+                }
+
                 const centerAvatar = document.querySelector('.center-avatar');
                 const badge = document.querySelector('.center-avatar-badge');
                 const centerAvatarImg = document.getElementById('center-avatar-img');
@@ -2612,6 +2617,11 @@
             // Reset engagement states when changing positions
             if (position === 'skyscraper' || position === 'center-midsize-square' || position === 'full-height-center') {
                 skyscraperEngaged = false;
+
+                // For Command Center: remove video-greeter-disabled class to reset
+                if (position === 'full-height-center') {
+                    document.body.classList.remove('video-greeter-disabled');
+                }
 
                 // Reset center avatar engaged state
                 const centerAvatar = document.querySelector('.center-avatar');
