@@ -2083,6 +2083,154 @@
         #showpilot-widget:fullscreen .widget-window {
             border-radius: 0 !important;
         }
+
+        /* ========================
+           MOBILE RESPONSIVE
+           ======================== */
+        @media (max-width: 767px) {
+            /* Position widget at bottom with horizontal separated layout */
+            #showpilot-widget {
+                position: fixed !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                top: auto !important;
+                transform: none !important;
+                width: 100% !important;
+                height: auto !important;
+                max-width: 100% !important;
+                background: white;
+                padding: 16px;
+                box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.1);
+                display: flex !important;
+                flex-direction: row !important;
+                gap: 12px;
+                align-items: stretch;
+                z-index: 99999;
+            }
+
+            /* Hide pill button on mobile */
+            #showpilot-widget .pill-button {
+                display: none !important;
+            }
+
+            /* Show widget window on mobile */
+            #showpilot-widget .widget-window {
+                display: flex !important;
+                flex-direction: row !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                gap: 12px;
+                padding: 0;
+            }
+
+            /* Hide widget header on mobile */
+            #showpilot-widget .widget-header {
+                display: none !important;
+            }
+
+            /* Square avatar container - left side */
+            #showpilot-widget .widget-window::before {
+                content: '';
+                width: 120px;
+                height: 120px;
+                background: url('/av44.png') center/cover;
+                border-radius: 12px;
+                flex-shrink: 0;
+            }
+
+            /* Mobile chat panel - right side */
+            #showpilot-widget .chat-panel {
+                flex: 1 !important;
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                display: flex !important;
+                flex-direction: column;
+                min-height: 120px;
+                padding: 12px;
+                margin: 0 !important;
+            }
+
+            /* Hide avatar section in chat panel on mobile */
+            #showpilot-widget .avatar-section {
+                display: none !important;
+            }
+
+            /* Hide messages on mobile */
+            #showpilot-widget .messages-container {
+                display: none !important;
+            }
+
+            /* Chat input on mobile */
+            #showpilot-widget .chat-input-wrapper {
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+                background: transparent !important;
+            }
+
+            #showpilot-widget .chat-input {
+                font-size: 15px !important;
+                padding: 0 !important;
+                border: none !important;
+            }
+
+            #showpilot-widget .input-actions {
+                gap: 8px !important;
+            }
+
+            /* Send button on mobile */
+            #showpilot-widget .send-button {
+                width: 36px !important;
+                height: 36px !important;
+                background: #0B3398 !important;
+                padding: 0 !important;
+                border-radius: 6px !important;
+            }
+
+            /* Hide voice button on mobile */
+            #showpilot-widget .voice-button {
+                display: none !important;
+            }
+
+            /* Mobile message bubble */
+            #showpilot-widget .chat-panel::before {
+                content: '👋 Hi! Ask me anything about our product demos.';
+                display: block;
+                background: #f1f5f9;
+                padding: 10px 12px;
+                border-radius: 12px;
+                font-size: 13px;
+                color: #475569;
+                line-height: 1.4;
+                margin-bottom: 10px;
+            }
+
+            /* Privacy link on mobile */
+            #showpilot-widget .chat-input-wrapper::after {
+                content: 'Privacy Policy';
+                display: block;
+                margin-top: 8px;
+                padding-top: 8px;
+                border-top: 1px solid #e2e8f0;
+                text-align: center;
+                font-size: 9px;
+                color: #94a3b8;
+            }
+
+            /* Hide greeting tooltip on mobile */
+            #showpilot-widget .greeting-tooltip,
+            .greeting-tooltip-site {
+                display: none !important;
+            }
+
+            /* Hide page content demo controls */
+            .demo-controls {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body class="device-desktop">
