@@ -2281,27 +2281,77 @@
             display: none !important; /* Hide on mobile, show in drawer */
         }
 
-        /* Bottom sheet for Site Agent */
+        /* Compact bottom bar for Site Agent on mobile - max 25% of screen */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] {
             height: auto !important;
-            max-height: 85% !important;
-            border-radius: 24px 24px 0 0 !important;
+            max-height: 25% !important;
+            border-radius: 16px 16px 0 0 !important;
             bottom: 0 !important;
             top: auto !important;
+            padding: 12px !important;
         }
 
-        /* Add drag handle for bottom sheet */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"]::after {
-            content: '';
-            position: absolute;
-            top: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 4px;
-            background: #cbd5e1;
-            border-radius: 2px;
-            z-index: 10;
+        /* Hide video container on mobile - too large */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .video-container-site {
+            display: none !important;
+        }
+
+        /* Compact chat panel on mobile */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-panel {
+            flex-direction: column !important;
+            gap: 8px !important;
+        }
+
+        /* Greeting tooltip - compact on mobile */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site {
+            position: static !important;
+            margin-bottom: 8px !important;
+            font-size: 13px !important;
+            padding: 8px 12px !important;
+        }
+
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .greeting-arrow {
+            display: none !important;
+        }
+
+        /* Chat container - full width on mobile */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        /* Hide hover controls on mobile */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .hover-controls {
+            display: none !important;
+        }
+
+        /* Compact input area */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area-site {
+            padding: 0 !important;
+        }
+
+        /* Input row - full width, compact */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .input-row-site {
+            gap: 8px !important;
+        }
+
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-input {
+            font-size: 16px !important;
+            padding: 12px !important;
+            flex: 1 !important;
+        }
+
+        /* Compact buttons */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .voice-btn,
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .send-btn {
+            width: 44px !important;
+            height: 44px !important;
+            min-width: 44px !important;
+        }
+
+        /* Hide bottom row elements on mobile to save space */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .input-bottom-row-site {
+            display: none !important;
         }
 
         /* Voice status badge - larger for mobile */
@@ -2611,7 +2661,7 @@
                     <!-- Greeting Tooltip for Site Agent -->
                     <div class="greeting-tooltip-site">
                         <div class="greeting-text">
-                            You're in good company! Over 500 companies have hired me to help them engage buyers, book meetings, and generate pipeline.
+                            Hi! I'm Alex. How can I help you today?
                         </div>
                         <div class="greeting-arrow"></div>
                     </div>
