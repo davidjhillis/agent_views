@@ -1,0 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: white;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.page-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #0f172a;
+  z-index: 1;
+  transition: filter 0.4s;
+}
+
+body.content-viewer-active .page-content {
+  filter: blur(12px);
+}
+
+.page-content h1 {
+  font-size: 48px;
+  margin-bottom: 16px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.page-content p {
+  font-size: 18px;
+  color: #64748b;
+}
+
+/* Demo Controls */
+.demo-controls {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: white;
+  backdrop-filter: blur(20px);
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08);
+  z-index: 99998;
+  max-width: 320px;
+}
+
+.demo-controls h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #0f172a;
+}
+
+.demo-section {
+  margin-bottom: 16px;
+}
+
+.demo-section:last-child {
+  margin-bottom: 0;
+}
+
+.demo-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.demo-btn {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  margin-bottom: 6px;
+  background: #f8f9fa;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #0f172a;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  font-family: 'Geist', sans-serif;
+}
+
+.demo-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: translateX(2px);
+}
+
+.demo-btn.active {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  border-color: transparent;
+}
+
+/* Widget Container */
+#showpilot-widget {
+  position: fixed;
+  z-index: 99999;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Position 1: Chat Button */
+#showpilot-widget[data-position="chat-button"] {
+  bottom: 24px;
+  right: 24px;
+}
+
+/* Position 2: Center Low Rectangle */
+#showpilot-widget[data-position="center-low-rectangle"] {
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px !important;
+  max-width: 900px;
+}
+
+/* Position 3: Center Midsize */
+#showpilot-widget[data-position="center-midsize-square"] {
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 580px;
+  height: 680px;
+}
+
+/* Position 4: Skyscraper */
+#showpilot-widget[data-position="skyscraper"] {
+  top: 0;
+  right: 0;
+  width: 440px !important;
+  height: 100vh;
+  max-width: 440px;
+}
+
+/* Position 5: Full Height Center */
+#showpilot-widget[data-position="full-height-center"] {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 960px;
+  height: calc(100vh - 48px);
+  max-height: 920px;
+}
+
+/* Position 6: Content Viewer */
+#showpilot-widget[data-position="content-viewer"] {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 92vw;
+  height: 88vh;
+  max-width: 1800px;
+}
+
+/* ========================
+   MOBILE RESPONSIVE STYLES
+   ======================== */
+@media (max-width: 767px) {
+  /* Hide demo controls on mobile */
+  .demo-controls {
+    display: none;
+  }
+
+  /* Mobile: All positions go to bottom with separated horizontal layout */
+  #showpilot-widget {
+    bottom: 0 !important;
+    left: 0 !important;
+    top: auto !important;
+    right: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
+  }
+}
