@@ -2277,16 +2277,17 @@
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] {
             position: absolute !important;
             height: auto !important;
-            max-height: 160px !important; /* ~19% of 844px */
+            max-height: none !important;
+            min-height: 200px !important;
             width: 100% !important;
             left: 0 !important;
             right: 0 !important;
             bottom: 0 !important;
             top: auto !important;
-            padding: 12px 16px 24px 16px !important; /* Extra bottom for safe area */
+            padding: 16px !important;
             background: white !important;
-            border-radius: 16px 16px 0 0 !important;
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1) !important;
+            border-radius: 0 !important;
+            box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.1) !important;
             transform: none !important;
         }
 
@@ -2308,16 +2309,17 @@
             padding: 0 !important;
         }
 
-        /* Small video greeter - circular avatar */
+        /* Square video greeter - 120x120px */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .video-container-site {
             display: block !important;
-            width: 48px !important;
-            height: 48px !important;
-            border-radius: 50% !important;
+            width: 120px !important;
+            height: 120px !important;
+            border-radius: 12px !important;
             overflow: hidden !important;
             flex-shrink: 0 !important;
             margin: 0 !important;
             position: relative !important;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
         }
 
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .video-container-site img,
@@ -2336,16 +2338,33 @@
             display: none !important;
         }
 
-        /* Chat container - horizontal layout */
+        /* Chat container - vertical rectangle */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site {
             display: flex !important;
             flex: 1 !important;
-            background: #f8f9fa !important;
-            border-radius: 24px !important;
-            padding: 0 !important;
+            flex-direction: column !important;
+            background: white !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 12px !important;
+            padding: 12px !important;
             margin: 0 !important;
-            height: 48px !important;
+            min-height: 120px !important;
+            height: auto !important;
             box-shadow: none !important;
+            justify-content: space-between !important;
+        }
+
+        /* Message bubble */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site::before {
+            content: '👋 Hi! Ask me anything about our product demos.' !important;
+            display: block !important;
+            background: #f1f5f9 !important;
+            padding: 10px 12px !important;
+            border-radius: 12px !important;
+            font-size: 13px !important;
+            color: #475569 !important;
+            line-height: 1.4 !important;
+            margin-bottom: 10px !important;
         }
 
         /* Hide hover controls on mobile */
@@ -2356,8 +2375,9 @@
         /* Input area - full width */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area-site {
             flex: 1 !important;
-            padding: 0 16px !important;
+            padding: 0 !important;
             display: flex !important;
+            flex-direction: column !important;
             background: transparent !important;
             border: none !important;
         }
@@ -2383,17 +2403,38 @@
             color: #94a3b8 !important;
         }
 
-        /* Compact buttons */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .voice-btn,
+        /* Hide voice button on mobile */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .voice-btn {
+            display: none !important;
+        }
+
+        /* Send button - brand color */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .send-btn {
             width: 36px !important;
             height: 36px !important;
             min-width: 36px !important;
             flex-shrink: 0 !important;
-            border-radius: 50% !important;
+            border-radius: 6px !important;
+            background: #0B3398 !important;
+            border: none !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
         }
 
-        /* Hide bottom row elements */
+        /* Privacy link */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area-site::after {
+            content: 'Privacy Policy' !important;
+            display: block !important;
+            margin-top: 8px !important;
+            padding-top: 8px !important;
+            border-top: 1px solid #e2e8f0 !important;
+            text-align: center !important;
+            font-size: 9px !important;
+            color: #94a3b8 !important;
+        }
+
+        /* Show bottom row for privacy link */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .input-bottom-row-site {
             display: none !important;
         }
