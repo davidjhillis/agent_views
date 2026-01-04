@@ -2273,66 +2273,74 @@
             display: none !important; /* Hide on mobile, show in drawer */
         }
 
-        /* Compact bottom bar for Site Agent on mobile - max 25% of screen */
+        /* Compact bottom bar for Site Agent on mobile - max 20% of screen */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] {
+            position: absolute !important;
             height: auto !important;
-            max-height: 200px !important;
-            min-height: 100px !important;
-            border-radius: 16px 16px 0 0 !important;
+            max-height: 160px !important; /* ~19% of 844px */
+            width: 100% !important;
+            left: 0 !important;
+            right: 0 !important;
             bottom: 0 !important;
             top: auto !important;
-            padding: 16px !important;
+            padding: 12px 16px 24px 16px !important; /* Extra bottom for safe area */
             background: white !important;
-            display: flex !important;
-            flex-direction: column !important;
+            border-radius: 16px 16px 0 0 !important;
             box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1) !important;
+            transform: none !important;
         }
 
-        /* Ensure widget-window displays on mobile */
+        /* Ensure widget-window doesn't interfere */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .widget-window {
-            display: flex !important;
-            background: transparent !important;
-            box-shadow: none !important;
-        }
-
-        /* Hide video container on mobile - too large */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .video-container-site {
             display: none !important;
         }
 
-        /* Compact chat panel on mobile */
+        /* Show chat panel as direct child */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-panel {
-            flex-direction: column !important;
-            gap: 12px !important;
-            flex: 1 !important;
             display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            gap: 12px !important;
         }
 
-        /* Greeting tooltip - compact on mobile */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site {
-            position: static !important;
-            margin-bottom: 0 !important;
-            font-size: 14px !important;
-            padding: 10px 14px !important;
-            background: #f8f9fa !important;
-            border-radius: 12px !important;
-            box-shadow: none !important;
+        /* Small video greeter - circular avatar */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .video-container-site {
+            display: block !important;
+            width: 48px !important;
+            height: 48px !important;
+            border-radius: 50% !important;
+            overflow: hidden !important;
+            flex-shrink: 0 !important;
+            margin: 0 !important;
+            position: relative !important;
         }
 
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .greeting-arrow {
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .video-container-site img,
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .video-container-site video {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+        }
+
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .video-overlay-site {
             display: none !important;
         }
 
-        /* Chat container - full width on mobile */
+        /* Hide greeting tooltip on mobile */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site {
+            display: none !important;
+        }
+
+        /* Chat container - horizontal layout */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site {
-            width: 100% !important;
-            max-width: 100% !important;
-            height: auto !important;
-            margin-top: 0 !important;
+            display: flex !important;
+            flex: 1 !important;
+            background: #f8f9fa !important;
+            border-radius: 24px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            height: 48px !important;
             box-shadow: none !important;
-            border-radius: 0 !important;
-            background: transparent !important;
-            flex: 0 0 auto !important;
         }
 
         /* Hide hover controls on mobile */
@@ -2340,26 +2348,30 @@
             display: none !important;
         }
 
-        /* Compact input area */
+        /* Input area - full width */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area-site {
-            padding: 12px 14px !important;
-            background: white !important;
-            border-radius: 12px !important;
-            border: 1px solid #e2e8f0 !important;
+            flex: 1 !important;
+            padding: 0 16px !important;
+            display: flex !important;
+            background: transparent !important;
+            border: none !important;
         }
 
-        /* Input row - full width, compact */
+        /* Input row - horizontal */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .input-row-site {
-            gap: 10px !important;
             display: flex !important;
+            flex: 1 !important;
+            gap: 8px !important;
+            align-items: center !important;
         }
 
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-input {
-            font-size: 16px !important;
-            padding: 0 !important;
             flex: 1 !important;
+            font-size: 15px !important;
+            padding: 0 !important;
             background: transparent !important;
             border: none !important;
+            color: #0f172a !important;
         }
 
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-input::placeholder {
@@ -2369,13 +2381,14 @@
         /* Compact buttons */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .voice-btn,
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .send-btn {
-            width: 40px !important;
-            height: 40px !important;
-            min-width: 40px !important;
+            width: 36px !important;
+            height: 36px !important;
+            min-width: 36px !important;
             flex-shrink: 0 !important;
+            border-radius: 50% !important;
         }
 
-        /* Hide bottom row elements on mobile to save space */
+        /* Hide bottom row elements */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .input-bottom-row-site {
             display: none !important;
         }
