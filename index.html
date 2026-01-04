@@ -2278,13 +2278,13 @@
             position: absolute !important;
             height: auto !important;
             max-height: none !important;
-            min-height: 200px !important;
+            min-height: auto !important;
             width: 100% !important;
             left: 0 !important;
             right: 0 !important;
             bottom: 0 !important;
             top: auto !important;
-            padding: 16px !important;
+            padding: 8px !important;
             background: white !important;
             border-radius: 0 !important;
             box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.1) !important;
@@ -2300,21 +2300,39 @@
             overflow: visible !important;
         }
 
-        /* Show chat panel in horizontal layout */
+        /* Show chat panel with message bubble at top */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-panel {
             display: flex !important;
-            flex-direction: row !important;
-            align-items: center !important;
-            gap: 12px !important;
+            flex-direction: column !important;
+            gap: 8px !important;
             padding: 0 !important;
         }
 
-        /* Square video greeter - 120x120px */
+        /* Message bubble above video and chat */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-panel::before {
+            content: '👋 Hi! Ask me anything about our product demos.' !important;
+            display: block !important;
+            background: #f1f5f9 !important;
+            padding: 8px 12px !important;
+            border-radius: 12px !important;
+            font-size: 13px !important;
+            color: #475569 !important;
+            line-height: 1.4 !important;
+        }
+
+        /* Container for video and chat side-by-side */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-panel > div:first-child {
+            display: flex !important;
+            gap: 8px !important;
+            align-items: stretch !important;
+        }
+
+        /* Square video greeter - 60x60px (50% smaller) */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .video-container-site {
             display: block !important;
-            width: 120px !important;
-            height: 120px !important;
-            border-radius: 12px !important;
+            width: 60px !important;
+            height: 60px !important;
+            border-radius: 8px !important;
             overflow: hidden !important;
             flex-shrink: 0 !important;
             margin: 0 !important;
@@ -2338,33 +2356,19 @@
             display: none !important;
         }
 
-        /* Chat container - vertical rectangle */
+        /* Chat container - same height as video */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site {
             display: flex !important;
             flex: 1 !important;
             flex-direction: column !important;
             background: white !important;
             border: 1px solid #e2e8f0 !important;
-            border-radius: 12px !important;
-            padding: 12px !important;
+            border-radius: 8px !important;
+            padding: 8px !important;
             margin: 0 !important;
-            min-height: 120px !important;
-            height: auto !important;
+            height: 60px !important;
             box-shadow: none !important;
-            justify-content: space-between !important;
-        }
-
-        /* Message bubble */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site::before {
-            content: '👋 Hi! Ask me anything about our product demos.' !important;
-            display: block !important;
-            background: #f1f5f9 !important;
-            padding: 10px 12px !important;
-            border-radius: 12px !important;
-            font-size: 13px !important;
-            color: #475569 !important;
-            line-height: 1.4 !important;
-            margin-bottom: 10px !important;
+            justify-content: center !important;
         }
 
         /* Hide hover controls on mobile */
@@ -2372,14 +2376,16 @@
             display: none !important;
         }
 
-        /* Input area - full width */
+        /* Input area - minimal padding */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area-site {
             flex: 1 !important;
             padding: 0 !important;
             display: flex !important;
-            flex-direction: column !important;
+            flex-direction: row !important;
+            align-items: center !important;
             background: transparent !important;
             border: none !important;
+            gap: 6px !important;
         }
 
         /* Input row - horizontal */
@@ -2392,7 +2398,7 @@
 
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-input {
             flex: 1 !important;
-            font-size: 15px !important;
+            font-size: 13px !important;
             padding: 0 !important;
             background: transparent !important;
             border: none !important;
@@ -2400,7 +2406,8 @@
         }
 
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-input::placeholder {
-            color: #94a3b8 !important;
+            color: #cbd5e1 !important;
+            font-size: 13px !important;
         }
 
         /* Hide voice button on mobile */
@@ -2408,11 +2415,11 @@
             display: none !important;
         }
 
-        /* Send button - brand color */
+        /* Send button - compact */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .send-btn {
-            width: 36px !important;
-            height: 36px !important;
-            min-width: 36px !important;
+            width: 32px !important;
+            height: 32px !important;
+            min-width: 32px !important;
             flex-shrink: 0 !important;
             border-radius: 6px !important;
             background: #0B3398 !important;
@@ -2420,23 +2427,22 @@
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
+            padding: 0 !important;
         }
 
-        /* Privacy link */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area-site::after {
-            content: 'Privacy Policy' !important;
-            display: block !important;
-            margin-top: 8px !important;
-            padding-top: 8px !important;
-            border-top: 1px solid #e2e8f0 !important;
-            text-align: center !important;
-            font-size: 9px !important;
-            color: #94a3b8 !important;
-        }
-
-        /* Show bottom row for privacy link */
+        /* Hide bottom row and privacy link */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .input-bottom-row-site {
             display: none !important;
+        }
+
+        /* Add minimal privacy text below chat panel */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-panel::after {
+            content: 'Privacy Policy' !important;
+            display: block !important;
+            text-align: center !important;
+            font-size: 8px !important;
+            color: #94a3b8 !important;
+            margin-top: 4px !important;
         }
 
         /* Voice status badge - larger for mobile */
