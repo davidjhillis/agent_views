@@ -2290,17 +2290,22 @@
             transform: none !important;
         }
 
-        /* Ensure widget-window doesn't interfere */
+        /* Keep widget-window but make it transparent container */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .widget-window {
-            display: none !important;
+            display: block !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            overflow: visible !important;
         }
 
-        /* Show chat panel as direct child */
+        /* Show chat panel in horizontal layout */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-panel {
             display: flex !important;
             flex-direction: row !important;
             align-items: center !important;
             gap: 12px !important;
+            padding: 0 !important;
         }
 
         /* Small video greeter - circular avatar */
