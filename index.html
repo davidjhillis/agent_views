@@ -60,7 +60,8 @@
             height: 900px;
             max-width: calc(100vw - 400px); /* Fit on screen with controls */
             max-height: calc(100vh - 80px);
-            border-radius: 12px;
+            border-radius: 0;
+            border: 1px solid #d1d5db;
         }
 
         /* Tablet Viewport (iPad Air portrait: 834px × 1194px) */
@@ -69,8 +70,8 @@
             height: 1194px;
             max-width: calc(100vw - 400px);
             max-height: calc(100vh - 80px);
-            border-radius: 24px;
-            border: 8px solid #1f2937;
+            border-radius: 0;
+            border: 1px solid #d1d5db;
         }
 
         /* Mobile Viewport (iPhone 14: 390px × 844px) */
@@ -79,22 +80,13 @@
             height: 844px;
             max-width: calc(100vw - 400px);
             max-height: calc(100vh - 80px);
-            border-radius: 48px;
-            border: 12px solid #1f2937;
+            border-radius: 0;
+            border: 1px solid #d1d5db;
         }
 
-        /* iPhone notch simulation */
+        /* Remove iPhone notch simulation */
         .demo-viewport[data-device="mobile"]::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 30px;
-            background: #1f2937;
-            border-radius: 0 0 16px 16px;
-            z-index: 999999;
+            display: none;
         }
 
         /* ============================================ */
@@ -2284,11 +2276,23 @@
         /* Compact bottom bar for Site Agent on mobile - max 25% of screen */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] {
             height: auto !important;
-            max-height: 25% !important;
+            max-height: 200px !important;
+            min-height: 100px !important;
             border-radius: 16px 16px 0 0 !important;
             bottom: 0 !important;
             top: auto !important;
-            padding: 12px !important;
+            padding: 16px !important;
+            background: white !important;
+            display: flex !important;
+            flex-direction: column !important;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        /* Ensure widget-window displays on mobile */
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .widget-window {
+            display: flex !important;
+            background: transparent !important;
+            box-shadow: none !important;
         }
 
         /* Hide video container on mobile - too large */
@@ -2299,15 +2303,20 @@
         /* Compact chat panel on mobile */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-panel {
             flex-direction: column !important;
-            gap: 8px !important;
+            gap: 12px !important;
+            flex: 1 !important;
+            display: flex !important;
         }
 
         /* Greeting tooltip - compact on mobile */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site {
             position: static !important;
-            margin-bottom: 8px !important;
-            font-size: 13px !important;
-            padding: 8px 12px !important;
+            margin-bottom: 0 !important;
+            font-size: 14px !important;
+            padding: 10px 14px !important;
+            background: #f8f9fa !important;
+            border-radius: 12px !important;
+            box-shadow: none !important;
         }
 
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .greeting-arrow {
@@ -2318,6 +2327,12 @@
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site {
             width: 100% !important;
             max-width: 100% !important;
+            height: auto !important;
+            margin-top: 0 !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            flex: 0 0 auto !important;
         }
 
         /* Hide hover controls on mobile */
@@ -2327,26 +2342,37 @@
 
         /* Compact input area */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area-site {
-            padding: 0 !important;
+            padding: 12px 14px !important;
+            background: white !important;
+            border-radius: 12px !important;
+            border: 1px solid #e2e8f0 !important;
         }
 
         /* Input row - full width, compact */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .input-row-site {
-            gap: 8px !important;
+            gap: 10px !important;
+            display: flex !important;
         }
 
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-input {
             font-size: 16px !important;
-            padding: 12px !important;
+            padding: 0 !important;
             flex: 1 !important;
+            background: transparent !important;
+            border: none !important;
+        }
+
+        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-input::placeholder {
+            color: #94a3b8 !important;
         }
 
         /* Compact buttons */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .voice-btn,
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .send-btn {
-            width: 44px !important;
-            height: 44px !important;
-            min-width: 44px !important;
+            width: 40px !important;
+            height: 40px !important;
+            min-width: 40px !important;
+            flex-shrink: 0 !important;
         }
 
         /* Hide bottom row elements on mobile to save space */
