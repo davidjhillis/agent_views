@@ -35,21 +35,31 @@
             min-height: 100vh;
             background: #e5e7eb;
             padding: 40px 20px;
+            padding-left: 360px; /* Space for fixed demo controls */
         }
 
         .demo-viewport {
             background: white;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
             border-radius: 12px;
-            overflow: hidden;
-            position: relative;
+            overflow: auto; /* Enable scrolling within viewport */
+            position: relative; /* Contain absolutely positioned children */
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 400px; /* Ensure minimum height */
+        }
+
+        /* Ensure content is properly contained within viewport */
+        .demo-viewport .page-content,
+        .demo-viewport .sample-sections {
+            max-width: 100%;
         }
 
         /* Desktop Viewport (1440px × 900px) */
         .demo-viewport[data-device="desktop"] {
             width: 1440px;
             height: 900px;
+            max-width: calc(100vw - 400px); /* Fit on screen with controls */
+            max-height: calc(100vh - 80px);
             border-radius: 12px;
         }
 
@@ -57,6 +67,8 @@
         .demo-viewport[data-device="tablet"] {
             width: 834px;
             height: 1194px;
+            max-width: calc(100vw - 400px);
+            max-height: calc(100vh - 80px);
             border-radius: 24px;
             border: 8px solid #1f2937;
         }
@@ -65,6 +77,8 @@
         .demo-viewport[data-device="mobile"] {
             width: 390px;
             height: 844px;
+            max-width: calc(100vw - 400px);
+            max-height: calc(100vh - 80px);
             border-radius: 48px;
             border: 12px solid #1f2937;
         }
@@ -99,7 +113,7 @@
         }
 
         .page-content {
-            position: fixed;
+            position: absolute; /* Changed from fixed to work within viewport */
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -237,7 +251,7 @@
            WIDGET CONTAINER
            ======================== */
         #showpilot-widget {
-            position: fixed;
+            position: absolute; /* Changed from fixed to position within viewport */
             z-index: 99999;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -273,7 +287,7 @@
             top: 0;
             right: 0;
             width: 440px !important;
-            height: 100vh;
+            height: 100%; /* Changed from 100vh to work within viewport */
             max-width: 440px;
         }
 
@@ -283,7 +297,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             width: 960px;
-            height: calc(100vh - 48px);
+            height: 95%; /* Changed from calc(100vh - 48px) to work within viewport */
             max-height: 920px;
         }
 
@@ -292,15 +306,15 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 92vw;
-            height: 88vh;
+            width: 92%;
+            height: 88%;
             max-width: 1800px;
         }
 
         /* Backdrop */
         .page-backdrop {
             display: none;
-            position: fixed;
+            position: absolute; /* Changed from fixed to position within viewport */
             inset: 0;
             background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(12px);
@@ -5745,7 +5759,7 @@
             `;
             toggle.style.cssText = `
                 display: none;
-                position: fixed;
+                position: absolute;
                 bottom: 96px;
                 right: 16px;
                 width: 56px;
@@ -5765,12 +5779,14 @@
                 let drawer = document.querySelector('.mobile-playlist-drawer');
                 if (!drawer) {
                     drawer = createPlaylistDrawer();
-                    document.body.appendChild(drawer);
+                    const viewport = document.querySelector('.demo-viewport');
+                    if (viewport) viewport.appendChild(drawer);
                 }
                 drawer.classList.toggle('open');
             };
 
-            document.body.appendChild(toggle);
+            const viewport = document.querySelector('.demo-viewport');
+            if (viewport) viewport.appendChild(toggle);
 
             // Show/hide based on viewport and position
             const observer = new MutationObserver(() => {
@@ -5790,7 +5806,7 @@
             const drawer = document.createElement('div');
             drawer.className = 'mobile-playlist-drawer';
             drawer.style.cssText = `
-                position: fixed;
+                position: absolute;
                 bottom: -400px;
                 left: 0;
                 right: 0;
