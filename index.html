@@ -267,9 +267,9 @@
             bottom: 24px;
             left: 50%;
             transform: translateX(-50%);
-            width: 900px !important;
+            width: 900px;
             height: auto;
-            max-width: 900px;
+            max-width: calc(100% - 48px); /* Constrain to viewport width */
             overflow: visible;
         }
 
@@ -280,13 +280,14 @@
             transform: translateX(-50%);
             width: 580px;
             height: 680px;
+            max-width: calc(100% - 48px); /* Constrain to viewport width */
         }
 
         /* POSITION 4: SKYSCRAPER - SHARP CORNERS */
         #showpilot-widget[data-position="skyscraper"] {
             top: 0;
             right: 0;
-            width: 440px !important;
+            width: 440px;
             height: 100%; /* Changed from 100vh to work within viewport */
             max-width: 440px;
         }
@@ -298,6 +299,7 @@
             transform: translate(-50%, -50%);
             width: 960px;
             height: 95%; /* Changed from calc(100vh - 48px) to work within viewport */
+            max-width: calc(100% - 48px); /* Constrain to viewport width */
             max-height: 920px;
         }
 
@@ -1265,6 +1267,7 @@
 
         #showpilot-widget[data-position="center-low-rectangle"] {
             width: 780px !important;
+            max-width: calc(100% - 48px) !important; /* Constrain to viewport */
             height: auto;
         }
 
@@ -2177,7 +2180,7 @@
 
         /* All positions become full-screen except chat button */
         .demo-viewport[data-device="mobile"] #showpilot-widget[data-position]:not([data-position="chat-button"]) {
-            position: fixed !important;
+            position: absolute !important;
             top: 0 !important;
             left: 0 !important;
             right: 0 !important;
