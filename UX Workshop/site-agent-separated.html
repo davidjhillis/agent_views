@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShowPilot Site Agent - Separated Layout</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ========================
+           GREETING TOOLTIP
+           ======================== */
+        .greeting-tooltip {
+            position: fixed;
+            bottom: 228px;
+            left: 50%;
+            transform: translateX(-310px);
+            background: white;
+            padding: 14px 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12), 0 4px 12px rgba(15, 23, 42, 0.08);
+            max-width: 600px;
+            animation: fadeIn 0.5s ease-out 0.3s backwards;
+            z-index: 9998;
+        }
+
+        .greeting-text {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #0f172a;
+        }
+
+        .greeting-arrow {
+            position: absolute;
+            bottom: -8px;
+            left: 24px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid white;
+        }
+
+        /* ========================
+           MAIN CONTAINER
+           ======================== */
+        .agent-container {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 16px;
+            align-items: stretch;
+            width: 880px;
+            max-width: calc(100vw - 48px);
+            animation: fadeIn 0.5s ease-out;
+            z-index: 9999;
+        }
+
+        /* ========================
+           VIDEO CONTAINER
+           ======================== */
+        .video-container {
+            position: relative;
+            width: 220px;
+            height: 180px;
+            flex-shrink: 0;
+            border-radius: 14px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3), 0 4px 12px rgba(99, 102, 241, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-wrapper video,
+        .video-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(15, 23, 42, 0.4) 100%);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 10px;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-container.chatting .video-overlay {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .talk-now-button {
+            background: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-family: 'Geist', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            color: #6366f1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .talk-now-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .voice-icon {
+            display: flex;
+            gap: 2px;
+            align-items: center;
+        }
+
+        .soundwave-icon {
+            display: flex;
+            gap: 2px;
+            align-items: center;
+            height: 10px;
+        }
+
+        .soundwave-bar {
+            width: 2px;
+            background: currentColor;
+            border-radius: 1px;
+            animation: pulse 1.2s ease-in-out infinite;
+        }
+
+        .talk-now-button .soundwave-bar {
+            background: #6366f1;
+        }
+
+        .soundwave-bar:nth-child(1) {
+            height: 4px;
+            animation-delay: 0s;
+        }
+
+        .soundwave-bar:nth-child(2) {
+            height: 9px;
+            animation-delay: 0.15s;
+        }
+
+        .soundwave-bar:nth-child(3) {
+            height: 6px;
+            animation-delay: 0.3s;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scaleY(0.6);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scaleY(1);
+                opacity: 1;
+            }
+        }
+
+        /* ========================
+           CHAT CONTAINER
+           ======================== */
+        .chat-container {
+            flex: 1;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(15, 23, 42, 0.12), 0 4px 16px rgba(15, 23, 42, 0.08);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            height: 180px;
+        }
+
+        /* Hover controls */
+        .hover-controls {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.2s;
+            display: flex;
+            gap: 6px;
+        }
+
+        .chat-container:hover .hover-controls {
+            opacity: 1;
+        }
+
+        .control-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: #f1f5f9;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .control-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .control-btn svg {
+            width: 14px;
+            height: 14px;
+            stroke: #64748b;
+            stroke-width: 2;
+        }
+
+        /* Chat input area */
+        .chat-input-area {
+            padding: 14px 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex: 1;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0;
+            background: white;
+        }
+
+        .input-top-row {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-bottom-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            background: transparent;
+            font-weight: 400;
+            color: #0f172a;
+            font-family: 'Geist', sans-serif;
+            padding: 0;
+        }
+
+        .chat-input::placeholder {
+            color: #cbd5e1;
+        }
+
+        .demo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 5px 10px;
+            background: #0B3398;
+            border-radius: 6px;
+            font-size: 10px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .demo-badge:hover {
+            transform: scale(1.02);
+            box-shadow: 0 2px 8px rgba(11, 51, 152, 0.3);
+        }
+
+        .demo-badge svg {
+            width: 12px;
+            height: 12px;
+            stroke: white;
+        }
+
+        .input-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .voice-btn {
+            width: 32px;
+            height: 32px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            color: #64748b;
+            flex-shrink: 0;
+        }
+
+        .voice-btn:hover {
+            color: #6366f1;
+        }
+
+        .voice-btn .soundwave-icon {
+            height: 16px;
+        }
+
+        .voice-btn .soundwave-bar {
+            width: 3px;
+        }
+
+        .voice-btn .soundwave-bar:nth-child(1) { height: 6px; }
+        .voice-btn .soundwave-bar:nth-child(2) { height: 14px; }
+        .voice-btn .soundwave-bar:nth-child(3) { height: 9px; }
+
+        .send-btn {
+            width: 32px;
+            height: 32px;
+            background: #0B3398;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .send-btn:hover {
+            background: #0a2d7a;
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(11, 51, 152, 0.25);
+        }
+
+        .send-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Toggle voice/send based on text */
+        .chat-input-area.has-text .voice-btn {
+            display: none;
+        }
+
+        .chat-input-area.has-text .send-btn {
+            display: flex;
+        }
+
+        .privacy-disclaimer {
+            font-size: 10px;
+            color: #94a3b8;
+            text-align: left;
+            line-height: 1.3;
+            font-weight: 400;
+            flex: 1;
+        }
+
+        .privacy-disclaimer a {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .privacy-disclaimer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ========================
+           MESSAGE BUBBLE INVITATION
+           ======================== */
+        .message-bubble {
+            background: #f1f5f9;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.4;
+            margin-bottom: 12px;
+            display: none;
+        }
+
+        .message-bubble.show {
+            display: block;
+        }
+
+        /* ========================
+           RESPONSIVE
+           ======================== */
+
+        /* Tablet (768px - 960px) */
+        @media (max-width: 960px) and (min-width: 768px) {
+            .agent-container {
+                width: calc(100vw - 48px);
+                gap: 14px;
+                bottom: 20px;
+            }
+
+            .video-container {
+                width: 200px;
+                height: 160px;
+            }
+
+            .chat-container {
+                height: 160px;
+            }
+
+            .greeting-tooltip {
+                bottom: 204px;
+                transform: translateX(-280px);
+            }
+        }
+
+        /* Mobile (< 768px) */
+        @media (max-width: 767px) {
+            body {
+                padding: 0;
+            }
+
+            .agent-container {
+                width: 100%;
+                max-width: 100%;
+                flex-direction: row;
+                gap: 12px;
+                bottom: 0;
+                left: 0;
+                transform: none;
+                border-radius: 0;
+                padding: 16px;
+                background: white;
+                box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.1);
+            }
+
+            .video-container {
+                width: 120px;
+                height: 120px;
+                border-radius: 12px;
+                flex-shrink: 0;
+            }
+
+            /* Hide talk overlay on mobile */
+            .video-overlay {
+                display: none;
+            }
+
+            .chat-container {
+                height: auto;
+                min-height: 120px;
+                border-radius: 12px;
+                box-shadow: none;
+                border: 1px solid #e2e8f0;
+            }
+
+            .greeting-tooltip {
+                display: none;
+            }
+
+            .greeting-arrow {
+                display: none;
+            }
+
+            /* Adjust input area for mobile */
+            .chat-input-area {
+                padding: 12px;
+            }
+
+            .input-bottom-row {
+                margin-top: 8px;
+                padding-top: 8px;
+            }
+
+            /* Message bubble on mobile */
+            .message-bubble {
+                font-size: 13px;
+                padding: 10px 12px;
+                margin-bottom: 10px;
+            }
+
+            /* Mobile send button matches desktop style */
+            .send-btn {
+                width: 36px;
+                height: 36px;
+                background: #0B3398;
+            }
+
+            .send-btn:hover {
+                background: #0a2d7a;
+            }
+
+            /* Hide demo badge on mobile, show simplified privacy */
+            .demo-badge {
+                display: none;
+            }
+
+            .privacy-disclaimer {
+                text-align: center;
+                font-size: 9px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="greeting-tooltip" id="greeting-tooltip">
+        <div class="greeting-text">
+            You're in good company! Over 500 companies have hired me to help them engage buyers, book meetings, and generate pipeline.
+        </div>
+        <div class="greeting-arrow"></div>
+    </div>
+
+    <div class="agent-container">
+        <!-- VIDEO CONTAINER -->
+        <div class="video-container">
+            <div class="video-wrapper">
+                <img src="public/av44.png" alt="ShowPilot Agent" id="avatar-img">
+                <video autoplay muted loop playsinline id="avatar-video" style="display: none;">
+                    <source src="public/av44.mp4" type="video/mp4">
+                </video>
+                <div class="video-overlay">
+                    <button class="talk-now-button" onclick="startVoiceChat()">
+                        <div class="voice-icon">
+                            <div class="soundwave-bar"></div>
+                            <div class="soundwave-bar"></div>
+                            <div class="soundwave-bar"></div>
+                        </div>
+                        Talk now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHAT CONTAINER -->
+        <div class="chat-container">
+            <div class="hover-controls">
+                <button class="control-btn control-expand" onclick="expand()" title="Expand">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                    </svg>
+                </button>
+                <button class="control-btn control-close" onclick="closeWidget()" title="Close">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="chat-input-area" id="chatInputArea">
+                <div class="message-bubble show" id="messageBubble">
+                    👋 Hi! Ask me anything about our product demos.
+                </div>
+                <div class="input-row">
+                    <input
+                        type="text"
+                        class="chat-input"
+                        id="chatInput"
+                        placeholder="Chat with ShowPilot Agent"
+                        oninput="handleInput()"
+                    >
+                    <button class="voice-btn" onclick="toggleVoice()" title="Voice input">
+                        <div class="soundwave-icon">
+                            <div class="soundwave-bar"></div>
+                            <div class="soundwave-bar"></div>
+                            <div class="soundwave-bar"></div>
+                        </div>
+                    </button>
+                    <button class="send-btn" onclick="sendMessage()" title="Send message">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 19V5M5 12l7-7 7 7"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="input-bottom-row">
+                    <button class="demo-badge" onclick="bookDemo()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        Book a demo
+                    </button>
+                    <div class="privacy-disclaimer">
+                        <a href="#privacy">Privacy Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isChatting = false;
+
+        // Handle input to toggle voice/send button and switch avatar
+        function handleInput() {
+            const input = document.getElementById('chatInput');
+            const inputArea = document.getElementById('chatInputArea');
+            const messageBubble = document.getElementById('messageBubble');
+
+            if (input.value.trim()) {
+                inputArea.classList.add('has-text');
+                // Hide message bubble when user starts typing
+                if (messageBubble) {
+                    messageBubble.classList.remove('show');
+                }
+                // Switch to chatting mode on first input
+                if (!isChatting && input.value.length > 0) {
+                    switchToChatMode();
+                }
+            } else {
+                inputArea.classList.remove('has-text');
+            }
+        }
+
+        // Switch from video to PNG avatar when chatting starts
+        function switchToChatMode() {
+            isChatting = true;
+            const videoContainer = document.querySelector('.video-container');
+            const avatarVideo = document.getElementById('avatar-video');
+            const avatarImg = document.getElementById('avatar-img');
+
+            // Add chatting class to hide overlay
+            videoContainer.classList.add('chatting');
+
+            // Switch from video to static PNG
+            if (avatarVideo && avatarImg) {
+                avatarVideo.style.display = 'none';
+                avatarImg.style.display = 'block';
+            }
+        }
+
+        // Send message function
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            // Switch to chat mode when sending first message
+            if (!isChatting) {
+                switchToChatMode();
+            }
+
+            console.log('Sending message:', message);
+            // In production, this would send to your API
+
+            input.value = '';
+            handleInput();
+        }
+
+        // Handle Enter key
+        document.getElementById('chatInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Voice chat function
+        function startVoiceChat() {
+            console.log('Starting voice chat...');
+
+            // Switch to chat mode when voice chat starts
+            if (!isChatting) {
+                switchToChatMode();
+            }
+
+            alert('Voice chat would start here!');
+        }
+
+        // Toggle voice
+        function toggleVoice() {
+            console.log('Toggle voice input...');
+            alert('Voice input would activate here!');
+        }
+
+        // Book demo
+        function bookDemo() {
+            console.log('Book demo clicked...');
+            alert('Book demo modal would open here!');
+        }
+
+        // Expand
+        function expand() {
+            console.log('Expand clicked...');
+            alert('Would expand to larger view!');
+        }
+
+        // Close
+        function closeWidget() {
+            console.log('Close clicked...');
+            document.querySelector('.agent-container').style.display = 'none';
+        }
+
+        // Tooltip stays visible - no auto-hide
+    </script>
+</body>
+</html>
