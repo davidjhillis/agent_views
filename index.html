@@ -2525,8 +2525,8 @@
            MOBILE RESPONSIVE (<768px)
            ======================== */
         @media (max-width: 767px) {
-            /* Site agent at BOTTOM of mobile screen */
-            #showpilot-widget[data-position="center-low-rectangle"] {
+            /* Site agent at BOTTOM - FORCE ALL POSITIONS ON MOBILE */
+            #showpilot-widget {
                 position: fixed !important;
                 bottom: 0 !important;
                 left: 0 !important;
@@ -2541,29 +2541,35 @@
                 z-index: 99999 !important;
             }
 
-            /* Hide greeting tooltip */
-            #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site {
+            /* Hide header and old UI elements */
+            #showpilot-widget .widget-header,
+            #showpilot-widget .pill-button,
+            #showpilot-widget .greeting-tooltip,
+            #showpilot-widget .center-avatar,
+            #showpilot-widget .messages-container,
+            #showpilot-widget .chat-messages,
+            #showpilot-widget .chat-input-area {
                 display: none !important;
             }
 
             /* Show widget window */
-            #showpilot-widget[data-position="center-low-rectangle"] .widget-window {
+            #showpilot-widget .widget-window {
                 display: block !important;
                 background: transparent !important;
                 box-shadow: none !important;
                 padding: 0 !important;
             }
 
-            /* Chat panel - flex wrap layout */
-            #showpilot-widget[data-position="center-low-rectangle"] .chat-panel {
+            /* Show and force site agent elements */
+            #showpilot-widget .chat-panel {
                 display: flex !important;
                 flex-wrap: wrap !important;
                 gap: 8px !important;
                 padding: 0 !important;
             }
 
-            /* Greeting tooltip as message bubble - full width */
-            #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site {
+            /* Message bubble - full width */
+            #showpilot-widget .greeting-tooltip-site {
                 display: block !important;
                 width: 100% !important;
                 background: #f1f5f9 !important;
@@ -2575,18 +2581,19 @@
                 box-shadow: none !important;
                 position: relative !important;
                 order: -1 !important;
-            }
-
-            #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site .greeting-arrow {
-                display: none !important;
-            }
-
-            #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site .greeting-text {
                 margin: 0 !important;
             }
 
-            /* Video greeter - 60px, NO overlay, on same line */
-            #showpilot-widget[data-position="center-low-rectangle"] .video-container-site {
+            #showpilot-widget .greeting-tooltip-site .greeting-arrow {
+                display: none !important;
+            }
+
+            #showpilot-widget .greeting-tooltip-site .greeting-text {
+                margin: 0 !important;
+            }
+
+            /* Video - 60px, NO overlay */
+            #showpilot-widget .video-container-site {
                 width: 60px !important;
                 height: 60px !important;
                 border-radius: 8px !important;
@@ -2597,14 +2604,14 @@
                 display: block !important;
             }
 
-            /* HIDE sound animation overlay */
-            #showpilot-widget[data-position="center-low-rectangle"] .video-overlay-site,
-            #showpilot-widget[data-position="center-low-rectangle"] .site-voice-animation-overlay {
+            /* HIDE ALL overlays */
+            #showpilot-widget .video-overlay-site,
+            #showpilot-widget .site-voice-animation-overlay {
                 display: none !important;
             }
 
-            /* Chat container - same height as video, flex: 1 */
-            #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site {
+            /* Chat container - same height, flex: 1 */
+            #showpilot-widget .chat-container-site {
                 flex: 1 !important;
                 height: 60px !important;
                 background: white !important;
@@ -2614,10 +2621,11 @@
                 display: flex !important;
                 align-items: center !important;
                 box-shadow: none !important;
+                margin: 0 !important;
             }
 
             /* Chat input area */
-            #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area-site {
+            #showpilot-widget .chat-input-area-site {
                 flex: 1 !important;
                 display: flex !important;
                 align-items: center !important;
@@ -2625,14 +2633,14 @@
                 padding: 0 !important;
             }
 
-            #showpilot-widget[data-position="center-low-rectangle"] .input-row-site {
+            #showpilot-widget .input-row-site {
                 flex: 1 !important;
                 display: flex !important;
                 align-items: center !important;
                 gap: 6px !important;
             }
 
-            #showpilot-widget[data-position="center-low-rectangle"] .chat-input {
+            #showpilot-widget .chat-input {
                 flex: 1 !important;
                 font-size: 13px !important;
                 padding: 0 !important;
@@ -2640,15 +2648,16 @@
                 background: transparent !important;
             }
 
-            /* Show voice button until user types */
-            #showpilot-widget[data-position="center-low-rectangle"] .voice-btn {
+            /* Show voice button */
+            #showpilot-widget .voice-btn {
                 width: 32px !important;
                 height: 32px !important;
                 flex-shrink: 0 !important;
+                display: flex !important;
             }
 
             /* Send button */
-            #showpilot-widget[data-position="center-low-rectangle"] .send-btn {
+            #showpilot-widget .send-btn {
                 width: 32px !important;
                 height: 32px !important;
                 background: #0B3398 !important;
@@ -2656,8 +2665,13 @@
                 flex-shrink: 0 !important;
             }
 
+            /* Hide hover controls */
+            #showpilot-widget .hover-controls {
+                display: none !important;
+            }
+
             /* Show bottom row but minimal */
-            #showpilot-widget[data-position="center-low-rectangle"] .input-bottom-row-site {
+            #showpilot-widget .input-bottom-row-site {
                 display: block !important;
                 width: 100% !important;
                 order: 999 !important;
@@ -2665,19 +2679,19 @@
                 margin-top: 4px !important;
             }
 
-            /* Hide demo badge on mobile */
-            #showpilot-widget[data-position="center-low-rectangle"] .demo-badge {
+            /* Hide demo badge */
+            #showpilot-widget .demo-badge {
                 display: none !important;
             }
 
-            /* Minimal privacy link - hide full text, show only link */
-            #showpilot-widget[data-position="center-low-rectangle"] .privacy-disclaimer {
+            /* Minimal privacy link */
+            #showpilot-widget .privacy-disclaimer {
                 text-align: center !important;
                 font-size: 0 !important;
                 color: #94a3b8 !important;
             }
 
-            #showpilot-widget[data-position="center-low-rectangle"] .privacy-disclaimer a {
+            #showpilot-widget .privacy-disclaimer a {
                 font-size: 8px !important;
                 color: #94a3b8 !important;
                 text-decoration: none !important;
