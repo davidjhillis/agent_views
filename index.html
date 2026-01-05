@@ -1,3 +1,4 @@
+<!-- Cache bust: 2026-01-04-21:00 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,80 +17,13 @@
             --theme-200: #c7d2fe;
             --theme-300: #a5b4fc;
             --theme-400: #818cf8;
-            --theme-500: #6366f1;
-            --theme-600: #4f46e5;
+            --theme-500: var(--theme-500);
+            --theme-600: var(--theme-600);
             --theme-700: #4338ca;
             --theme-800: #3730a3;
             --theme-900: #312e81;
             --theme-950: #1e1b4b;
         }
-
-        /* ============================================
-           RESPONSIVE VIEWPORT SYSTEM
-           ============================================ */
-
-        .demo-viewport-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: #e5e7eb;
-            padding: 40px 20px;
-            padding-left: 360px; /* Space for fixed demo controls */
-        }
-
-        .demo-viewport {
-            background: white;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            border-radius: 12px;
-            overflow: auto; /* Enable scrolling within viewport */
-            position: relative; /* Contain absolutely positioned children */
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            min-height: 400px; /* Ensure minimum height */
-        }
-
-        /* Ensure content is properly contained within viewport */
-        .demo-viewport .page-content,
-        .demo-viewport .sample-sections {
-            max-width: 100%;
-        }
-
-        /* Desktop Viewport (1440px × 900px) */
-        .demo-viewport[data-device="desktop"] {
-            width: 1440px;
-            height: 900px;
-            max-width: calc(100vw - 400px); /* Fit on screen with controls */
-            max-height: calc(100vh - 80px);
-            border-radius: 0;
-            border: 1px solid #d1d5db;
-        }
-
-        /* Tablet Viewport (iPad Air portrait: 834px × 1194px) */
-        .demo-viewport[data-device="tablet"] {
-            width: 834px;
-            height: 1194px;
-            max-width: calc(100vw - 400px);
-            max-height: calc(100vh - 80px);
-            border-radius: 0;
-            border: 1px solid #d1d5db;
-        }
-
-        /* Mobile Viewport (iPhone 14: 390px × 844px) */
-        .demo-viewport[data-device="mobile"] {
-            width: 390px;
-            height: 844px;
-            max-width: calc(100vw - 400px);
-            max-height: calc(100vh - 80px);
-            border-radius: 0;
-            border: 1px solid #d1d5db;
-        }
-
-        /* Remove iPhone notch simulation */
-        .demo-viewport[data-device="mobile"]::before {
-            display: none;
-        }
-
-        /* ============================================ */
 
         * {
             margin: 0;
@@ -99,13 +33,14 @@
 
         body {
             font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #e5e7eb;
+            background: white;
             min-height: 100vh;
+            padding: 2rem;
             overflow-x: hidden;
         }
 
         .page-content {
-            position: absolute; /* Changed from fixed to work within viewport */
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -243,7 +178,7 @@
            WIDGET CONTAINER
            ======================== */
         #showpilot-widget {
-            position: absolute; /* Changed from fixed to position within viewport */
+            position: fixed;
             z-index: 99999;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -259,9 +194,9 @@
             bottom: 24px;
             left: 50%;
             transform: translateX(-50%);
-            width: 900px;
+            width: 900px !important;
             height: auto;
-            max-width: calc(100% - 48px); /* Constrain to viewport width */
+            max-width: 900px;
             overflow: visible;
         }
 
@@ -272,15 +207,14 @@
             transform: translateX(-50%);
             width: 580px;
             height: 680px;
-            max-width: calc(100% - 48px); /* Constrain to viewport width */
         }
 
         /* POSITION 4: SKYSCRAPER - SHARP CORNERS */
         #showpilot-widget[data-position="skyscraper"] {
             top: 0;
             right: 0;
-            width: 440px;
-            height: 100%; /* Changed from 100vh to work within viewport */
+            width: 440px !important;
+            height: 100vh;
             max-width: 440px;
         }
 
@@ -290,8 +224,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             width: 960px;
-            height: 95%; /* Changed from calc(100vh - 48px) to work within viewport */
-            max-width: calc(100% - 48px); /* Constrain to viewport width */
+            height: calc(100vh - 48px);
             max-height: 920px;
         }
 
@@ -300,15 +233,15 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 92%;
-            height: 88%;
+            width: 92vw;
+            height: 88vh;
             max-width: 1800px;
         }
 
         /* Backdrop */
         .page-backdrop {
             display: none;
-            position: absolute; /* Changed from fixed to position within viewport */
+            position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(12px);
@@ -1259,7 +1192,6 @@
 
         #showpilot-widget[data-position="center-low-rectangle"] {
             width: 780px !important;
-            max-width: calc(100% - 48px) !important; /* Constrain to viewport */
             height: auto;
         }
 
@@ -2153,379 +2085,11 @@
             border-radius: 0 !important;
         }
 
-        /* ============================================
-           MOBILE RESPONSIVE CSS (max-width: 767px)
-           Within demo-viewport[data-device="mobile"]
-           ============================================ */
-
-        .demo-viewport[data-device="mobile"] .page-content {
-            font-size: 14px;
-        }
-
-        .demo-viewport[data-device="mobile"] .page-content h1 {
-            font-size: 32px;
-        }
-
-        .demo-viewport[data-device="mobile"] .page-content p {
-            font-size: 14px;
-        }
-
-        /* All positions become full-screen except chat button */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position]:not([data-position="chat-button"]) {
-            position: absolute !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            bottom: 0 !important;
-            width: 100% !important;
-            height: 100% !important;
-            max-width: 100% !important;
-            max-height: 100% !important;
-            border-radius: 0 !important;
-            transform: none !important;
-        }
-
-        /* Chat button - larger and lower for thumb reach */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="chat-button"] .pill-button {
-            width: 64px !important;
-            height: 64px !important;
-            bottom: 16px !important;
-            right: 16px !important;
-            font-size: 18px;
-        }
-
-        /* Widget header - mobile optimized with safe area */
-        .demo-viewport[data-device="mobile"] .widget-header {
-            padding: 12px 16px !important;
-            padding-top: 42px !important; /* Account for notch */
-        }
-
-        .demo-viewport[data-device="mobile"] .header-avatar {
-            width: 36px !important;
-            height: 36px !important;
-        }
-
-        .demo-viewport[data-device="mobile"] .header-info h3 {
-            font-size: 16px !important;
-        }
-
-        .demo-viewport[data-device="mobile"] .header-status {
-            font-size: 12px !important;
-        }
-
-        /* Hide some header controls on mobile */
-        .demo-viewport[data-device="mobile"] .control-expand,
-        .demo-viewport[data-device="mobile"] .control-fullscreen,
-        .demo-viewport[data-device="mobile"] .control-right {
-            display: none !important;
-        }
-
-        /* Larger tap targets for remaining controls */
-        .demo-viewport[data-device="mobile"] .control-btn {
-            width: 44px !important;
-            height: 44px !important;
-        }
-
-        /* Messages - optimized for mobile */
-        .demo-viewport[data-device="mobile"] .message {
-            margin-bottom: 16px !important;
-        }
-
-        .demo-viewport[data-device="mobile"] .message-bubble {
-            max-width: 85% !important;
-            padding: 16px !important;
-            font-size: 16px !important; /* Prevent zoom on input focus */
-            line-height: 1.5 !important;
-        }
-
-        /* Chat input - keyboard-aware with safe area */
-        .demo-viewport[data-device="mobile"] .chat-input {
-            padding: 12px 16px !important;
-            padding-bottom: 28px !important; /* Safe area inset bottom */
-            position: sticky !important;
-            bottom: 0 !important;
-        }
-
-        .demo-viewport[data-device="mobile"] .chat-input textarea {
-            font-size: 16px !important; /* Prevent iOS zoom */
-            padding: 12px !important;
-            min-height: 48px !important;
-        }
-
-        .demo-viewport[data-device="mobile"] .send-btn {
-            width: 48px !important;
-            height: 48px !important;
-            min-width: 48px !important;
-        }
-
-        /* Experience Viewer - vertical stack on mobile */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="content-viewer"] .content-viewer {
-            height: 40% !important;
-            width: 100% !important;
-        }
-
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="content-viewer"] .chat-container {
-            height: 60% !important;
-            width: 100% !important;
-        }
-
-        .demo-viewport[data-device="mobile"] .playlist-panel {
-            display: none !important; /* Hide on mobile, show in drawer */
-        }
-
-        /* Compact bottom bar for Site Agent on mobile - max 20% of screen */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] {
-            position: absolute !important;
-            height: auto !important;
-            max-height: none !important;
-            min-height: auto !important;
-            width: 100% !important;
-            left: 0 !important;
-            right: 0 !important;
-            bottom: 0 !important;
-            top: auto !important;
-            padding: 8px !important;
-            background: white !important;
-            border-radius: 0 !important;
-            box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.1) !important;
-            transform: none !important;
-        }
-
-        /* Keep widget-window but make it transparent container */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .widget-window {
-            display: block !important;
-            background: transparent !important;
-            box-shadow: none !important;
-            border-radius: 0 !important;
-            overflow: visible !important;
-        }
-
-        /* Show chat panel with message bubble at top */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-panel {
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 8px !important;
-            padding: 0 !important;
-        }
-
-        /* Message bubble above video and chat */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-panel::before {
-            content: '👋 Hi! Ask me anything about our product demos.' !important;
-            display: block !important;
-            background: #f1f5f9 !important;
-            padding: 8px 12px !important;
-            border-radius: 12px !important;
-            font-size: 13px !important;
-            color: #475569 !important;
-            line-height: 1.4 !important;
-        }
-
-        /* Container for video and chat side-by-side */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-panel > div:first-child {
-            display: flex !important;
-            gap: 8px !important;
-            align-items: stretch !important;
-        }
-
-        /* Square video greeter - 60x60px (50% smaller) */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .video-container-site {
-            display: block !important;
-            width: 60px !important;
-            height: 60px !important;
-            border-radius: 8px !important;
-            overflow: hidden !important;
-            flex-shrink: 0 !important;
-            margin: 0 !important;
-            position: relative !important;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
-        }
-
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .video-container-site img,
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .video-container-site video {
-            width: 100% !important;
-            height: 100% !important;
-            object-fit: cover !important;
-        }
-
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .video-overlay-site {
-            display: none !important;
-        }
-
-        /* Hide greeting tooltip on mobile */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site {
-            display: none !important;
-        }
-
-        /* Chat container - same height as video */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site {
-            display: flex !important;
-            flex: 1 !important;
-            flex-direction: column !important;
-            background: white !important;
-            border: 1px solid #e2e8f0 !important;
-            border-radius: 8px !important;
-            padding: 8px !important;
-            margin: 0 !important;
-            height: 60px !important;
-            box-shadow: none !important;
-            justify-content: center !important;
-        }
-
-        /* Hide hover controls on mobile */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .hover-controls {
-            display: none !important;
-        }
-
-        /* Input area - minimal padding */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area-site {
-            flex: 1 !important;
-            padding: 0 !important;
-            display: flex !important;
-            flex-direction: row !important;
-            align-items: center !important;
-            background: transparent !important;
-            border: none !important;
-            gap: 6px !important;
-        }
-
-        /* Input row - horizontal */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .input-row-site {
-            display: flex !important;
-            flex: 1 !important;
-            gap: 8px !important;
-            align-items: center !important;
-        }
-
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-input {
-            flex: 1 !important;
-            font-size: 13px !important;
-            padding: 0 !important;
-            background: transparent !important;
-            border: none !important;
-            color: #0f172a !important;
-        }
-
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-input::placeholder {
-            color: #cbd5e1 !important;
-            font-size: 13px !important;
-        }
-
-        /* Hide voice button on mobile */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .voice-btn {
-            display: none !important;
-        }
-
-        /* Send button - compact */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .send-btn {
-            width: 32px !important;
-            height: 32px !important;
-            min-width: 32px !important;
-            flex-shrink: 0 !important;
-            border-radius: 6px !important;
-            background: #0B3398 !important;
-            border: none !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            padding: 0 !important;
-        }
-
-        /* Hide bottom row and privacy link */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .input-bottom-row-site {
-            display: none !important;
-        }
-
-        /* Add minimal privacy text below chat panel */
-        .demo-viewport[data-device="mobile"] #showpilot-widget[data-position="center-low-rectangle"] .chat-panel::after {
-            content: 'Privacy Policy' !important;
-            display: block !important;
-            text-align: center !important;
-            font-size: 8px !important;
-            color: #94a3b8 !important;
-            margin-top: 4px !important;
-        }
-
-        /* Voice status badge - larger for mobile */
-        .demo-viewport[data-device="mobile"] .voice-status-badge {
-            font-size: 13px !important;
-            padding: 8px 14px !important;
-        }
-
-        /* Center avatar badge - larger */
-        .demo-viewport[data-device="mobile"] .center-avatar-badge {
-            font-size: 13px !important;
-            padding: 8px 16px !important;
-        }
-
-        /* Greeting tooltip - adjusted for mobile */
-        .demo-viewport[data-device="mobile"] .greeting-tooltip {
-            font-size: 14px !important;
-            padding: 12px 16px !important;
-            bottom: 80px !important;
-        }
-
-        /* ============================================
-           TABLET RESPONSIVE CSS (768px-1024px equivalent)
-           Within demo-viewport[data-device="tablet"]
-           ============================================ */
-
-        /* Skyscraper - narrower on tablet */
-        .demo-viewport[data-device="tablet"] #showpilot-widget[data-position="skyscraper"] {
-            width: 360px !important;
-        }
-
-        /* Command Center - respect tablet dimensions */
-        .demo-viewport[data-device="tablet"] #showpilot-widget[data-position="full-height-center"] {
-            width: 90% !important;
-            max-width: 700px !important;
-        }
-
-        /* Touch targets - minimum 44px */
-        .demo-viewport[data-device="tablet"] .control-btn {
-            width: 44px !important;
-            height: 44px !important;
-        }
-
-        .demo-viewport[data-device="tablet"] .pill-button {
-            min-width: 160px !important;
-            height: 56px !important;
-            font-size: 16px !important;
-        }
-
-        /* Messages - slightly wider */
-        .demo-viewport[data-device="tablet"] .message-bubble {
-            max-width: 80% !important;
-            padding: 14px 16px !important;
-        }
-
-        /* Experience Viewer - collapsible playlist */
-        .demo-viewport[data-device="tablet"] .playlist-panel {
-            width: 280px !important;
-        }
-
-        /* Focus Box and Command Center - full screen on tablet */
-        .demo-viewport[data-device="tablet"] #showpilot-widget[data-position="center-midsize-square"],
-        .demo-viewport[data-device="tablet"] #showpilot-widget[data-position="full-height-center"] {
-            width: 100% !important;
-            height: 100% !important;
-            max-width: 100% !important;
-            border-radius: 0 !important;
-        }
-
-        /* Stack content viewer vertically on tablet */
-        .demo-viewport[data-device="tablet"] #showpilot-widget[data-position="content-viewer"] .content-viewer {
-            height: 45% !important;
-        }
-
-        .demo-viewport[data-device="tablet"] #showpilot-widget[data-position="content-viewer"] .chat-container {
-            height: 55% !important;
-        }
-
         /* ========================
-           MOBILE RESPONSIVE (<768px)
+           MOBILE RESPONSIVE
            ======================== */
         @media (max-width: 767px) {
-            /* Site agent at BOTTOM - Match desktop specificity */
+            /* FORCE site agent to bottom of screen with horizontal layout */
             #showpilot-widget[data-position="center-low-rectangle"] {
                 position: fixed !important;
                 bottom: 0 !important;
@@ -2537,165 +2101,108 @@
                 height: auto !important;
                 max-width: 100% !important;
                 padding: 8px !important;
-                background: white !important;
-                box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.1) !important;
                 z-index: 99999 !important;
             }
 
-            /* Hide header and old UI elements */
-            #showpilot-widget[data-position="center-low-rectangle"] .widget-header,
-            #showpilot-widget[data-position="center-low-rectangle"] .pill-button,
-            #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip,
-            #showpilot-widget[data-position="center-low-rectangle"] .center-avatar,
-            #showpilot-widget[data-position="center-low-rectangle"] .messages-container,
-            #showpilot-widget[data-position="center-low-rectangle"] .chat-messages,
-            #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area {
-                display: none !important;
-            }
-
-            /* Show widget window */
-            #showpilot-widget[data-position="center-low-rectangle"] .widget-window {
-                display: block !important;
-                background: transparent !important;
-                box-shadow: none !important;
-                padding: 0 !important;
-            }
-
-            /* Show and force site agent elements */
+            /* Chat panel horizontal layout - video and chat on SAME LINE */
             #showpilot-widget[data-position="center-low-rectangle"] .chat-panel {
                 display: flex !important;
                 flex-direction: row !important;
                 flex-wrap: wrap !important;
                 gap: 8px !important;
-                padding: 0 !important;
-            }
-
-            /* Message bubble - full width */
-            #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site {
-                display: block !important;
                 width: 100% !important;
-                background: #f1f5f9 !important;
-                padding: 8px 12px !important;
-                border-radius: 12px !important;
-                font-size: 13px !important;
-                color: #475569 !important;
-                line-height: 1.4 !important;
-                box-shadow: none !important;
-                position: relative !important;
-                order: -1 !important;
                 margin: 0 !important;
-            }
-
-            #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site .greeting-arrow {
-                display: none !important;
-            }
-
-            #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site .greeting-text {
-                margin: 0 !important;
-            }
-
-            /* Video - 60px, NO overlay */
-            #showpilot-widget[data-position="center-low-rectangle"] .video-container-site {
-                width: 60px !important;
-                height: 60px !important;
-                border-radius: 8px !important;
-                flex-shrink: 0 !important;
-                overflow: hidden !important;
-                background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
-                margin: 0 !important;
-                display: block !important;
-            }
-
-            /* HIDE ALL overlays */
-            #showpilot-widget[data-position="center-low-rectangle"] .video-overlay-site,
-            #showpilot-widget[data-position="center-low-rectangle"] .site-voice-animation-overlay {
-                display: none !important;
-            }
-
-            /* Chat container - same height, flex: 1 */
-            #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site {
-                flex: 1 !important;
-                height: 60px !important;
-                background: white !important;
-                border: 1px solid #e2e8f0 !important;
-                border-radius: 8px !important;
-                padding: 8px !important;
-                display: flex !important;
-                align-items: center !important;
-                box-shadow: none !important;
-                margin: 0 !important;
-            }
-
-            /* Chat input area */
-            #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area-site {
-                flex: 1 !important;
-                display: flex !important;
-                align-items: center !important;
-                gap: 6px !important;
                 padding: 0 !important;
-            }
-
-            #showpilot-widget[data-position="center-low-rectangle"] .input-row-site {
-                flex: 1 !important;
-                display: flex !important;
-                align-items: center !important;
-                gap: 6px !important;
-            }
-
-            #showpilot-widget[data-position="center-low-rectangle"] .chat-input {
-                flex: 1 !important;
-                font-size: 13px !important;
-                padding: 0 !important;
-                border: none !important;
                 background: transparent !important;
             }
 
-            /* Voice button - don't force display so toggle works */
-            #showpilot-widget[data-position="center-low-rectangle"] .voice-btn {
-                width: 32px !important;
-                height: 32px !important;
+            /* Message bubble FIRST - spans full width above video and chat */
+            #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site {
+                order: -1 !important;
+                width: 100% !important;
+                margin-bottom: 8px !important;
+                background: #f1f5f9 !important;
+                padding: 10px 12px !important;
+                border-radius: 12px !important;
+                font-size: 13px !important;
+                line-height: 1.4 !important;
+            }
+
+            /* Video container - 60x60px SQUARE on left */
+            #showpilot-widget[data-position="center-low-rectangle"] .video-container-site {
+                width: 60px !important;
+                height: 60px !important;
+                min-width: 60px !important;
+                min-height: 60px !important;
+                border-radius: 8px !important;
+                margin: 0 !important;
                 flex-shrink: 0 !important;
             }
 
-            /* Send button */
-            #showpilot-widget[data-position="center-low-rectangle"] .send-btn {
-                width: 32px !important;
-                height: 32px !important;
+            /* Video element square */
+            #showpilot-widget[data-position="center-low-rectangle"] .video-container-site video {
+                width: 60px !important;
+                height: 60px !important;
+                border-radius: 8px !important;
+                object-fit: cover !important;
+            }
+
+            /* NO sound animation overlay on mobile */
+            #showpilot-widget[data-position="center-low-rectangle"] .sound-animation {
+                display: none !important;
+            }
+
+            /* Chat container - fills remaining space, same 60px height */
+            #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site {
+                flex: 1 !important;
+                height: 60px !important;
+                min-height: 60px !important;
+                background: white !important;
+                border: 1px solid #e2e8f0 !important;
+                border-radius: 12px !important;
+                padding: 8px 12px !important;
+                display: flex !important;
+                align-items: center !important;
+                gap: 8px !important;
+                margin: 0 !important;
+            }
+
+            /* Chat input */
+            #showpilot-widget[data-position="center-low-rectangle"] .chat-input-site {
+                flex: 1 !important;
+                font-size: 14px !important;
+                border: none !important;
+                padding: 0 !important;
+                background: transparent !important;
+            }
+
+            /* Voice button - visible until user types */
+            #showpilot-widget[data-position="center-low-rectangle"] .voice-btn {
+                width: 36px !important;
+                height: 36px !important;
                 background: #0B3398 !important;
                 border-radius: 6px !important;
                 flex-shrink: 0 !important;
-            }
-
-            /* Hide hover controls */
-            #showpilot-widget[data-position="center-low-rectangle"] .hover-controls {
-                display: none !important;
-            }
-
-            /* Show bottom row but minimal */
-            #showpilot-widget[data-position="center-low-rectangle"] .input-bottom-row-site {
-                display: block !important;
-                width: 100% !important;
-                order: 999 !important;
                 padding: 0 !important;
-                margin-top: 4px !important;
             }
 
-            /* Hide demo badge */
-            #showpilot-widget[data-position="center-low-rectangle"] .demo-badge {
-                display: none !important;
+            /* Send button - hidden until user types */
+            #showpilot-widget[data-position="center-low-rectangle"] .send-btn {
+                width: 36px !important;
+                height: 36px !important;
+                background: #0B3398 !important;
+                border-radius: 6px !important;
+                flex-shrink: 0 !important;
+                padding: 0 !important;
             }
 
-            /* Minimal privacy link */
-            #showpilot-widget[data-position="center-low-rectangle"] .privacy-disclaimer {
+            /* Privacy link - minimal padding */
+            #showpilot-widget[data-position="center-low-rectangle"] .privacy-link-site {
+                font-size: 9px !important;
+                padding: 4px 0 !important;
+                margin: 4px 0 0 0 !important;
                 text-align: center !important;
-                font-size: 0 !important;
-                color: #94a3b8 !important;
-            }
-
-            #showpilot-widget[data-position="center-low-rectangle"] .privacy-disclaimer a {
-                font-size: 8px !important;
-                color: #94a3b8 !important;
-                text-decoration: none !important;
+                width: 100% !important;
             }
 
             /* Hide demo controls on mobile */
@@ -2703,9 +2210,163 @@
                 display: none !important;
             }
         }
+
+        /* ========================
+           MOBILE DEMO MODE (when Mobile button clicked)
+           Apply same mobile layout when body.device-mobile class is present
+           ======================== */
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            top: auto !important;
+            transform: none !important;
+            width: 100% !important;
+            height: auto !important;
+            max-width: 100% !important;
+            padding: 8px !important;
+            z-index: 99999 !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .chat-panel {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: transparent !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site {
+            order: -1 !important;
+            width: 100% !important;
+            margin-bottom: 8px !important;
+            background: #f1f5f9 !important;
+            padding: 10px 12px !important;
+            border-radius: 12px !important;
+            font-size: 13px !important;
+            line-height: 1.4 !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .video-container-site {
+            width: 60px !important;
+            height: 60px !important;
+            min-width: 60px !important;
+            min-height: 60px !important;
+            border-radius: 8px !important;
+            margin: 0 !important;
+            flex-shrink: 0 !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .video-container-site video {
+            width: 60px !important;
+            height: 60px !important;
+            border-radius: 8px !important;
+            object-fit: cover !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .sound-animation {
+            display: none !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site {
+            flex: 1 !important;
+            height: 60px !important;
+            min-height: 60px !important;
+            background: white !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 12px !important;
+            padding: 8px 12px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            margin: 0 !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .chat-input-site {
+            flex: 1 !important;
+            font-size: 14px !important;
+            border: none !important;
+            padding: 0 !important;
+            background: transparent !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .voice-btn {
+            width: 36px !important;
+            height: 36px !important;
+            background: #0B3398 !important;
+            border-radius: 6px !important;
+            flex-shrink: 0 !important;
+            padding: 0 !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .send-btn {
+            width: 36px !important;
+            height: 36px !important;
+            background: #0B3398 !important;
+            border-radius: 6px !important;
+            flex-shrink: 0 !important;
+            padding: 0 !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .privacy-link-site {
+            font-size: 9px !important;
+            padding: 4px 0 !important;
+            margin: 4px 0 0 0 !important;
+            text-align: center !important;
+            width: 100% !important;
+        }
     </style>
 </head>
 <body class="device-desktop">
+    <div class="page-content">
+        <h1>ShowPilot</h1>
+        <p>AI-powered product guidance and qualification</p>
+        <div style="margin-top: 24px;">
+            <a href="DEVELOPER-GUIDE.md" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background: #f8f9fa; border: 1px solid #e2e8f0; border-radius: 10px; text-decoration: none; color: #0f172a; font-size: 14px; font-weight: 600; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="12" y1="18" x2="12" y2="12"/>
+                    <line x1="9" y1="15" x2="15" y2="15"/>
+                </svg>
+                Developer Guide
+            </a>
+        </div>
+        <div style="margin-top: 60px; max-width: 1200px; margin-left: auto; margin-right: auto;" class="sample-sections">
+            <div style="background: #f8f9fa; border: 1px solid #e2e8f0; padding: 40px; border-radius: 16px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);" class="agents-section">
+                <h2 style="font-size: 32px; margin-bottom: 16px; font-weight: 700; color: #0f172a;">Agents</h2>
+                <p style="font-size: 18px; color: #475569; line-height: 1.6; margin-bottom: 20px;">Intelligent AI agents that understand your business, products, and customers.</p>
+                <ul style="font-size: 16px; color: #64748b; line-height: 1.8; list-style: none; padding: 0;">
+                    <li style="margin-bottom: 12px;">✓ Train AI agents with your product knowledge and sales playbook</li>
+                    <li style="margin-bottom: 12px;">✓ Customize qualification paths for different customer segments</li>
+                    <li style="margin-bottom: 12px;">✓ Integrate with your tech stack to automate follow-up</li>
+                </ul>
+            </div>
+            <div style="background: #f8f9fa; border: 1px solid #e2e8f0; padding: 40px; border-radius: 16px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);" class="demos-section">
+                <h2 style="font-size: 32px; margin-bottom: 16px; font-weight: 700; color: #0f172a;">Interactive Demos</h2>
+                <p style="font-size: 18px; color: #475569; line-height: 1.6; margin-bottom: 20px;">Convert your live product into interactive demos without coding.</p>
+                <ul style="font-size: 16px; color: #64748b; line-height: 1.8; list-style: none; padding: 0;">
+                    <li style="margin-bottom: 12px;">✓ Create guided product tours directly from your live application</li>
+                    <li style="margin-bottom: 12px;">✓ Customize demos for different use cases and personas</li>
+                    <li style="margin-bottom: 12px;">✓ Deploy across multiple channels</li>
+                </ul>
+            </div>
+            <div style="background: #f8f9fa; border: 1px solid #e2e8f0; padding: 40px; border-radius: 16px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);" class="insights-section">
+                <h2 style="font-size: 32px; margin-bottom: 16px; font-weight: 700; color: #0f172a;">Insights</h2>
+                <p style="font-size: 18px; color: #475569; line-height: 1.6; margin-bottom: 20px;">Comprehensive customer interaction analytics and buyer intent signals.</p>
+                <ul style="font-size: 16px; color: #64748b; line-height: 1.8; list-style: none; padding: 0;">
+                    <li style="margin-bottom: 12px;">✓ Get real-time visibility into engagement metrics</li>
+                    <li style="margin-bottom: 12px;">✓ Uncover buyer intent from conversation patterns</li>
+                    <li style="margin-bottom: 12px;">✓ Monitor account-level engagement and content performance</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <div class="demo-controls">
         <h4>Agent Positions</h4>
         <div class="demo-section">
@@ -2720,9 +2381,9 @@
         <div class="demo-section">
             <div class="demo-section-title">Device View</div>
             <div class="device-btns">
-                <button class="demo-btn device-btn active" onclick="setDevice('desktop', event)">Desktop</button>
-                <button class="demo-btn device-btn" onclick="setDevice('tablet', event)">Tablet</button>
-                <button class="demo-btn device-btn" onclick="setDevice('mobile', event)">Mobile</button>
+                <button class="demo-btn device-btn active" onclick="setDevice('desktop')">Desktop</button>
+                <button class="demo-btn device-btn" onclick="setDevice('tablet')">Tablet</button>
+                <button class="demo-btn device-btn" onclick="setDevice('mobile')">Mobile</button>
             </div>
         </div>
 
@@ -2774,53 +2435,6 @@
             <button class="demo-btn" onclick="demoPageNavigation()">Page Navigation</button>
             <button class="demo-btn" onclick="demoExperienceViewer()">Experience Viewer</button>
             <button class="demo-btn" onclick="startLearnFlow()">Journey</button>
-        </div>
-    </div>
-
-    <div class="demo-viewport-wrapper">
-        <div class="demo-viewport" data-device="desktop">
-            <div class="page-content">
-        <h1>ShowPilot</h1>
-        <p>AI-powered product guidance and qualification</p>
-        <div style="margin-top: 24px;">
-            <a href="DEVELOPER-GUIDE.md" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background: #f8f9fa; border: 1px solid #e2e8f0; border-radius: 10px; text-decoration: none; color: #0f172a; font-size: 14px; font-weight: 600; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14 2 14 8 20 8"/>
-                    <line x1="12" y1="18" x2="12" y2="12"/>
-                    <line x1="9" y1="15" x2="15" y2="15"/>
-                </svg>
-                Developer Guide
-            </a>
-        </div>
-        <div style="margin-top: 60px; max-width: 1200px; margin-left: auto; margin-right: auto;" class="sample-sections">
-            <div style="background: #f8f9fa; border: 1px solid #e2e8f0; padding: 40px; border-radius: 16px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);" class="agents-section">
-                <h2 style="font-size: 32px; margin-bottom: 16px; font-weight: 700; color: #0f172a;">Agents</h2>
-                <p style="font-size: 18px; color: #475569; line-height: 1.6; margin-bottom: 20px;">Intelligent AI agents that understand your business, products, and customers.</p>
-                <ul style="font-size: 16px; color: #64748b; line-height: 1.8; list-style: none; padding: 0;">
-                    <li style="margin-bottom: 12px;">✓ Train AI agents with your product knowledge and sales playbook</li>
-                    <li style="margin-bottom: 12px;">✓ Customize qualification paths for different customer segments</li>
-                    <li style="margin-bottom: 12px;">✓ Integrate with your tech stack to automate follow-up</li>
-                </ul>
-            </div>
-            <div style="background: #f8f9fa; border: 1px solid #e2e8f0; padding: 40px; border-radius: 16px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);" class="demos-section">
-                <h2 style="font-size: 32px; margin-bottom: 16px; font-weight: 700; color: #0f172a;">Interactive Demos</h2>
-                <p style="font-size: 18px; color: #475569; line-height: 1.6; margin-bottom: 20px;">Convert your live product into interactive demos without coding.</p>
-                <ul style="font-size: 16px; color: #64748b; line-height: 1.8; list-style: none; padding: 0;">
-                    <li style="margin-bottom: 12px;">✓ Create guided product tours directly from your live application</li>
-                    <li style="margin-bottom: 12px;">✓ Customize demos for different use cases and personas</li>
-                    <li style="margin-bottom: 12px;">✓ Deploy across multiple channels</li>
-                </ul>
-            </div>
-            <div style="background: #f8f9fa; border: 1px solid #e2e8f0; padding: 40px; border-radius: 16px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);" class="insights-section">
-                <h2 style="font-size: 32px; margin-bottom: 16px; font-weight: 700; color: #0f172a;">Insights</h2>
-                <p style="font-size: 18px; color: #475569; line-height: 1.6; margin-bottom: 20px;">Comprehensive customer interaction analytics and buyer intent signals.</p>
-                <ul style="font-size: 16px; color: #64748b; line-height: 1.8; list-style: none; padding: 0;">
-                    <li style="margin-bottom: 12px;">✓ Get real-time visibility into engagement metrics</li>
-                    <li style="margin-bottom: 12px;">✓ Uncover buyer intent from conversation patterns</li>
-                    <li style="margin-bottom: 12px;">✓ Monitor account-level engagement and content performance</li>
-                </ul>
-            </div>
         </div>
     </div>
 
@@ -2935,7 +2549,7 @@
                     <!-- Greeting Tooltip for Site Agent -->
                     <div class="greeting-tooltip-site">
                         <div class="greeting-text">
-                            Hi! I'm Alex. How can I help you today?
+                            You're in good company! Over 500 companies have hired me to help them engage buyers, book meetings, and generate pipeline.
                         </div>
                         <div class="greeting-arrow"></div>
                     </div>
@@ -3344,6 +2958,11 @@
         }
 
         function setPosition(position) {
+            // FORCE Site Agent on mobile - prevent position changes
+            if (window.innerWidth <= 767) {
+                position = 'center-low-rectangle';
+            }
+
             previousPosition = widget.getAttribute('data-position');
             widget.setAttribute('data-position', position);
             updateDemoButtons(position);
@@ -3508,45 +3127,15 @@
             }
         }
 
-        function setDevice(device, event) {
-            // Get widget reference first
-            const widget = document.getElementById('showpilot-widget');
-
-            // Update body class
+        function setDevice(device) {
             document.body.className = `device-${device}`;
             if (widget.getAttribute('data-position') === 'content-viewer') {
                 document.body.classList.add('content-viewer-active');
             }
-
-            // Update viewport container
-            const viewport = document.querySelector('.demo-viewport');
-            if (viewport) {
-                viewport.setAttribute('data-device', device);
-            }
-
-            // Update active button
             document.querySelectorAll('.device-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            if (event && event.target) {
-                event.target.classList.add('active');
-            }
-
-            // Get current widget position
-            const position = widget.getAttribute('data-position');
-
-            // Handle device-specific constraints
-            if (device === 'mobile') {
-                // On mobile, skyscraper doesn't make sense - switch to Focus Box
-                if (position === 'skyscraper') {
-                    console.log('Skyscraper view is not optimal on mobile. Auto-switching to Focus Box.');
-                    setTimeout(() => {
-                        demoFocusBox();
-                    }, 100);
-                }
-            }
-
-            console.log(`Device view switched to: ${device}`);
+            event.target.classList.add('active');
         }
 
         function toggleVoice() {
@@ -5981,215 +5570,7 @@
             }, 1000);
         }
 
-        // ============================================
-        // MOBILE KEYBOARD VISIBILITY HANDLING
-        // ============================================
-
-        // Check if we're in mobile viewport
-        function isMobileViewport() {
-            const viewport = document.querySelector('.demo-viewport');
-            return viewport && viewport.getAttribute('data-device') === 'mobile';
-        }
-
-        // Handle keyboard visibility on mobile devices (within mobile viewport simulation)
-        if ('visualViewport' in window) {
-            window.visualViewport.addEventListener('resize', () => {
-                if (!isMobileViewport()) return; // Only apply in mobile viewport
-
-                const viewport = window.visualViewport;
-                const chatInput = document.querySelector('.chat-input');
-
-                if (!chatInput) return;
-
-                // Keyboard is likely visible if viewport height is significantly reduced
-                if (viewport.height < window.innerHeight * 0.75) {
-                    // Keyboard visible - adjust input position
-                    const keyboardHeight = window.innerHeight - viewport.height;
-                    chatInput.style.transform = `translateY(-${keyboardHeight}px)`;
-                    chatInput.style.transition = 'transform 0.2s';
-
-                    // Scroll active input into view
-                    const activeInput = document.activeElement;
-                    if (activeInput && (activeInput.tagName === 'TEXTAREA' || activeInput.tagName === 'INPUT')) {
-                        setTimeout(() => {
-                            activeInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }, 100);
-                    }
-                } else {
-                    // Keyboard hidden - reset position
-                    chatInput.style.transform = '';
-                }
-            });
-        }
-
-        // ============================================
-        // TOUCH GESTURE SUPPORT (SWIPE TO DISMISS)
-        // ============================================
-
-        if ('ontouchstart' in window) {
-            let touchStartY = 0;
-            let touchEndY = 0;
-            let touchStartX = 0;
-            let touchEndX = 0;
-
-            const widgetElement = document.getElementById('showpilot-widget');
-
-            widgetElement.addEventListener('touchstart', (e) => {
-                touchStartY = e.changedTouches[0].screenY;
-                touchStartX = e.changedTouches[0].screenX;
-            }, { passive: true });
-
-            widgetElement.addEventListener('touchend', (e) => {
-                touchEndY = e.changedTouches[0].screenY;
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-            }, { passive: true });
-
-            function handleSwipe() {
-                if (!isMobileViewport()) return; // Only in mobile viewport
-
-                const swipeDistanceY = touchStartY - touchEndY;
-                const swipeDistanceX = Math.abs(touchStartX - touchEndX);
-
-                // Only process if it's primarily vertical swipe (not horizontal)
-                if (swipeDistanceX > 50) return;
-
-                const widget = document.getElementById('showpilot-widget');
-                const position = widget.getAttribute('data-position');
-
-                // Swipe down to dismiss (for modals and full-screen positions)
-                if (swipeDistanceY < -100) {
-                    if (position !== 'chat-button') {
-                        console.log('Swipe down detected - minimizing widget');
-                        minimize(); // Use existing minimize function
-                    }
-                }
-
-                // Swipe up for bottom sheet (Site Agent)
-                if (swipeDistanceY > 100 && position === 'center-low-rectangle') {
-                    console.log('Swipe up detected on Site Agent - expanding');
-                    // Could trigger expansion animation here if needed
-                }
-            }
-        }
-
-        // ============================================
-        // MOBILE PLAYLIST TOGGLE FOR EXPERIENCE VIEWER
-        // ============================================
-
-        // Add mobile playlist toggle button (only visible in mobile viewport)
-        function createMobilePlaylistToggle() {
-            const existingToggle = document.querySelector('.mobile-playlist-toggle');
-            if (existingToggle) return; // Already exists
-
-            const toggle = document.createElement('button');
-            toggle.className = 'mobile-playlist-toggle';
-            toggle.innerHTML = `
-                <svg viewBox="0 0 24 24" width="24" height="24" fill="white">
-                    <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="2" fill="none"/>
-                </svg>
-            `;
-            toggle.style.cssText = `
-                display: none;
-                position: absolute;
-                bottom: 96px;
-                right: 16px;
-                width: 56px;
-                height: 56px;
-                background: var(--theme-700);
-                border: none;
-                border-radius: 50%;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-                cursor: pointer;
-                z-index: 999998;
-                align-items: center;
-                justify-content: center;
-            `;
-
-            toggle.onclick = () => {
-                // Create/toggle playlist drawer
-                let drawer = document.querySelector('.mobile-playlist-drawer');
-                if (!drawer) {
-                    drawer = createPlaylistDrawer();
-                    const viewport = document.querySelector('.demo-viewport');
-                    if (viewport) viewport.appendChild(drawer);
-                }
-                drawer.classList.toggle('open');
-            };
-
-            const viewport = document.querySelector('.demo-viewport');
-            if (viewport) viewport.appendChild(toggle);
-
-            // Show/hide based on viewport and position
-            const observer = new MutationObserver(() => {
-                const viewport = document.querySelector('.demo-viewport');
-                const widget = document.getElementById('showpilot-widget');
-                const isMobile = viewport && viewport.getAttribute('data-device') === 'mobile';
-                const isContentViewer = widget && widget.getAttribute('data-position') === 'content-viewer';
-
-                toggle.style.display = (isMobile && isContentViewer) ? 'flex' : 'none';
-            });
-
-            observer.observe(document.querySelector('.demo-viewport'), { attributes: true });
-            observer.observe(document.getElementById('showpilot-widget'), { attributes: true });
-        }
-
-        function createPlaylistDrawer() {
-            const drawer = document.createElement('div');
-            drawer.className = 'mobile-playlist-drawer';
-            drawer.style.cssText = `
-                position: absolute;
-                bottom: -400px;
-                left: 0;
-                right: 0;
-                height: 400px;
-                background: white;
-                border-radius: 24px 24px 0 0;
-                box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
-                z-index: 999999;
-                transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                padding: 20px;
-                overflow-y: auto;
-            `;
-
-            // Clone playlist content
-            const playlistPanel = document.querySelector('.playlist-panel');
-            if (playlistPanel) {
-                drawer.innerHTML = playlistPanel.innerHTML;
-            }
-
-            // Add handle
-            const handle = document.createElement('div');
-            handle.style.cssText = `
-                width: 40px;
-                height: 4px;
-                background: #cbd5e1;
-                border-radius: 2px;
-                position: absolute;
-                top: 8px;
-                left: 50%;
-                transform: translateX(-50%);
-            `;
-            drawer.prepend(handle);
-
-            return drawer;
-        }
-
-        // Initialize mobile playlist toggle
-        createMobilePlaylistToggle();
-
-        // Add CSS for open state
-        const style = document.createElement('style');
-        style.textContent = `
-            .mobile-playlist-drawer.open {
-                bottom: 0 !important;
-            }
-        `;
-        document.head.appendChild(style);
-
         updateDemoButtons('chat-button');
     </script>
-        </div><!-- .demo-viewport -->
-    </div><!-- .demo-viewport-wrapper -->
 </body>
 </html>
