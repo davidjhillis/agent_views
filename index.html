@@ -2554,34 +2554,38 @@
                 padding: 0 !important;
             }
 
-            /* Chat panel - vertical layout */
+            /* Chat panel - flex wrap layout */
             #showpilot-widget[data-position="center-low-rectangle"] .chat-panel {
                 display: flex !important;
-                flex-direction: column !important;
+                flex-wrap: wrap !important;
                 gap: 8px !important;
                 padding: 0 !important;
             }
 
-            /* Message bubble above video and chat */
-            #showpilot-widget[data-position="center-low-rectangle"] .chat-panel::before {
-                content: '👋 Hi! Ask me anything about our product demos.' !important;
+            /* Greeting tooltip as message bubble - full width */
+            #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site {
                 display: block !important;
+                width: 100% !important;
                 background: #f1f5f9 !important;
                 padding: 8px 12px !important;
                 border-radius: 12px !important;
                 font-size: 13px !important;
                 color: #475569 !important;
                 line-height: 1.4 !important;
+                box-shadow: none !important;
+                position: relative !important;
+                order: -1 !important;
             }
 
-            /* Video and chat on SAME LINE */
-            #showpilot-widget[data-position="center-low-rectangle"] .chat-panel > div:first-child {
-                display: flex !important;
-                gap: 8px !important;
-                align-items: stretch !important;
+            #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site .greeting-arrow {
+                display: none !important;
             }
 
-            /* Video greeter - 60px, NO overlay */
+            #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site .greeting-text {
+                margin: 0 !important;
+            }
+
+            /* Video greeter - 60px, NO overlay, on same line */
             #showpilot-widget[data-position="center-low-rectangle"] .video-container-site {
                 width: 60px !important;
                 height: 60px !important;
@@ -2589,14 +2593,17 @@
                 flex-shrink: 0 !important;
                 overflow: hidden !important;
                 background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+                margin: 0 !important;
+                display: block !important;
             }
 
             /* HIDE sound animation overlay */
-            #showpilot-widget[data-position="center-low-rectangle"] .video-overlay-site {
+            #showpilot-widget[data-position="center-low-rectangle"] .video-overlay-site,
+            #showpilot-widget[data-position="center-low-rectangle"] .site-voice-animation-overlay {
                 display: none !important;
             }
 
-            /* Chat container - same height as video */
+            /* Chat container - same height as video, flex: 1 */
             #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site {
                 flex: 1 !important;
                 height: 60px !important;
@@ -2606,6 +2613,7 @@
                 padding: 8px !important;
                 display: flex !important;
                 align-items: center !important;
+                box-shadow: none !important;
             }
 
             /* Chat input area */
@@ -2648,24 +2656,35 @@
                 flex-shrink: 0 !important;
             }
 
-            /* Hide bottom row */
+            /* Show bottom row but minimal */
             #showpilot-widget[data-position="center-low-rectangle"] .input-bottom-row-site {
-                display: none !important;
-            }
-
-            /* Privacy below everything */
-            #showpilot-widget[data-position="center-low-rectangle"] .chat-panel::after {
-                content: 'Privacy Policy' !important;
                 display: block !important;
-                text-align: center !important;
-                font-size: 8px !important;
-                color: #94a3b8 !important;
+                width: 100% !important;
+                order: 999 !important;
+                padding: 0 !important;
                 margin-top: 4px !important;
             }
 
+            /* Hide demo badge on mobile */
+            #showpilot-widget[data-position="center-low-rectangle"] .demo-badge {
+                display: none !important;
+            }
+
+            /* Minimal privacy link - hide full text, show only link */
+            #showpilot-widget[data-position="center-low-rectangle"] .privacy-disclaimer {
+                text-align: center !important;
+                font-size: 0 !important;
+                color: #94a3b8 !important;
+            }
+
+            #showpilot-widget[data-position="center-low-rectangle"] .privacy-disclaimer a {
+                font-size: 8px !important;
+                color: #94a3b8 !important;
+                text-decoration: none !important;
+            }
+
             /* Hide demo controls on mobile */
-            .demo-controls,
-            .greeting-tooltip-site {
+            .demo-controls {
                 display: none !important;
             }
         }
