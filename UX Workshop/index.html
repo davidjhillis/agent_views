@@ -2848,6 +2848,11 @@
         }
 
         function setPosition(position) {
+            // FORCE Site Agent on mobile - prevent position changes
+            if (window.innerWidth <= 767) {
+                position = 'center-low-rectangle';
+            }
+
             previousPosition = widget.getAttribute('data-position');
             widget.setAttribute('data-position', position);
             updateDemoButtons(position);
