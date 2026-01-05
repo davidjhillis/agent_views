@@ -2525,8 +2525,8 @@
            MOBILE RESPONSIVE (<768px)
            ======================== */
         @media (max-width: 767px) {
-            /* Force widget to bottom with horizontal separated layout */
-            #showpilot-widget {
+            /* Site agent at BOTTOM of mobile screen */
+            #showpilot-widget[data-position="center-low-rectangle"] {
                 position: fixed !important;
                 bottom: 0 !important;
                 left: 0 !important;
@@ -2535,123 +2535,132 @@
                 transform: none !important;
                 width: 100% !important;
                 height: auto !important;
-                max-width: 100% !important;
-                background: white;
-                padding: 16px;
-                box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.1);
-                display: flex !important;
-                flex-direction: row !important;
-                gap: 12px;
-                align-items: stretch;
-                z-index: 99999;
+                padding: 8px !important;
+                background: white !important;
+                box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.1) !important;
+                z-index: 99999 !important;
             }
 
-            /* Hide pill button on mobile */
-            #showpilot-widget .pill-button,
-            #showpilot-widget .greeting-tooltip {
+            /* Hide greeting tooltip */
+            #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site {
                 display: none !important;
             }
 
-            /* Force widget window to display on mobile */
-            #showpilot-widget .widget-window {
-                display: flex !important;
-                flex-direction: row !important;
-                border-radius: 0 !important;
+            /* Show widget window */
+            #showpilot-widget[data-position="center-low-rectangle"] .widget-window {
+                display: block !important;
+                background: transparent !important;
                 box-shadow: none !important;
-                background: transparent !important;
-                gap: 12px;
-                padding: 0;
+                padding: 0 !important;
             }
 
-            /* Hide widget header on mobile */
-            #showpilot-widget .widget-header {
-                display: none !important;
-            }
-
-            /* Square avatar - left side */
-            #showpilot-widget .widget-window::before {
-                content: '';
-                width: 120px;
-                height: 120px;
-                background: url('public/av44.png') center/cover;
-                border-radius: 12px;
-                flex-shrink: 0;
-            }
-
-            /* Chat panel - right side */
-            #showpilot-widget .chat-panel {
-                flex: 1 !important;
-                background: white;
-                border: 1px solid #e2e8f0;
-                border-radius: 12px;
+            /* Chat panel - vertical layout */
+            #showpilot-widget[data-position="center-low-rectangle"] .chat-panel {
                 display: flex !important;
-                flex-direction: column;
-                min-height: 120px;
-                padding: 12px;
-                margin: 0 !important;
+                flex-direction: column !important;
+                gap: 8px !important;
+                padding: 0 !important;
             }
 
-            /* Hide avatar section in chat panel */
-            #showpilot-widget .avatar-section,
-            #showpilot-widget .messages-container {
+            /* Message bubble above video and chat */
+            #showpilot-widget[data-position="center-low-rectangle"] .chat-panel::before {
+                content: '👋 Hi! Ask me anything about our product demos.' !important;
+                display: block !important;
+                background: #f1f5f9 !important;
+                padding: 8px 12px !important;
+                border-radius: 12px !important;
+                font-size: 13px !important;
+                color: #475569 !important;
+                line-height: 1.4 !important;
+            }
+
+            /* Video and chat on SAME LINE */
+            #showpilot-widget[data-position="center-low-rectangle"] .chat-panel > div:first-child {
+                display: flex !important;
+                gap: 8px !important;
+                align-items: stretch !important;
+            }
+
+            /* Video greeter - 60px, NO overlay */
+            #showpilot-widget[data-position="center-low-rectangle"] .video-container-site {
+                width: 60px !important;
+                height: 60px !important;
+                border-radius: 8px !important;
+                flex-shrink: 0 !important;
+                overflow: hidden !important;
+                background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+            }
+
+            /* HIDE sound animation overlay */
+            #showpilot-widget[data-position="center-low-rectangle"] .video-overlay-site {
                 display: none !important;
             }
 
-            /* Message bubble invitation */
-            #showpilot-widget .chat-panel::before {
-                content: '👋 Hi! Ask me anything about our product demos.';
-                display: block;
-                background: #f1f5f9;
-                padding: 10px 12px;
-                border-radius: 12px;
-                font-size: 13px;
-                color: #475569;
-                line-height: 1.4;
-                margin-bottom: 10px;
+            /* Chat container - same height as video */
+            #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site {
+                flex: 1 !important;
+                height: 60px !important;
+                background: white !important;
+                border: 1px solid #e2e8f0 !important;
+                border-radius: 8px !important;
+                padding: 8px !important;
+                display: flex !important;
+                align-items: center !important;
             }
 
-            /* Clean chat input */
-            #showpilot-widget .chat-input-wrapper {
-                margin: 0 !important;
+            /* Chat input area */
+            #showpilot-widget[data-position="center-low-rectangle"] .chat-input-area-site {
+                flex: 1 !important;
+                display: flex !important;
+                align-items: center !important;
+                gap: 6px !important;
+                padding: 0 !important;
+            }
+
+            #showpilot-widget[data-position="center-low-rectangle"] .input-row-site {
+                flex: 1 !important;
+                display: flex !important;
+                align-items: center !important;
+                gap: 6px !important;
+            }
+
+            #showpilot-widget[data-position="center-low-rectangle"] .chat-input {
+                flex: 1 !important;
+                font-size: 13px !important;
                 padding: 0 !important;
                 border: none !important;
                 background: transparent !important;
             }
 
-            #showpilot-widget .chat-input {
-                font-size: 15px !important;
-                padding: 0 !important;
-                border: none !important;
+            /* Show voice button until user types */
+            #showpilot-widget[data-position="center-low-rectangle"] .voice-btn {
+                width: 32px !important;
+                height: 32px !important;
+                flex-shrink: 0 !important;
             }
 
-            #showpilot-widget .input-actions {
-                gap: 8px !important;
-            }
-
-            /* Send button - brand color */
-            #showpilot-widget .send-button {
-                width: 36px !important;
-                height: 36px !important;
+            /* Send button */
+            #showpilot-widget[data-position="center-low-rectangle"] .send-btn {
+                width: 32px !important;
+                height: 32px !important;
                 background: #0B3398 !important;
-                padding: 0 !important;
                 border-radius: 6px !important;
+                flex-shrink: 0 !important;
             }
 
-            /* Hide voice button on mobile */
-            #showpilot-widget .voice-button {
+            /* Hide bottom row */
+            #showpilot-widget[data-position="center-low-rectangle"] .input-bottom-row-site {
                 display: none !important;
             }
 
-            /* Privacy link */
-            #showpilot-widget .chat-input-wrapper::after {
-                content: 'Privacy Policy';
-                display: block;
-                margin-top: 8px;
-                padding-top: 8px;
-                border-top: 1px solid #e2e8f0;
-                text-align: center;
-                font-size: 9px;
-                color: #94a3b8;
+            /* Privacy below everything */
+            #showpilot-widget[data-position="center-low-rectangle"] .chat-panel::after {
+                content: 'Privacy Policy' !important;
+                display: block !important;
+                text-align: center !important;
+                font-size: 8px !important;
+                color: #94a3b8 !important;
+                margin-top: 4px !important;
             }
 
             /* Hide demo controls on mobile */
