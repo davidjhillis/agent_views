@@ -2209,6 +2209,115 @@
                 display: none !important;
             }
         }
+
+        /* ========================
+           MOBILE DEMO MODE (when Mobile button clicked)
+           Apply same mobile layout when body.device-mobile class is present
+           ======================== */
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            top: auto !important;
+            transform: none !important;
+            width: 100% !important;
+            height: auto !important;
+            max-width: 100% !important;
+            padding: 8px !important;
+            z-index: 99999 !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .chat-panel {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: transparent !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .greeting-tooltip-site {
+            order: -1 !important;
+            width: 100% !important;
+            margin-bottom: 8px !important;
+            background: #f1f5f9 !important;
+            padding: 10px 12px !important;
+            border-radius: 12px !important;
+            font-size: 13px !important;
+            line-height: 1.4 !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .video-container-site {
+            width: 60px !important;
+            height: 60px !important;
+            min-width: 60px !important;
+            min-height: 60px !important;
+            border-radius: 8px !important;
+            margin: 0 !important;
+            flex-shrink: 0 !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .video-container-site video {
+            width: 60px !important;
+            height: 60px !important;
+            border-radius: 8px !important;
+            object-fit: cover !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .sound-animation {
+            display: none !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .chat-container-site {
+            flex: 1 !important;
+            height: 60px !important;
+            min-height: 60px !important;
+            background: white !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 12px !important;
+            padding: 8px 12px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            margin: 0 !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .chat-input-site {
+            flex: 1 !important;
+            font-size: 14px !important;
+            border: none !important;
+            padding: 0 !important;
+            background: transparent !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .voice-btn {
+            width: 36px !important;
+            height: 36px !important;
+            background: #0B3398 !important;
+            border-radius: 6px !important;
+            flex-shrink: 0 !important;
+            padding: 0 !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .send-btn {
+            width: 36px !important;
+            height: 36px !important;
+            background: #0B3398 !important;
+            border-radius: 6px !important;
+            flex-shrink: 0 !important;
+            padding: 0 !important;
+        }
+
+        body.device-mobile #showpilot-widget[data-position="center-low-rectangle"] .privacy-link-site {
+            font-size: 9px !important;
+            padding: 4px 0 !important;
+            margin: 4px 0 0 0 !important;
+            text-align: center !important;
+            width: 100% !important;
+        }
     </style>
 </head>
 <body class="device-desktop">
