@@ -2564,6 +2564,7 @@
             /* Show and force site agent elements */
             #showpilot-widget[data-position="center-low-rectangle"] .chat-panel {
                 display: flex !important;
+                flex-direction: row !important;
                 flex-wrap: wrap !important;
                 gap: 8px !important;
                 padding: 0 !important;
@@ -2649,12 +2650,11 @@
                 background: transparent !important;
             }
 
-            /* Show voice button */
+            /* Voice button - don't force display so toggle works */
             #showpilot-widget[data-position="center-low-rectangle"] .voice-btn {
                 width: 32px !important;
                 height: 32px !important;
                 flex-shrink: 0 !important;
-                display: flex !important;
             }
 
             /* Send button */
