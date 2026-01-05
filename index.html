@@ -3173,6 +3173,11 @@
 
         // Initialize video/image visibility on page load
         window.addEventListener('DOMContentLoaded', function() {
+            // FORCE site agent layout on mobile devices
+            if (window.innerWidth <= 767) {
+                widget.setAttribute('data-position', 'center-low-rectangle');
+            }
+
             const currentPosition = widget.getAttribute('data-position');
             const headerAvatarImg = document.getElementById('header-avatar-img');
             const headerAvatarVideo = document.getElementById('header-avatar-video');
